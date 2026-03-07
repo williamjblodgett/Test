@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Learning Hub</title>
+  <meta name="description" content="Professional training resources for Salesforce Agentforce, Tableau API, Microsoft Copilot Studio, Microsoft 365 AI, and AI Security & Compliance.">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="index.html">
+        <span class="navbar__brand-icon">🤖</span>
+        AI Learning Hub
+      </a>
+      <ul class="navbar__links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="salesforce/index.html">Salesforce</a></li>
+        <li><a href="tableau/index.html">Tableau</a></li>
+        <li><a href="copilot/index.html">Copilot Studio</a></li>
+        <li><a href="ms365/index.html">MS365 AI</a></li>
+        <li><a href="security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions">
+        <button class="btn-theme" id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero__badge">🎓 Free Professional Training</div>
+    <h1>Master <span>AI Tools</span> That Drive Results</h1>
+    <p>Curated learning paths, hands-on quizzes, and expert resources for Salesforce Agentforce, Tableau, Microsoft Copilot Studio, MS365 AI, and AI Security.</p>
+    <div class="hero__actions">
+      <a class="btn btn-primary" href="#topics">Explore Topics ↓</a>
+      <a class="btn btn-outline" href="security/index.html">AI Security Guide</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ── -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <strong>5</strong>
+        <span>Core Topics</span>
+      </div>
+      <div class="stat-item">
+        <strong>50+</strong>
+        <span>Quiz Questions</span>
+      </div>
+      <div class="stat-item">
+        <strong>100%</strong>
+        <span>Free Resources</span>
+      </div>
+      <div class="stat-item">
+        <strong>4</strong>
+        <span>Platforms Covered</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Topics ── -->
+<section class="section" id="topics">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Choose Your Learning Path</h2>
+      <p>Select a topic to access training content, resources, and a knowledge quiz</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search topics (e.g. agents, data, compliance)…"
+        aria-label="Search topics"
+      >
+      <button aria-label="Search">🔍</button>
+    </div>
+
+    <div class="cards-grid">
+
+      <article class="card" data-search="salesforce agentforce ai agents automation crm flows apex">
+        <div class="card__icon icon-sf">☁️</div>
+        <div class="card__title">Salesforce Agentforce</div>
+        <div class="card__desc">
+          Build and deploy autonomous AI agents inside Salesforce CRM. Learn flows, agent topics, Einstein, and Apex integration.
+        </div>
+        <a class="card__link" href="salesforce/index.html">Start Learning →</a>
+      </article>
+
+      <article class="card" data-search="tableau api data visualization analytics dashboards rest hyper">
+        <div class="card__icon icon-tab">📊</div>
+        <div class="card__title">Tableau API</div>
+        <div class="card__desc">
+          Automate dashboards, embed analytics, and connect data sources using the Tableau REST API, Hyper API, and Extensions SDK.
+        </div>
+        <a class="card__link" href="tableau/index.html">Start Learning →</a>
+      </article>
+
+      <article class="card" data-search="copilot studio microsoft power virtual agents chatbot low code bots">
+        <div class="card__icon icon-cop">🤖</div>
+        <div class="card__title">Microsoft Copilot Studio</div>
+        <div class="card__desc">
+          Create, publish, and manage AI-powered copilots using Microsoft's low-code platform — no deep coding required.
+        </div>
+        <a class="card__link" href="copilot/index.html">Start Learning →</a>
+      </article>
+
+      <article class="card" data-search="microsoft 365 ms365 office copilot teams excel word outlook ai productivity">
+        <div class="card__icon icon-ms">🟩</div>
+        <div class="card__title">Microsoft 365 AI</div>
+        <div class="card__desc">
+          Leverage M365 Copilot across Teams, Word, Excel, Outlook, and SharePoint to supercharge everyday productivity.
+        </div>
+        <a class="card__link" href="ms365/index.html">Start Learning →</a>
+      </article>
+
+      <article class="card" data-search="security compliance data privacy gdpr hipaa soc2 zero trust safety ai risk">
+        <div class="card__icon icon-sec">🔒</div>
+        <div class="card__title">Security & Compliance</div>
+        <div class="card__desc">
+          Understand AI data risks, privacy regulations (GDPR, HIPAA, SOC 2), and best practices for safe, compliant AI use.
+        </div>
+        <a class="card__link" href="security/index.html">Start Learning →</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Why This Matters ── -->
+<section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Why AI Skills Matter Now</h2>
+      <p>The organizations that invest in AI literacy today will lead their industries tomorrow</p>
+    </div>
+    <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div style="text-align:center; padding: 1.5rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">⚡</div>
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Boost Productivity</h3>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted);">AI tools can reduce repetitive work by up to 40%, freeing time for high-value tasks.</p>
+      </div>
+      <div style="text-align:center; padding: 1.5rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎯</div>
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Career Advancement</h3>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted);">AI proficiency is now among the most sought-after skills across every industry.</p>
+      </div>
+      <div style="text-align:center; padding: 1.5rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🛡️</div>
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Stay Compliant</h3>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted);">Understanding AI security keeps your organization protected and audit-ready.</p>
+      </div>
+      <div style="text-align:center; padding: 1.5rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📈</div>
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Data-Driven Decisions</h3>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted);">Tools like Tableau and Copilot turn raw data into actionable business insights.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Free resources for AI-powered professionals</span>
+      <span>Last updated: <time id="last-updated"></time> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="scripts/main.js"></script>
+<script>
+  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>

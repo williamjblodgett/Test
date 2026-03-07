@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Security & Compliance — AI Learning Hub</title>
+  <meta name="description" content="Understand AI security risks, data privacy regulations (GDPR, HIPAA, SOC 2), and safe AI usage best practices.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html">
+        <span class="navbar__brand-icon">🤖</span>
+        AI Learning Hub
+      </a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html" class="active">Security</a></li>
+      </ul>
+      <div class="navbar__actions">
+        <button class="btn-theme" id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Page Hero ── -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>Security & Compliance</span>
+    </nav>
+    <div class="page-hero__icon">🔒</div>
+    <h1>AI Security, Data Compliance & Safety</h1>
+    <p>Protect your organization, respect privacy laws, and use AI responsibly — essential knowledge for every AI practitioner.</p>
+  </div>
+</section>
+
+<!-- ── Main Content ── -->
+<main class="section">
+  <div class="container">
+
+    <!-- Overview -->
+    <div class="content-block">
+      <h2>🔍 Why AI Security Matters</h2>
+      <p>
+        As AI tools handle increasingly sensitive business data — customer records, financial information, legal documents — understanding the security and compliance implications is no longer optional. A single misconfiguration or policy gap can expose your organization to data breaches, regulatory fines, and reputational damage.
+      </p>
+      <p>
+        This section covers the key risks of AI adoption, applicable data privacy regulations, platform-specific safeguards, and practical guidelines for safe AI use in your organization.
+      </p>
+      <div class="alert alert-danger">
+        🚨 <strong>Critical reminder:</strong> Never input personally identifiable information (PII), protected health information (PHI), or confidential business data into a consumer AI tool (like public ChatGPT or Gemini) that is not covered by your organization's data processing agreements.
+      </div>
+    </div>
+
+    <!-- AI Security Risks -->
+    <div class="content-block">
+      <h2>⚠️ Top AI Security Risks</h2>
+
+      <h3>1. Data Leakage</h3>
+      <p>Entering sensitive data into AI systems that don't have enterprise data protection agreements may expose that data to third-party training pipelines or unauthorized access.</p>
+      <div class="alert alert-warning">Mitigation: Use only enterprise-licensed AI tools with zero data retention policies (e.g., Microsoft Copilot, Salesforce Einstein, approved Azure OpenAI deployments).</div>
+
+      <h3>2. Prompt Injection</h3>
+      <p>Malicious content embedded in documents or web pages can hijack AI agent behavior, causing agents to execute unauthorized actions or leak data.</p>
+      <div class="alert alert-warning">Mitigation: Validate and sanitize all inputs to AI agents. Limit agent permissions to the minimum required (principle of least privilege).</div>
+
+      <h3>3. AI Hallucinations</h3>
+      <p>AI models can confidently generate false information (hallucinations). Acting on incorrect AI output in legal, medical, or financial contexts can cause serious harm.</p>
+      <div class="alert alert-warning">Mitigation: Always ground AI in trusted knowledge sources. Require human review for high-stakes decisions. Never use AI output as a sole authoritative source.</div>
+
+      <h3>4. Overprivileged AI Agents</h3>
+      <p>Autonomous AI agents with broad permissions (e.g., ability to send emails, delete records, post to external systems) can cause significant damage if manipulated or misconfigured.</p>
+      <div class="alert alert-warning">Mitigation: Apply least-privilege access. Require human approval for irreversible or high-impact actions. Audit agent activity logs regularly.</div>
+
+      <h3>5. Shadow AI</h3>
+      <p>Employees using unauthorized AI tools outside corporate oversight ("shadow AI") creates unmonitored data flows and compliance gaps.</p>
+      <div class="alert alert-warning">Mitigation: Establish clear AI usage policies. Provide approved enterprise AI tools so employees aren't driven to unsanctioned alternatives. Monitor network traffic for known AI endpoints.</div>
+
+      <h3>6. Model Bias & Discrimination</h3>
+      <p>AI models trained on biased data can make unfair recommendations in hiring, lending, healthcare, or customer service — creating legal and ethical liability.</p>
+      <div class="alert alert-warning">Mitigation: Audit AI model outputs for demographic bias. Use diverse training data. Implement human-in-the-loop reviews for sensitive decisions.</div>
+    </div>
+
+    <!-- Compliance Frameworks -->
+    <div class="content-block">
+      <h2>📋 Key Compliance Frameworks</h2>
+
+      <h3>GDPR — General Data Protection Regulation (EU)</h3>
+      <ul>
+        <li>Applies to any organization handling EU residents' personal data</li>
+        <li>Requires lawful basis for processing data (consent, contract, legitimate interest, etc.)</li>
+        <li>Right to erasure ("right to be forgotten") — must be able to delete user data on request</li>
+        <li>Data breach notification required within 72 hours</li>
+        <li>AI-specific: automated decision-making that significantly affects individuals requires human review (Article 22)</li>
+        <li><strong>Fines:</strong> Up to €20 million or 4% of global annual revenue</li>
+      </ul>
+
+      <h3>HIPAA — Health Insurance Portability and Accountability Act (US)</h3>
+      <ul>
+        <li>Protects Protected Health Information (PHI) in healthcare settings</li>
+        <li>AI tools used with PHI must have a signed Business Associate Agreement (BAA) with the vendor</li>
+        <li>Requires access controls, audit logs, and encryption for PHI at rest and in transit</li>
+        <li>Microsoft, Salesforce, and select Azure OpenAI deployments offer HIPAA BAAs</li>
+        <li><strong>Fines:</strong> Up to $1.9 million per violation category per year</li>
+      </ul>
+
+      <h3>SOC 2 — System and Organization Controls</h3>
+      <ul>
+        <li>Auditing standard for SaaS and cloud service providers</li>
+        <li>Covers Security, Availability, Processing Integrity, Confidentiality, and Privacy</li>
+        <li>Type I: Controls are designed appropriately. Type II: Controls operate effectively over time</li>
+        <li>Microsoft 365, Salesforce, and Tableau all hold SOC 2 Type II certifications</li>
+        <li>Check vendor SOC 2 reports before deploying AI tools with sensitive data</li>
+      </ul>
+
+      <h3>EU AI Act (2024)</h3>
+      <ul>
+        <li>World's first comprehensive AI regulation — applies to AI used in the EU</li>
+        <li>Classifies AI by risk level: Unacceptable Risk (banned), High Risk, Limited Risk, Minimal Risk</li>
+        <li>High-risk AI (hiring, credit scoring, biometrics) requires human oversight, transparency, and documentation</li>
+        <li>General-purpose AI models (like GPT-4) must meet transparency requirements</li>
+        <li><strong>Fines:</strong> Up to €35 million or 7% of global annual revenue</li>
+      </ul>
+
+      <h3>CCPA — California Consumer Privacy Act (US)</h3>
+      <ul>
+        <li>Gives California residents rights over their personal data</li>
+        <li>Right to know, right to delete, right to opt-out of sale of personal data</li>
+        <li>Applies to businesses meeting revenue/data thresholds doing business in California</li>
+      </ul>
+    </div>
+
+    <!-- Platform Security -->
+    <div class="content-block">
+      <h2>🛡️ Platform-Specific Security Features</h2>
+
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Key Security Feature</th>
+            <th>Data Retention Policy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Salesforce Einstein / Agentforce</strong></td>
+            <td>Einstein Trust Layer — PII masking, toxicity filtering, audit trail</td>
+            <td>Zero data retention by external LLM providers</td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft 365 Copilot</strong></td>
+            <td>Microsoft Purview, DLP policies, Azure AI Content Safety</td>
+            <td>Data stays in your Microsoft 365 tenant boundary</td>
+          </tr>
+          <tr>
+            <td><strong>Copilot Studio</strong></td>
+            <td>Power Platform DLP, role-based access, content moderation</td>
+            <td>Governed by Power Platform admin controls</td>
+          </tr>
+          <tr>
+            <td><strong>Tableau</strong></td>
+            <td>Row-level security, column-level permissions, site authentication</td>
+            <td>Data stays in your Tableau server/cloud environment</td>
+          </tr>
+          <tr>
+            <td><strong>Azure OpenAI</strong></td>
+            <td>Private endpoints, VNet integration, RBAC, content filters</td>
+            <td>No data used for model training (enterprise agreement)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Safe AI Usage Guidelines -->
+    <div class="content-block">
+      <h2>✅ Safe AI Usage Guidelines</h2>
+
+      <h3>For All Employees</h3>
+      <ul>
+        <li>✅ <strong>DO</strong> use only AI tools approved by your IT/security team</li>
+        <li>✅ <strong>DO</strong> verify AI-generated content before sharing or acting on it</li>
+        <li>✅ <strong>DO</strong> report any unexpected AI behavior or data exposure to IT security</li>
+        <li>❌ <strong>DO NOT</strong> paste customer PII, financial records, or confidential contracts into consumer AI tools</li>
+        <li>❌ <strong>DO NOT</strong> use AI to make final decisions in high-stakes areas (hiring, medical, legal) without human review</li>
+        <li>❌ <strong>DO NOT</strong> share AI-generated content without disclosing it was AI-assisted where required</li>
+      </ul>
+
+      <h3>For IT & Administrators</h3>
+      <ul>
+        <li>✅ Establish DLP policies that prevent sensitive data from leaving the organization via AI tools</li>
+        <li>✅ Maintain an AI inventory — document every AI tool in use, its data flows, and its vendor agreements</li>
+        <li>✅ Require vendor BAAs for tools handling PHI or other regulated data</li>
+        <li>✅ Enable audit logging for all AI tool activity</li>
+        <li>✅ Conduct regular AI risk assessments aligned with NIST AI RMF or ISO/IEC 42001</li>
+        <li>✅ Provide AI literacy training to all employees before rollout</li>
+      </ul>
+
+      <h3>Responsible AI Principles</h3>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-top: 1rem;">
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">⚖️</div>
+          <strong>Fairness</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">AI should not discriminate based on protected characteristics.</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🔍</div>
+          <strong>Transparency</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">Explain how AI makes decisions. Disclose AI use when required.</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🔒</div>
+          <strong>Privacy</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">Minimize data collection. Protect PII at every step.</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🧑‍💼</div>
+          <strong>Human Oversight</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">Humans must remain accountable for AI-assisted decisions.</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🛡️</div>
+          <strong>Safety</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">Test for harms before deploying AI in production.</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">♿</div>
+          <strong>Inclusiveness</strong>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">Design AI systems that work for everyone, including those with disabilities.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="content-block">
+      <h2>🔗 Training Resources</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://learn.microsoft.com/en-us/azure/ai-services/responsible-use-of-ai-overview" target="_blank" rel="noopener">Microsoft Responsible AI Principles</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://www.salesforce.com/company/intentional-innovation/trusted-ai/" target="_blank" rel="noopener">Salesforce Trusted AI Principles</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://www.nist.gov/artificial-intelligence/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework (AI RMF)</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://learn.microsoft.com/en-us/training/paths/responsible-ai-business-principles/" target="_blank" rel="noopener">Microsoft Learn: Responsible AI — Business Principles</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://gdpr.eu/what-is-gdpr/" target="_blank" rel="noopener">GDPR Overview — gdpr.eu</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://www.hhs.gov/hipaa/for-professionals/index.html" target="_blank" rel="noopener">HIPAA for Professionals — HHS.gov</a>
+        </li>
+        <li>
+          <span class="res-type res-cert">Cert</span>
+          <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/sc-900/" target="_blank" rel="noopener">SC-900: Microsoft Security, Compliance & Identity Fundamentals</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU AI Act — Official Regulatory Framework</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Quick Start Tips -->
+    <div class="tips-box content-block">
+      <h3>🚀 Quick-Start Tips for Organizations</h3>
+      <ol>
+        <li><strong>Create an AI Acceptable Use Policy:</strong> Define which AI tools employees can use, for what purposes, and what data is off-limits. Publish it widely.</li>
+        <li><strong>Audit Your AI Tool Inventory:</strong> List every AI tool in use, who uses it, what data it touches, and whether it has appropriate vendor agreements (BAA, DPA, SOC 2).</li>
+        <li><strong>Enable Enterprise AI Only:</strong> Configure your IT environment to direct AI usage to enterprise-licensed tools (Microsoft Copilot, Salesforce Einstein) rather than consumer equivalents.</li>
+        <li><strong>Train Your People:</strong> Conduct AI security awareness training annually. Make sure everyone knows not to share PII with unapproved tools.</li>
+        <li><strong>Start with SC-900:</strong> If you're new to Microsoft security and compliance, the free SC-900 certification prep on Microsoft Learn is an excellent foundation.</li>
+      </ol>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz-section" id="quiz-container"></div>
+
+  </div>
+</main>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong></span>
+      <span><a href="../index.html">← Back to Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+  new Quiz({
+    containerId: 'quiz-container',
+    topic: 'AI Security & Compliance',
+    questions: [
+      {
+        question: 'What is "Shadow AI" in the context of organizational security?',
+        options: [
+          'AI systems that operate in dark mode',
+          'AI used by hackers to attack organizations',
+          'Employees using unauthorized AI tools outside corporate IT oversight',
+          'AI models with hidden training data'
+        ],
+        correct: 2,
+        topic: 'Shadow AI',
+        explanation: 'Shadow AI refers to employees using unapproved consumer AI tools (like public ChatGPT) with sensitive data — creating unmonitored compliance risks.'
+      },
+      {
+        question: 'Under GDPR, how quickly must organizations notify authorities of a data breach?',
+        options: [
+          'Within 24 hours',
+          'Within 72 hours',
+          'Within 7 business days',
+          'Within 30 days'
+        ],
+        correct: 1,
+        topic: 'GDPR',
+        explanation: 'GDPR Article 33 requires supervisory authority notification of personal data breaches within 72 hours of becoming aware of the breach.'
+      },
+      {
+        question: 'Which Salesforce security feature masks PII before sending data to external LLMs?',
+        options: [
+          'Salesforce Shield',
+          'Einstein Trust Layer',
+          'Platform Encryption',
+          'Data Cloud Governance'
+        ],
+        correct: 1,
+        topic: 'Salesforce Security',
+        explanation: 'The Einstein Trust Layer masks sensitive data before it leaves Salesforce\'s network, ensuring external LLM providers never see raw PII.'
+      },
+      {
+        question: 'What does "prompt injection" mean in AI security?',
+        options: [
+          'Inserting a USB drive into an AI server',
+          'Malicious instructions embedded in user inputs that hijack AI agent behavior',
+          'A technique for improving AI model performance',
+          'Injecting test data into AI training pipelines'
+        ],
+        correct: 1,
+        topic: 'Prompt Injection',
+        explanation: 'Prompt injection is when attackers embed hidden instructions in content (emails, documents, web pages) that cause AI agents to take unintended or malicious actions.'
+      },
+      {
+        question: 'For healthcare organizations using AI tools that process patient data, what agreement must be in place with the AI vendor?',
+        options: [
+          'Non-Disclosure Agreement (NDA)',
+          'Service Level Agreement (SLA)',
+          'Business Associate Agreement (BAA)',
+          'Master Service Agreement (MSA)'
+        ],
+        correct: 2,
+        topic: 'HIPAA',
+        explanation: 'HIPAA requires a Business Associate Agreement (BAA) with any vendor that processes Protected Health Information (PHI) on your behalf, including AI vendors.'
+      },
+      {
+        question: 'Which principle states that AI agents should only be given the minimum permissions needed to perform their task?',
+        options: [
+          'Zero Trust',
+          'Principle of Least Privilege',
+          'Defense in Depth',
+          'Data Minimization'
+        ],
+        correct: 1,
+        topic: 'AI Security Principles',
+        explanation: 'The Principle of Least Privilege limits AI agent permissions to only what is needed, reducing the blast radius of misconfiguration or manipulation.'
+      },
+      {
+        question: 'What is the maximum fine under the EU AI Act for violations involving banned AI systems?',
+        options: [
+          '€5 million or 1% of global revenue',
+          '€20 million or 4% of global revenue',
+          '€35 million or 7% of global revenue',
+          '€10 million or 2% of global revenue'
+        ],
+        correct: 2,
+        topic: 'EU AI Act',
+        explanation: 'The EU AI Act\'s highest tier of fines (€35 million or 7% of global annual turnover) applies to violations involving prohibited AI practices.'
+      },
+      {
+        question: 'What is an "AI hallucination" and why is it a security/safety concern?',
+        options: [
+          'When AI generates visual content with errors',
+          'When AI confidently states false information as fact, which could lead to harmful decisions',
+          'When AI systems become overloaded and crash',
+          'When AI models are trained on hallucinated (synthetic) data'
+        ],
+        correct: 1,
+        topic: 'AI Hallucinations',
+        explanation: 'AI hallucinations are confident but false outputs. In legal, medical, or financial contexts, acting on hallucinated AI output can cause serious real-world harm.'
+      },
+      {
+        question: 'Which Microsoft certification is recommended for foundational knowledge of security, compliance, and identity?',
+        options: [
+          'MS-900',
+          'AZ-900',
+          'SC-900',
+          'PL-900'
+        ],
+        correct: 2,
+        topic: 'Certifications',
+        explanation: 'SC-900 (Microsoft Security, Compliance, and Identity Fundamentals) is the entry-level certification for these topics, with free prep available on Microsoft Learn.'
+      },
+      {
+        question: 'Which of the following is an example of RESPONSIBLE AI use?',
+        options: [
+          'Using AI to automatically reject job applications without human review',
+          'Pasting customer records into a public AI chatbot to save time',
+          'Having a human review AI-generated medical summaries before they reach patients',
+          'Deploying an AI agent with full admin access to all company systems'
+        ],
+        correct: 2,
+        topic: 'Responsible AI',
+        explanation: 'Human oversight is a core responsible AI principle. AI-generated medical summaries should always be reviewed by a qualified human before use in patient care.'
+      }
+    ]
+  });
+</script>
+</body>
+</html>

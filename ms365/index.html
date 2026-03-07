@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft 365 AI — AI Learning Hub</title>
+  <meta name="description" content="Learn Microsoft 365 Copilot AI features across Teams, Word, Excel, Outlook, and SharePoint to boost productivity.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟩</text></svg>">
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html">
+        <span class="navbar__brand-icon">🤖</span>
+        AI Learning Hub
+      </a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html" class="active">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions">
+        <button class="btn-theme" id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Page Hero ── -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>Microsoft 365 AI</span>
+    </nav>
+    <div class="page-hero__icon">🟩</div>
+    <h1>Microsoft 365 AI</h1>
+    <p>Transform daily productivity with Microsoft 365 Copilot — AI assistance embedded in Teams, Word, Excel, Outlook, PowerPoint, and SharePoint.</p>
+  </div>
+</section>
+
+<!-- ── Main Content ── -->
+<main class="section">
+  <div class="container">
+
+    <!-- Overview -->
+    <div class="content-block">
+      <h2>🔍 What Is Microsoft 365 Copilot?</h2>
+      <p>
+        <strong>Microsoft 365 Copilot</strong> is an AI assistant deeply integrated into the Microsoft 365 suite of applications. Powered by large language models (GPT-4 class) combined with your organization's own data through <strong>Microsoft Graph</strong>, Copilot can summarize meetings, draft documents, analyze spreadsheets, answer emails, and much more — all within the apps you already use daily.
+      </p>
+      <p>
+        Unlike a standalone AI chatbot, M365 Copilot has context: it knows your calendar, emails, documents, chats, and meetings — and uses that context to provide highly relevant, personalized assistance.
+      </p>
+      <div class="alert alert-info">
+        💡 <strong>Microsoft Graph</strong> is the unified API that connects M365 Copilot to your organization's data across all Microsoft 365 apps — securely and with your existing permissions.
+      </div>
+      <div class="alert alert-warning">
+        ⚠️ M365 Copilot requires a Microsoft 365 Copilot license (add-on) in addition to your standard M365 subscription. Check with your IT admin for availability.
+      </div>
+    </div>
+
+    <!-- Who it's for -->
+    <div class="content-block">
+      <h2>👤 Who Is It For?</h2>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Knowledge Workers</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Draft faster, summarize meetings, and find information across all M365 apps.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Managers & Leaders</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Get meeting summaries, action items, and status updates without attending every call.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Analysts</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Use Copilot in Excel to analyze data, spot trends, and generate formulas in plain English.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>IT Admins</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Configure Copilot policies, manage permissions, and monitor usage via Admin Center.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Concepts -->
+    <div class="content-block">
+      <h2>📚 Key Concepts — Copilot Per App</h2>
+
+      <h3>📧 Copilot in Outlook</h3>
+      <ul>
+        <li>Draft emails from bullet points or short prompts</li>
+        <li>Summarize long email threads in seconds</li>
+        <li>Adjust tone (professional, casual, concise) with one click</li>
+        <li>Coaching tips to improve message clarity and impact</li>
+      </ul>
+
+      <h3>📝 Copilot in Word</h3>
+      <ul>
+        <li>Draft entire documents from a brief prompt or outline</li>
+        <li>Rewrite, summarize, or expand selected text</li>
+        <li>Extract key points and generate executive summaries</li>
+        <li>Pull in data from referenced files, emails, and meetings</li>
+      </ul>
+
+      <h3>📊 Copilot in Excel</h3>
+      <ul>
+        <li>Ask questions about your data in plain English ("Show me sales by region last quarter")</li>
+        <li>Generate formulas and explain what they do</li>
+        <li>Identify trends, outliers, and correlations automatically</li>
+        <li>Create charts and pivot tables from natural language prompts</li>
+      </ul>
+
+      <h3>🎯 Copilot in Teams</h3>
+      <ul>
+        <li>Real-time meeting transcription and smart summaries</li>
+        <li>Action item extraction and follow-up suggestions post-meeting</li>
+        <li>Catch-up summaries for channels you missed</li>
+        <li>Draft replies and messages in chat with AI assistance</li>
+      </ul>
+
+      <h3>📊 Copilot in PowerPoint</h3>
+      <ul>
+        <li>Create full presentations from a text prompt or Word document</li>
+        <li>Suggest slide designs and layouts</li>
+        <li>Summarize or reorganize existing decks</li>
+        <li>Add speaker notes automatically</li>
+      </ul>
+
+      <h3>🔍 Microsoft Copilot Chat (BizChat)</h3>
+      <ul>
+        <li>Web-grounded AI chat with enterprise data via Graph</li>
+        <li>Ask questions that span multiple M365 apps ("Summarize emails and Teams messages about Project X from this week")</li>
+        <li>Available at copilot.microsoft.com and in Teams sidebar</li>
+        <li>Work Data mode (protected) vs. Web mode (public web)</li>
+      </ul>
+
+      <h3>Microsoft Graph — The Foundation</h3>
+      <ul>
+        <li>Unified API connecting all M365 user and organizational data</li>
+        <li>Respects existing permission model — Copilot only sees what you can see</li>
+        <li>Enables semantic search across emails, documents, chats, and calendar</li>
+      </ul>
+    </div>
+
+    <!-- Resources -->
+    <div class="content-block">
+      <h2>🔗 Training Resources</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/" target="_blank" rel="noopener">Microsoft 365 Copilot Official Documentation</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://learn.microsoft.com/en-us/training/paths/get-started-with-microsoft-365-copilot/" target="_blank" rel="noopener">Microsoft Learn: Get Started with M365 Copilot (Free)</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://adoption.microsoft.com/en-us/copilot/" target="_blank" rel="noopener">Microsoft Copilot Adoption Hub — Scenarios & Guides</a>
+        </li>
+        <li>
+          <span class="res-type res-cert">Cert</span>
+          <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ms-900/" target="_blank" rel="noopener">MS-900: Microsoft 365 Fundamentals (includes AI overview)</a>
+        </li>
+        <li>
+          <span class="res-type res-cert">Cert</span>
+          <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ms-102/" target="_blank" rel="noopener">MS-102: Microsoft 365 Administrator (Advanced)</a>
+        </li>
+        <li>
+          <span class="res-type res-vid">Video</span>
+          <a href="https://www.youtube.com/@Microsoft365" target="_blank" rel="noopener">Microsoft 365 YouTube Channel — Tips & Feature Videos</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://learn.microsoft.com/en-us/graph/overview" target="_blank" rel="noopener">Microsoft Graph API Overview</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://learn.microsoft.com/en-us/training/modules/introduction-to-microsoft-365-copilot/" target="_blank" rel="noopener">Microsoft Learn: Introduction to Microsoft 365 Copilot</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Quick Start Tips -->
+    <div class="tips-box content-block">
+      <h3>🚀 Quick-Start Tips</h3>
+      <ol>
+        <li><strong>Start with Outlook:</strong> Use "Draft with Copilot" on your next email — type 3 bullet points and let Copilot write the full message. Edit and send.</li>
+        <li><strong>Summarize Your Next Meeting in Teams:</strong> Enable Copilot in Teams Settings → Meetings. After the call, open the Copilot recap tab for a full summary and action items.</li>
+        <li><strong>Ask Excel a Question:</strong> Open any spreadsheet, click the Copilot icon, and type "What are my top 5 items by revenue?" — no formulas needed.</li>
+        <li><strong>Use Copilot Chat for Cross-App Search:</strong> In Teams, open Copilot and ask "What are the main decisions from my last 3 meetings?" to see cross-app intelligence.</li>
+        <li><strong>Complete the Microsoft Adoption Scenarios:</strong> Visit adoption.microsoft.com/copilot to find use-case playbooks for your specific job role.</li>
+      </ol>
+    </div>
+
+    <!-- AI Prompting Tips -->
+    <div class="content-block">
+      <h2>✍️ Writing Better Copilot Prompts</h2>
+      <p>The quality of Copilot's output depends heavily on how you prompt it. Follow this framework:</p>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>What It Means</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Goal</strong></td>
+            <td>What do you want Copilot to do?</td>
+            <td>Draft an email</td>
+          </tr>
+          <tr>
+            <td><strong>Context</strong></td>
+            <td>Relevant background information</td>
+            <td>To a client who missed our deadline</td>
+          </tr>
+          <tr>
+            <td><strong>Source</strong></td>
+            <td>Data or files to reference</td>
+            <td>Using the project timeline in /Project-Plan.docx</td>
+          </tr>
+          <tr>
+            <td><strong>Expectations</strong></td>
+            <td>Format, tone, length</td>
+            <td>Keep it professional, under 150 words, with a solution</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="alert alert-success">
+        ✅ <strong>Good prompt example:</strong> "Draft a professional email to our client explaining we'll be 2 days late on the Q1 report delivery. Reference the reasons from last week's Teams meeting. Keep it concise, empathetic, and include a new delivery date of Friday."
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz-section" id="quiz-container"></div>
+
+  </div>
+</main>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong></span>
+      <span><a href="../index.html">← Back to Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+  new Quiz({
+    containerId: 'quiz-container',
+    topic: 'Microsoft 365 AI',
+    questions: [
+      {
+        question: 'What powers Microsoft 365 Copilot\'s understanding of your personal work data (emails, meetings, documents)?',
+        options: [
+          'Azure Cognitive Services',
+          'Microsoft Graph',
+          'Power BI dataflows',
+          'SharePoint Search only'
+        ],
+        correct: 1,
+        topic: 'Microsoft Graph',
+        explanation: 'Microsoft Graph is the unified API layer that connects Copilot to your organizational data across all M365 apps, respecting existing permissions.'
+      },
+      {
+        question: 'Which M365 Copilot feature can automatically generate a full presentation from a Word document or text prompt?',
+        options: [
+          'Copilot in Outlook',
+          'Copilot in Excel',
+          'Copilot in PowerPoint',
+          'Copilot in Teams'
+        ],
+        correct: 2,
+        topic: 'Copilot in PowerPoint',
+        explanation: 'Copilot in PowerPoint can create full slide decks from a document or text prompt, including suggested layouts and speaker notes.'
+      },
+      {
+        question: 'In Microsoft Teams, what does Copilot generate automatically after a meeting?',
+        options: [
+          'A Power BI dashboard of attendee engagement',
+          'A meeting summary with key points and action items',
+          'An auto-reply email to all attendees',
+          'A task list synced to Azure DevOps'
+        ],
+        correct: 1,
+        topic: 'Copilot in Teams',
+        explanation: 'After a meeting (with transcription enabled), Copilot generates a summary including key discussion points, decisions, and action items.'
+      },
+      {
+        question: 'What is "Microsoft Copilot Chat" (BizChat) primarily used for?',
+        options: [
+          'Replacing Microsoft Teams entirely',
+          'Cross-app AI queries spanning emails, documents, Teams chats, and calendar data',
+          'Managing Azure subscriptions via natural language',
+          'Sending bulk marketing emails'
+        ],
+        correct: 1,
+        topic: 'Copilot Chat / BizChat',
+        explanation: 'Copilot Chat (BizChat) provides a conversational interface that can query across your entire M365 data estate — emails, documents, chats, calendar — in one place.'
+      },
+      {
+        question: 'Which of the following is the BEST prompt structure for Microsoft 365 Copilot?',
+        options: [
+          '"Write something about sales."',
+          '"Draft a professional email to the marketing team summarizing the Q4 campaign results from last week\'s Teams meeting, under 200 words."',
+          '"Do my job for me."',
+          '"Make a table."'
+        ],
+        correct: 1,
+        topic: 'Prompting Best Practices',
+        explanation: 'An effective Copilot prompt includes a clear goal, relevant context, data source reference, and format/tone expectations.'
+      },
+      {
+        question: 'In Excel, how does Copilot help users who don\'t know formulas?',
+        options: [
+          'It replaces Excel with a simpler app',
+          'It imports Power BI reports automatically',
+          'It allows plain-English questions about the data and generates formulas on request',
+          'It connects to Salesforce automatically'
+        ],
+        correct: 2,
+        topic: 'Copilot in Excel',
+        explanation: 'Copilot in Excel lets you ask questions in plain English (e.g., "Show me total revenue by region"), generates formulas, and explains what they do.'
+      },
+      {
+        question: 'What is required to access Microsoft 365 Copilot features beyond a standard M365 subscription?',
+        options: [
+          'Nothing — it is included in all M365 plans',
+          'An Azure OpenAI Service subscription',
+          'A Microsoft 365 Copilot add-on license',
+          'A Power Platform Premium license'
+        ],
+        correct: 2,
+        topic: 'Licensing',
+        explanation: 'Microsoft 365 Copilot requires a separate add-on license (currently $30/user/month) on top of eligible M365 base subscriptions.'
+      }
+    ]
+  });
+</script>
+</body>
+</html>

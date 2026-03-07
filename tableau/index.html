@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau API — AI Learning Hub</title>
+  <meta name="description" content="Learn the Tableau REST API, Hyper API, and Extensions SDK to automate dashboards and embed analytics.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html">
+        <span class="navbar__brand-icon">🤖</span>
+        AI Learning Hub
+      </a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html">Salesforce</a></li>
+        <li><a href="../tableau/index.html" class="active">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions">
+        <button class="btn-theme" id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Page Hero ── -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a>
+      <span>Tableau API</span>
+    </nav>
+    <div class="page-hero__icon">📊</div>
+    <h1>Tableau API</h1>
+    <p>Automate, integrate, and extend Tableau's powerful data visualization platform using REST, Hyper, and Extensions APIs.</p>
+  </div>
+</section>
+
+<!-- ── Main Content ── -->
+<main class="section">
+  <div class="container">
+
+    <!-- Overview -->
+    <div class="content-block">
+      <h2>🔍 What Is the Tableau API?</h2>
+      <p>
+        Tableau provides a suite of APIs that let developers and analysts automate administrative tasks, embed dashboards in external apps, push data programmatically, and build custom extensions. Rather than clicking through the Tableau UI manually, you can write code that manages hundreds of workbooks, users, or data sources at once.
+      </p>
+      <p>
+        With <strong>Tableau AI</strong> (formerly Tableau Pulse and Einstein), you can also surface AI-generated insights and natural-language data explanations directly in dashboards.
+      </p>
+      <div class="alert alert-info">
+        💡 Tableau is now part of <strong>Salesforce</strong> and integrates with Data Cloud, making it a key component of the Salesforce AI stack.
+      </div>
+    </div>
+
+    <!-- Who it's for -->
+    <div class="content-block">
+      <h2>👤 Who Is It For?</h2>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Data Analysts</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Automate publishing, refresh schedules, and user permissions.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Developers</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Embed Tableau views in web apps and build custom dashboard extensions.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>Data Engineers</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Push large datasets to Tableau using the Hyper API for fast in-memory analytics.</p>
+        </div>
+        <div class="card" style="padding: 1.25rem;">
+          <strong>IT/Admins</strong>
+          <p class="text-muted mt-1" style="font-size:0.875rem;">Manage site settings, groups, schedules, and content at scale via REST API.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Concepts -->
+    <div class="content-block">
+      <h2>📚 Key Concepts</h2>
+
+      <h3>Tableau REST API</h3>
+      <ul>
+        <li>HTTP-based API for managing Tableau Server / Tableau Cloud programmatically</li>
+        <li>Authenticate with <strong>Personal Access Tokens (PAT)</strong> or username/password</li>
+        <li>Key endpoints: <code>/workbooks</code>, <code>/datasources</code>, <code>/users</code>, <code>/views</code>, <code>/jobs</code></li>
+        <li>Supports pagination, filtering, and field selection for efficient queries</li>
+      </ul>
+
+      <h3>Tableau Hyper API</h3>
+      <ul>
+        <li>Python/C++ library to create and read <code>.hyper</code> extract files</li>
+        <li>Optimized for high-performance in-memory data operations</li>
+        <li>Use cases: large ETL jobs, custom data extracts, bulk data pushes</li>
+        <li>Supports insert, update, delete operations on extract files</li>
+      </ul>
+
+      <h3>Tableau Extensions API (JavaScript)</h3>
+      <ul>
+        <li>Build custom web apps that run inside Tableau dashboard zones</li>
+        <li>Access dashboard data, filter views, and react to user interactions</li>
+        <li>Requires basic HTML/CSS/JavaScript knowledge</li>
+        <li>Extensions are hosted on any web server and loaded by URL</li>
+      </ul>
+
+      <h3>Embedding API (Tableau Embedding API v3)</h3>
+      <ul>
+        <li>Embed Tableau views into your own web applications with a Web Component</li>
+        <li>Control filters, parameters, and marks programmatically via JavaScript</li>
+        <li>Supports SSO via Connected Apps or JWT authentication</li>
+      </ul>
+
+      <h3>Tableau AI (Tableau Pulse / Einstein)</h3>
+      <ul>
+        <li>AI-generated metric insights surfaced directly in dashboards</li>
+        <li>Natural language answers to data questions</li>
+        <li>Automated anomaly detection and trend explanations</li>
+      </ul>
+    </div>
+
+    <!-- Resources -->
+    <div class="content-block">
+      <h2>🔗 Training Resources</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api.htm" target="_blank" rel="noopener">Tableau REST API Reference</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://tableau.github.io/hyper-db/docs/" target="_blank" rel="noopener">Tableau Hyper API Documentation</a>
+        </li>
+        <li>
+          <span class="res-type res-doc">Docs</span>
+          <a href="https://help.tableau.com/current/api/embedding_api/en-us/docs/embedding_api_intro.htm" target="_blank" rel="noopener">Tableau Embedding API v3 Guide</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://trailhead.salesforce.com/content/learn/trails/explore-tableau" target="_blank" rel="noopener">Trailhead: Explore Tableau (Free Learning Path)</a>
+        </li>
+        <li>
+          <span class="res-type res-cert">Cert</span>
+          <a href="https://www.tableau.com/learn/certification/desktop-specialist" target="_blank" rel="noopener">Tableau Desktop Specialist Certification</a>
+        </li>
+        <li>
+          <span class="res-type res-cert">Cert</span>
+          <a href="https://www.tableau.com/learn/certification/data-analyst" target="_blank" rel="noopener">Tableau Certified Data Analyst Certification</a>
+        </li>
+        <li>
+          <span class="res-type res-vid">Video</span>
+          <a href="https://www.youtube.com/@tableausoftware" target="_blank" rel="noopener">Tableau Official YouTube — Tutorials & Tips</a>
+        </li>
+        <li>
+          <span class="res-type res-course">Course</span>
+          <a href="https://developer.salesforce.com/tableau" target="_blank" rel="noopener">Tableau Developer Portal — Samples & Docs</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Quick Start Tips -->
+    <div class="tips-box content-block">
+      <h3>🚀 Quick-Start Tips</h3>
+      <ol>
+        <li><strong>Get a Free Account:</strong> Sign up for Tableau Public (free) to start building visualizations without a server.</li>
+        <li><strong>Learn REST API basics:</strong> Use Postman or curl to authenticate and list your workbooks via <code>GET /api/2.8/auth/signin</code>.</li>
+        <li><strong>Try the Hyper API samples:</strong> Clone the official GitHub repo and run the Python sample scripts to create your first <code>.hyper</code> file.</li>
+        <li><strong>Build an Extension:</strong> Use the Tableau Extensions API scaffold on GitHub to build a simple HTML dashboard extension in under 1 hour.</li>
+        <li><strong>Enable Tableau AI:</strong> Explore Tableau Pulse in Tableau Cloud to see AI-generated metric summaries in action.</li>
+      </ol>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz-section" id="quiz-container"></div>
+
+  </div>
+</main>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong></span>
+      <span><a href="../index.html">← Back to Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+  new Quiz({
+    containerId: 'quiz-container',
+    topic: 'Tableau API',
+    questions: [
+      {
+        question: 'Which Tableau API is used to manage workbooks, users, and permissions programmatically via HTTP?',
+        options: [
+          'Hyper API',
+          'Extensions API',
+          'REST API',
+          'Embedding API'
+        ],
+        correct: 2,
+        topic: 'Tableau REST API',
+        explanation: 'The Tableau REST API is an HTTP-based interface for managing Tableau Server and Tableau Cloud resources programmatically.'
+      },
+      {
+        question: 'What is the primary use case for the Tableau Hyper API?',
+        options: [
+          'Embedding Tableau dashboards in web apps',
+          'Creating and manipulating high-performance .hyper extract files',
+          'Building custom UI extensions inside dashboards',
+          'Authenticating users with SSO'
+        ],
+        correct: 1,
+        topic: 'Hyper API',
+        explanation: 'The Hyper API allows you to create, read, and modify .hyper files — Tableau\'s in-memory data extract format — for fast bulk data operations.'
+      },
+      {
+        question: 'Which authentication method is recommended for Tableau REST API integrations?',
+        options: [
+          'Basic Auth with username/password on every request',
+          'OAuth 1.0',
+          'Personal Access Tokens (PAT)',
+          'API Keys stored in the URL'
+        ],
+        correct: 2,
+        topic: 'Authentication',
+        explanation: 'Personal Access Tokens (PATs) are the recommended, more secure method for authenticating to the Tableau REST API.'
+      },
+      {
+        question: 'What language is the Tableau Extensions API built on?',
+        options: [
+          'Python',
+          'Java',
+          'JavaScript',
+          'Apex'
+        ],
+        correct: 2,
+        topic: 'Extensions API',
+        explanation: 'The Tableau Extensions API is a JavaScript SDK, allowing web developers to build custom dashboard extensions hosted on any web server.'
+      },
+      {
+        question: 'What does Tableau AI (Tableau Pulse) provide to end users?',
+        options: [
+          'Automated workbook publishing scripts',
+          'AI-generated natural language insights and anomaly detection on metrics',
+          'Drag-and-drop visualization building with no code',
+          'Python notebook integration for machine learning'
+        ],
+        correct: 1,
+        topic: 'Tableau AI',
+        explanation: 'Tableau Pulse surfaces AI-generated metric insights, trend explanations, and anomaly alerts directly within dashboards in natural language.'
+      },
+      {
+        question: 'Which version of the Tableau Embedding API uses Web Components (modern standard)?',
+        options: [
+          'Tableau JavaScript API v1',
+          'Tableau JS API v2',
+          'Tableau Embedding API v3',
+          'Tableau REST Embed API'
+        ],
+        correct: 2,
+        topic: 'Embedding API',
+        explanation: 'The Tableau Embedding API v3 is built on modern Web Components and replaces the older JavaScript API v1 and v2.'
+      },
+      {
+        question: 'Tableau is now owned by which company, enabling tight integration with CRM and Data Cloud?',
+        options: [
+          'Microsoft',
+          'Google',
+          'Salesforce',
+          'Oracle'
+        ],
+        correct: 2,
+        topic: 'Tableau Ecosystem',
+        explanation: 'Salesforce acquired Tableau in 2019, enabling deep integration between Tableau, Salesforce CRM, and Data Cloud.'
+      }
+    ]
+  });
+</script>
+</body>
+</html>
