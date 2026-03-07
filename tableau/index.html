@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tableau API — AI Learning Hub</title>
-  <meta name="description" content="Learn the Tableau REST API, Hyper API, and Extensions SDK to automate dashboards and embed analytics.">
+  <meta name="description" content="Intermediate guide to Tableau REST API, Hyper API, Extensions API, Embedding API, and Tableau AI — for developers and data engineers.">
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 </head>
@@ -42,150 +42,423 @@
     </nav>
     <div class="page-hero__icon">📊</div>
     <h1>Tableau API</h1>
-    <p>Automate, integrate, and extend Tableau's powerful data visualization platform using REST, Hyper, and Extensions APIs.</p>
+    <p>REST API authentication patterns, Hyper extract internals, Extensions SDK architecture, Embedding API v3, and Tableau AI — for developers and data engineers.</p>
   </div>
 </section>
 
-<!-- ── Main Content ── -->
-<main class="section">
-  <div class="container">
+<!-- ── Two-Column Layout ── -->
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li><a href="#overview">API Ecosystem Overview</a></li>
+      <li><a href="#rest-api">REST API Deep Dive</a></li>
+      <li><a href="#hyper-api">Hyper API</a></li>
+      <li><a href="#extensions-api">Extensions API</a></li>
+      <li><a href="#embedding-api">Embedding API v3</a></li>
+      <li><a href="#tableau-ai">Tableau AI / Pulse</a></li>
+      <li><a href="#resources">Resources</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
 
     <!-- Overview -->
-    <div class="content-block">
-      <h2>🔍 What Is the Tableau API?</h2>
-      <p>
-        Tableau provides a suite of APIs that let developers and analysts automate administrative tasks, embed dashboards in external apps, push data programmatically, and build custom extensions. Rather than clicking through the Tableau UI manually, you can write code that manages hundreds of workbooks, users, or data sources at once.
-      </p>
-      <p>
-        With <strong>Tableau AI</strong> (formerly Tableau Pulse and Einstein), you can also surface AI-generated insights and natural-language data explanations directly in dashboards.
-      </p>
-      <div class="alert alert-info">
-        💡 Tableau is now part of <strong>Salesforce</strong> and integrates with Data Cloud, making it a key component of the Salesforce AI stack.
+    <section id="overview">
+      <div class="content-block">
+        <h2>🔍 API Ecosystem Overview</h2>
+        <p>
+          Tableau exposes four distinct developer surfaces, each serving a different integration pattern. Understanding which API to use — and when — is the first decision in any Tableau automation or integration project.
+        </p>
+
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>API</th>
+              <th>Language</th>
+              <th>Primary Use Case</th>
+              <th>Auth Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>REST API</strong></td>
+              <td>Any (HTTP)</td>
+              <td>Admin automation, content management, permissions</td>
+              <td>PAT or username/password</td>
+            </tr>
+            <tr>
+              <td><strong>Hyper API</strong></td>
+              <td>Python, Java, C++, .NET</td>
+              <td>Create/modify <code>.hyper</code> extract files programmatically</td>
+              <td>N/A (local file ops)</td>
+            </tr>
+            <tr>
+              <td><strong>Extensions API</strong></td>
+              <td>JavaScript</td>
+              <td>Custom dashboard panels that interact with viz data</td>
+              <td>Tableau session (iframe)</td>
+            </tr>
+            <tr>
+              <td><strong>Embedding API v3</strong></td>
+              <td>JavaScript (Web Components)</td>
+              <td>Embed Tableau views in external web apps</td>
+              <td>Connected Apps / JWT</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-info">
+          💡 Tableau is part of the Salesforce portfolio since 2019. Data Cloud integration enables pushing Salesforce unified customer data directly into Tableau extracts — and surfacing Tableau AI insights within the Salesforce platform.
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Who it's for -->
-    <div class="content-block">
-      <h2>👤 Who Is It For?</h2>
-      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Data Analysts</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Automate publishing, refresh schedules, and user permissions.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Developers</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Embed Tableau views in web apps and build custom dashboard extensions.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Data Engineers</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Push large datasets to Tableau using the Hyper API for fast in-memory analytics.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>IT/Admins</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Manage site settings, groups, schedules, and content at scale via REST API.</p>
-        </div>
+    <!-- REST API -->
+    <section id="rest-api">
+      <div class="content-block">
+        <h2>🌐 REST API Deep Dive</h2>
+        <p>
+          The Tableau REST API is an HTTP-based interface for managing Tableau Server and Tableau Cloud resources programmatically. Every action you can perform in the Tableau web UI has a corresponding REST API endpoint — enabling full automation of administrative and content management workflows.
+        </p>
+
+        <h3>Authentication</h3>
+        <p>All REST API calls require a session token obtained at sign-in. Two methods:</p>
+        <ul>
+          <li>
+            <strong>Personal Access Tokens (PAT) — Recommended:</strong> Long-lived tokens tied to a user account. Create them in Account Settings → Personal Access Tokens. Use PATs for server-side scripts and CI/CD pipelines — they don't expire unless explicitly revoked or the password changes.
+          </li>
+          <li>
+            <strong>Username/Password:</strong> Exchange credentials for a short-lived session token. Not recommended for automated workflows — tokens expire and credentials in scripts are a security risk.
+          </li>
+        </ul>
+
+        <p>Sign-in request (PAT):</p>
+        <pre><code>POST https://&lt;server&gt;/api/2.8/auth/signin
+Content-Type: application/json
+
+{
+  "credentials": {
+    "personalAccessTokenName": "my-token-name",
+    "personalAccessTokenSecret": "my-token-secret",
+    "site": { "contentUrl": "my-site" }
+  }
+}</code></pre>
+        <p>The response includes a <code>token</code> and <code>siteId</code> used in all subsequent request headers: <code>X-Tableau-Auth: {token}</code>.</p>
+
+        <h3>Core Resource Endpoints</h3>
+        <ul>
+          <li><code>GET /api/{version}/sites/{siteId}/workbooks</code> — List all workbooks. Supports <code>filter</code> and <code>sort</code> query params.</li>
+          <li><code>GET /api/{version}/sites/{siteId}/datasources</code> — List data sources. Filter by <code>type:eq:text/csv</code>, etc.</li>
+          <li><code>POST /api/{version}/sites/{siteId}/datasources/{id}/refresh</code> — Trigger an extract refresh job.</li>
+          <li><code>GET /api/{version}/sites/{siteId}/jobs/{jobId}</code> — Poll job status (asynchronous operations).</li>
+          <li><code>PUT /api/{version}/sites/{siteId}/users/{userId}</code> — Update user role or site role.</li>
+          <li><code>DELETE /api/{version}/sites/{siteId}/workbooks/{id}/permissions/{...}</code> — Revoke specific permissions.</li>
+        </ul>
+
+        <h3>Pagination</h3>
+        <p>All list endpoints paginate results using <code>pageSize</code> and <code>pageNumber</code> query parameters. The response includes a <code>pagination</code> object with <code>totalAvailable</code>, <code>pageNumber</code>, and <code>pageSize</code> — use these to build loops in automation scripts:</p>
+        <pre><code>GET /api/2.8/sites/{siteId}/workbooks?pageSize=100&amp;pageNumber=1</code></pre>
+
+        <h3>Common Automation Patterns</h3>
+        <ul>
+          <li><strong>Bulk permission audit:</strong> Iterate users → get their content permissions → export to a spreadsheet for compliance review.</li>
+          <li><strong>Automated extract refresh:</strong> Trigger refreshes via API after ETL pipelines complete, rather than relying on scheduled refreshes.</li>
+          <li><strong>Content migration:</strong> Use the REST API with the <code>workbook</code> download/publish endpoints to move content between sites or environments (dev → staging → prod).</li>
+          <li><strong>Usage reporting:</strong> Combine <code>/views/{id}/usage</code> and <code>/users</code> endpoints to build custom adoption dashboards in Tableau itself.</li>
+        </ul>
       </div>
-    </div>
+    </section>
 
-    <!-- Key Concepts -->
-    <div class="content-block">
-      <h2>📚 Key Concepts</h2>
+    <!-- Hyper API -->
+    <section id="hyper-api">
+      <div class="content-block">
+        <h2>⚡ Hyper API</h2>
+        <p>
+          The Hyper API is a set of language-specific libraries for creating, reading, and modifying Tableau's <code>.hyper</code> extract files — Tableau's proprietary in-memory columnar data format that powers its high-performance query engine (Hyper).
+        </p>
 
-      <h3>Tableau REST API</h3>
-      <ul>
-        <li>HTTP-based API for managing Tableau Server / Tableau Cloud programmatically</li>
-        <li>Authenticate with <strong>Personal Access Tokens (PAT)</strong> or username/password</li>
-        <li>Key endpoints: <code>/workbooks</code>, <code>/datasources</code>, <code>/users</code>, <code>/views</code>, <code>/jobs</code></li>
-        <li>Supports pagination, filtering, and field selection for efficient queries</li>
-      </ul>
+        <h3>What Is a .hyper File?</h3>
+        <p>A <code>.hyper</code> file is a self-contained binary database file optimized for Tableau's analytical query workloads:</p>
+        <ul>
+          <li>Columnar storage format — fast aggregation and filtering across large row sets.</li>
+          <li>Compressed on disk; decompressed into memory when Tableau opens the viz.</li>
+          <li>Supports multiple tables within a single file (multi-table extracts).</li>
+          <li>The Hyper engine can query a <code>.hyper</code> file at speeds comparable to dedicated OLAP databases for typical BI workloads.</li>
+        </ul>
 
-      <h3>Tableau Hyper API</h3>
-      <ul>
-        <li>Python/C++ library to create and read <code>.hyper</code> extract files</li>
-        <li>Optimized for high-performance in-memory data operations</li>
-        <li>Use cases: large ETL jobs, custom data extracts, bulk data pushes</li>
-        <li>Supports insert, update, delete operations on extract files</li>
-      </ul>
+        <h3>When to Use Hyper API vs. Live Connections</h3>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Hyper API Extract</th>
+              <th>Live Connection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Large dataset (&gt;10M rows)</td>
+              <td>✅ Better performance</td>
+              <td>⚠️ Query speed depends on source DB</td>
+            </tr>
+            <tr>
+              <td>Real-time data required</td>
+              <td>❌ Data is a snapshot</td>
+              <td>✅ Always current</td>
+            </tr>
+            <tr>
+              <td>Offline access needed</td>
+              <td>✅ Works without source connection</td>
+              <td>❌ Requires source connectivity</td>
+            </tr>
+            <tr>
+              <td>Complex transformations</td>
+              <td>✅ Apply in ETL before writing</td>
+              <td>⚠️ Limited to live query layer</td>
+            </tr>
+            <tr>
+              <td>Source DB under load</td>
+              <td>✅ No ongoing DB queries</td>
+              <td>❌ Each viz interaction hits source</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <h3>Tableau Extensions API (JavaScript)</h3>
-      <ul>
-        <li>Build custom web apps that run inside Tableau dashboard zones</li>
-        <li>Access dashboard data, filter views, and react to user interactions</li>
-        <li>Requires basic HTML/CSS/JavaScript knowledge</li>
-        <li>Extensions are hosted on any web server and loaded by URL</li>
-      </ul>
+        <h3>Writing Data with Python Hyper API</h3>
+        <pre><code>from tableauhyperapi import HyperProcess, Connection, TableDefinition, \
+    SqlType, Telemetry, Inserter, CreateMode
 
-      <h3>Embedding API (Tableau Embedding API v3)</h3>
-      <ul>
-        <li>Embed Tableau views into your own web applications with a Web Component</li>
-        <li>Control filters, parameters, and marks programmatically via JavaScript</li>
-        <li>Supports SSO via Connected Apps or JWT authentication</li>
-      </ul>
+with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
+    with Connection(hyper.endpoint, 'my_extract.hyper',
+                    CreateMode.CREATE_AND_REPLACE) as connection:
+        schema = TableDefinition(
+            table_name='orders',
+            columns=[
+                TableDefinition.Column('order_id', SqlType.int()),
+                TableDefinition.Column('amount', SqlType.double()),
+                TableDefinition.Column('order_date', SqlType.date()),
+            ]
+        )
+        connection.catalog.create_table(schema)
 
-      <h3>Tableau AI (Tableau Pulse / Einstein)</h3>
-      <ul>
-        <li>AI-generated metric insights surfaced directly in dashboards</li>
-        <li>Natural language answers to data questions</li>
-        <li>Automated anomaly detection and trend explanations</li>
-      </ul>
-    </div>
+        with Inserter(connection, schema) as inserter:
+            inserter.add_rows([[1001, 250.75, date(2024, 1, 15)],
+                               [1002, 890.00, date(2024, 1, 16)]])
+            inserter.execute()</code></pre>
+
+        <h3>Incremental Updates</h3>
+        <p>For large extracts that update frequently, use <strong>delta inserts</strong> rather than full rebuilds:</p>
+        <ul>
+          <li>Open the existing <code>.hyper</code> file in <code>CREATE_AND_REPLACE</code> mode only for full refreshes.</li>
+          <li>For incremental updates, use <code>NONE</code> mode (open existing file) and run <code>DELETE</code> + <code>INSERT</code> SQL within the Hyper connection to update only changed rows.</li>
+          <li>Hyper supports a SQL subset for DML operations — <code>INSERT INTO</code>, <code>DELETE FROM WHERE</code>, <code>UPDATE</code>.</li>
+        </ul>
+
+        <p>After generating/updating the <code>.hyper</code> file, publish it to Tableau Server/Cloud using the REST API's datasource publish endpoint to make it available in Tableau workbooks.</p>
+      </div>
+    </section>
+
+    <!-- Extensions API -->
+    <section id="extensions-api">
+      <div class="content-block">
+        <h2>🧩 Extensions API</h2>
+        <p>
+          The Tableau Extensions API lets you build custom web applications that run inside Tableau dashboard zones — giving you access to dashboard data, marks, filters, and parameters, and allowing your extension to both read and react to the state of a dashboard.
+        </p>
+
+        <h3>Architecture</h3>
+        <ul>
+          <li>An extension is a web app (HTML/CSS/JS) hosted on any web server (internal or external).</li>
+          <li>It's loaded inside a Tableau dashboard via a <strong>Web Page object</strong> that points to your app's URL.</li>
+          <li>Communication between the extension and Tableau happens via the <code>tableau.extensions</code> JavaScript namespace injected by Tableau into the iframe context.</li>
+          <li>Extensions run with the permissions of the authenticated Tableau user — they cannot access data the user cannot see.</li>
+        </ul>
+
+        <h3>Key API Capabilities</h3>
+        <ul>
+          <li><strong>Reading data:</strong> Call <code>worksheet.getSummaryDataAsync()</code> or <code>worksheet.getUnderlyingTableDataAsync()</code> to retrieve viz data as a JavaScript DataTable object.</li>
+          <li><strong>Event listening:</strong> Subscribe to <code>TableauEventType.MarkSelectionChanged</code>, <code>FilterChanged</code>, and <code>ParameterChanged</code> to react to user interactions in real time.</li>
+          <li><strong>Applying filters:</strong> Call <code>worksheet.applyFilterAsync()</code> to programmatically filter the viz from your extension's UI.</li>
+          <li><strong>Parameter control:</strong> Read and set dashboard parameters — useful for building custom filter panels or drilldown controls.</li>
+          <li><strong>Dashboard layout access:</strong> Enumerate sheets, zones, and objects in the dashboard for dynamic behavior.</li>
+        </ul>
+
+        <h3>Initialization Pattern</h3>
+        <pre><code>// Initialize the extension and get the dashboard
+tableau.extensions.initializeAsync().then(() => {
+  const dashboard = tableau.extensions.dashboardContent.dashboard;
+  const worksheet = dashboard.worksheets.find(ws => ws.name === 'Sales Overview');
+
+  // Subscribe to mark selection changes
+  worksheet.addEventListener(
+    tableau.TableauEventType.MarkSelectionChanged,
+    async (event) => {
+      const marks = await event.getMarksAsync();
+      const data = marks.data[0];
+      console.log('Selected marks:', data.data);
+    }
+  );
+});</code></pre>
+
+        <h3>Security Considerations</h3>
+        <ul>
+          <li>Extensions must be allowlisted in Tableau Server/Cloud settings before users can add them to dashboards.</li>
+          <li>Extensions can operate in <strong>full data access</strong> or <strong>summary data only</strong> mode — controlled by the Tableau admin.</li>
+          <li>For sandbox environments, use the <code>tableau.extensions.allowedUrls</code> configuration to restrict network calls from the extension.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Embedding API -->
+    <section id="embedding-api">
+      <div class="content-block">
+        <h2>🖥️ Embedding API v3</h2>
+        <p>
+          The Tableau Embedding API v3 is the current standard for embedding Tableau views into external web applications. It replaces the legacy JavaScript API v1/v2 with a modern Web Components-based approach, dramatically simplifying the embedding code.
+        </p>
+
+        <h3>Web Components vs. Legacy API</h3>
+        <p>Legacy embedding required verbose JavaScript initialization. The v3 API uses a declarative HTML tag:</p>
+        <pre><code>&lt;!-- Include the Embedding API library --&gt;
+&lt;script type="module"
+  src="https://your-tableau-server/javascripts/api/tableau.embedding.3.latest.min.js"&gt;
+&lt;/script&gt;
+
+&lt;!-- Embed a view declaratively --&gt;
+&lt;tableau-viz
+  id="tableauViz"
+  src="https://your-tableau-server/views/SalesOverview/SalesDashboard"
+  width="1200"
+  height="700"
+  toolbar="bottom"
+  hide-tabs&gt;
+&lt;/tableau-viz&gt;</code></pre>
+
+        <h3>Programmatic Control</h3>
+        <p>After the viz loads, interact with it via the JavaScript API:</p>
+        <pre><code>const viz = document.getElementById('tableauViz');
+
+// Apply a filter after load
+viz.addEventListener('firstinteractive', async () => {
+  const sheet = viz.workbook.activeSheet;
+  await sheet.applyFilterAsync('Region', ['West', 'East'],
+                               tableau.FilterUpdateType.Replace);
+});
+
+// Change a parameter
+await viz.workbook.changeParameterValueAsync('Year', 2024);</code></pre>
+
+        <h3>Authentication for Embedded Views</h3>
+        <p>Embedded views require the viewer to authenticate. Two patterns:</p>
+        <ul>
+          <li>
+            <strong>Connected Apps (Trusted Authentication):</strong> Your server generates a signed JWT using a Connected App configuration in Tableau Cloud. The JWT is passed as the <code>token</code> attribute on the <code>&lt;tableau-viz&gt;</code> element, enabling seamless SSO — the user doesn't see a Tableau login prompt.
+          </li>
+          <li>
+            <strong>Embedding with existing Tableau session:</strong> If the user is already logged into Tableau in the same browser, the embedded view uses the existing session cookie. Simpler to implement but requires users to have a Tableau login.
+          </li>
+        </ul>
+
+        <h3>Row-Level Security in Embedded Contexts</h3>
+        <p>For multi-tenant applications where different users should see different data subsets:</p>
+        <ul>
+          <li>Use <strong>User Filters</strong> in Tableau — filters that dynamically scope data to the authenticated Tableau username.</li>
+          <li>Or use <strong>Entitlement Filters</strong> combined with JWT claims — pass user attributes (department, region, customer_id) in the Connected App JWT payload and map them to data filters in the viz.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Tableau AI -->
+    <section id="tableau-ai">
+      <div class="content-block">
+        <h2>🤖 Tableau AI / Pulse</h2>
+        <p>
+          Tableau AI (marketed as <strong>Tableau Pulse</strong> for business users and powered by Einstein analytics capabilities) brings AI-generated insights directly into Tableau dashboards — surfacing anomalies, trends, and natural language explanations without requiring users to manually analyze data.
+        </p>
+
+        <h3>How Tableau Pulse Works</h3>
+        <ol>
+          <li><strong>Metric definition:</strong> An admin or analyst defines a <strong>Metric</strong> in Tableau Cloud — specifying the measure (e.g., Weekly Revenue), the dimension for segmentation (e.g., Region), the time grain, and any filters.</li>
+          <li><strong>Automated insight generation:</strong> Tableau's analytics engine runs statistical analyses on the metric data: trend detection (is this going up/down?), anomaly detection (is this week unusually low?), and driver analysis (which segment is causing the change?).</li>
+          <li><strong>NLP narration:</strong> The engine generates natural language summaries of detected insights using LLM-based narration — e.g., "West Region revenue dropped 18% week-over-week, primarily driven by a 30% decline in Enterprise accounts."</li>
+          <li><strong>Digest delivery:</strong> Insights are pushed to users via Tableau Cloud's Pulse UI, email digests, or Slack notifications — personalized to the metrics each user follows.</li>
+        </ol>
+
+        <h3>Ask Data / Einstein Copilot for Tableau</h3>
+        <p>Tableau's natural language query interface allows users to type plain-English questions and receive visualizations:</p>
+        <ul>
+          <li>The NLQ engine parses the query, maps terms to fields in the data source (using field synonyms you configure), and generates the appropriate aggregation.</li>
+          <li>Requires <strong>Ask Data</strong> to be enabled on the data source and field synonyms to be configured for domain-specific terminology.</li>
+          <li>In Tableau Cloud with M365 Copilot integration, Tableau insights can be surfaced inside Teams, Outlook, and Copilot Chat.</li>
+        </ul>
+
+        <h3>Integration with Salesforce Data Cloud</h3>
+        <p>Tableau and Data Cloud share a unified data layer:</p>
+        <ul>
+          <li>Tableau can connect directly to Data Cloud as a live data source — queries run against the Data Cloud engine without requiring data duplication.</li>
+          <li>Tableau Pulse metrics defined on Data Cloud data automatically benefit from real-time unified customer profiles.</li>
+          <li>AI-generated Tableau insights can be surfaced within Salesforce CRM pages using the Tableau Analytics Extension for Salesforce.</li>
+        </ul>
+      </div>
+    </section>
 
     <!-- Resources -->
-    <div class="content-block">
-      <h2>🔗 Training Resources</h2>
-      <ul class="resource-list">
-        <li>
-          <span class="res-type res-doc">Docs</span>
-          <a href="https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api.htm" target="_blank" rel="noopener">Tableau REST API Reference</a>
-        </li>
-        <li>
-          <span class="res-type res-doc">Docs</span>
-          <a href="https://tableau.github.io/hyper-db/docs/" target="_blank" rel="noopener">Tableau Hyper API Documentation</a>
-        </li>
-        <li>
-          <span class="res-type res-doc">Docs</span>
-          <a href="https://help.tableau.com/current/api/embedding_api/en-us/docs/embedding_api_intro.htm" target="_blank" rel="noopener">Tableau Embedding API v3 Guide</a>
-        </li>
-        <li>
-          <span class="res-type res-course">Course</span>
-          <a href="https://trailhead.salesforce.com/content/learn/trails/explore-tableau" target="_blank" rel="noopener">Trailhead: Explore Tableau (Free Learning Path)</a>
-        </li>
-        <li>
-          <span class="res-type res-cert">Cert</span>
-          <a href="https://www.tableau.com/learn/certification/desktop-specialist" target="_blank" rel="noopener">Tableau Desktop Specialist Certification</a>
-        </li>
-        <li>
-          <span class="res-type res-cert">Cert</span>
-          <a href="https://www.tableau.com/learn/certification/data-analyst" target="_blank" rel="noopener">Tableau Certified Data Analyst Certification</a>
-        </li>
-        <li>
-          <span class="res-type res-vid">Video</span>
-          <a href="https://www.youtube.com/@tableausoftware" target="_blank" rel="noopener">Tableau Official YouTube — Tutorials & Tips</a>
-        </li>
-        <li>
-          <span class="res-type res-course">Course</span>
-          <a href="https://developer.salesforce.com/tableau" target="_blank" rel="noopener">Tableau Developer Portal — Samples & Docs</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Quick Start Tips -->
-    <div class="tips-box content-block">
-      <h3>🚀 Quick-Start Tips</h3>
-      <ol>
-        <li><strong>Get a Free Account:</strong> Sign up for Tableau Public (free) to start building visualizations without a server.</li>
-        <li><strong>Learn REST API basics:</strong> Use Postman or curl to authenticate and list your workbooks via <code>GET /api/2.8/auth/signin</code>.</li>
-        <li><strong>Try the Hyper API samples:</strong> Clone the official GitHub repo and run the Python sample scripts to create your first <code>.hyper</code> file.</li>
-        <li><strong>Build an Extension:</strong> Use the Tableau Extensions API scaffold on GitHub to build a simple HTML dashboard extension in under 1 hour.</li>
-        <li><strong>Enable Tableau AI:</strong> Explore Tableau Pulse in Tableau Cloud to see AI-generated metric summaries in action.</li>
-      </ol>
-    </div>
+    <section id="resources">
+      <div class="content-block">
+        <h2>🔗 Training Resources</h2>
+        <ul class="resource-list">
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://help.tableau.com/current/api/rest_api/en-us/REST/rest_api.htm" target="_blank" rel="noopener">Tableau REST API Reference</a>
+          </li>
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://tableau.github.io/hyper-db/docs/" target="_blank" rel="noopener">Tableau Hyper API Documentation</a>
+          </li>
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://help.tableau.com/current/api/embedding_api/en-us/docs/embedding_api_intro.htm" target="_blank" rel="noopener">Tableau Embedding API v3 Guide</a>
+          </li>
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://help.tableau.com/current/api/extensions_api/en-us/docs/extensions_api_about.htm" target="_blank" rel="noopener">Tableau Extensions API Documentation</a>
+          </li>
+          <li>
+            <span class="res-type res-course">Course</span>
+            <a href="https://trailhead.salesforce.com/content/learn/trails/explore-tableau" target="_blank" rel="noopener">Trailhead: Explore Tableau (Free Learning Path)</a>
+          </li>
+          <li>
+            <span class="res-type res-cert">Cert</span>
+            <a href="https://www.tableau.com/learn/certification/desktop-specialist" target="_blank" rel="noopener">Tableau Desktop Specialist Certification</a>
+          </li>
+          <li>
+            <span class="res-type res-cert">Cert</span>
+            <a href="https://www.tableau.com/learn/certification/data-analyst" target="_blank" rel="noopener">Tableau Certified Data Analyst Certification</a>
+          </li>
+          <li>
+            <span class="res-type res-vid">Video</span>
+            <a href="https://www.youtube.com/@tableausoftware" target="_blank" rel="noopener">Tableau Official YouTube — Tutorials & Tips</a>
+          </li>
+          <li>
+            <span class="res-type res-course">Course</span>
+            <a href="https://developer.salesforce.com/tableau" target="_blank" rel="noopener">Tableau Developer Portal — Samples & Docs</a>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- Quiz -->
-    <div class="quiz-section" id="quiz-container"></div>
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
 
-  </div>
-</main>
+  </main>
+</div>
 
 <!-- ── Footer ── -->
 <footer class="footer">
@@ -205,88 +478,88 @@
     topic: 'Tableau API',
     questions: [
       {
-        question: 'Which Tableau API is used to manage workbooks, users, and permissions programmatically via HTTP?',
+        question: 'A script needs to trigger a Tableau extract refresh after an ETL pipeline completes. Which Tableau API and endpoint handles this?',
         options: [
-          'Hyper API',
-          'Extensions API',
-          'REST API',
-          'Embedding API'
+          'Hyper API — HyperProcess.refresh()',
+          'REST API — POST /sites/{siteId}/datasources/{id}/refresh',
+          'Extensions API — worksheet.refreshDataAsync()',
+          'Embedding API — viz.refreshDataAsync()'
         ],
-        correct: 2,
-        topic: 'Tableau REST API',
-        explanation: 'The Tableau REST API is an HTTP-based interface for managing Tableau Server and Tableau Cloud resources programmatically.'
+        correct: 1,
+        topic: 'REST API',
+        explanation: 'The REST API\'s datasource refresh endpoint triggers an asynchronous job to refresh an extract. Poll the /jobs/{jobId} endpoint to monitor completion.'
       },
       {
-        question: 'What is the primary use case for the Tableau Hyper API?',
+        question: 'In the Hyper API, what is the key difference between opening a .hyper file with CreateMode.CREATE_AND_REPLACE vs. CreateMode.NONE?',
         options: [
-          'Embedding Tableau dashboards in web apps',
-          'Creating and manipulating high-performance .hyper extract files',
-          'Building custom UI extensions inside dashboards',
-          'Authenticating users with SSO'
+          'CREATE_AND_REPLACE requires a license; NONE is free',
+          'CREATE_AND_REPLACE rebuilds the file from scratch; NONE opens the existing file for incremental updates',
+          'CREATE_AND_REPLACE supports SQL; NONE only supports Python',
+          'NONE is deprecated — CREATE_AND_REPLACE should always be used'
         ],
         correct: 1,
         topic: 'Hyper API',
-        explanation: 'The Hyper API allows you to create, read, and modify .hyper files — Tableau\'s in-memory data extract format — for fast bulk data operations.'
+        explanation: 'CREATE_AND_REPLACE destroys and recreates the file — use for full refreshes. NONE opens the existing .hyper file, allowing you to run DELETE/INSERT operations for incremental delta updates.'
       },
       {
-        question: 'Which authentication method is recommended for Tableau REST API integrations?',
+        question: 'A developer wants their Tableau Extension to react whenever a user selects marks on a worksheet. What is the correct approach?',
         options: [
-          'Basic Auth with username/password on every request',
-          'OAuth 1.0',
-          'Personal Access Tokens (PAT)',
-          'API Keys stored in the URL'
-        ],
-        correct: 2,
-        topic: 'Authentication',
-        explanation: 'Personal Access Tokens (PATs) are the recommended, more secure method for authenticating to the Tableau REST API.'
-      },
-      {
-        question: 'What language is the Tableau Extensions API built on?',
-        options: [
-          'Python',
-          'Java',
-          'JavaScript',
-          'Apex'
-        ],
-        correct: 2,
-        topic: 'Extensions API',
-        explanation: 'The Tableau Extensions API is a JavaScript SDK, allowing web developers to build custom dashboard extensions hosted on any web server.'
-      },
-      {
-        question: 'What does Tableau AI (Tableau Pulse) provide to end users?',
-        options: [
-          'Automated workbook publishing scripts',
-          'AI-generated natural language insights and anomaly detection on metrics',
-          'Drag-and-drop visualization building with no code',
-          'Python notebook integration for machine learning'
+          'Poll worksheet.getSummaryDataAsync() on a timer',
+          'Subscribe to TableauEventType.MarkSelectionChanged on the worksheet object',
+          'Call worksheet.getSelectedMarksAsync() on page load',
+          'Set a CSS event listener on the viz iframe'
         ],
         correct: 1,
-        topic: 'Tableau AI',
-        explanation: 'Tableau Pulse surfaces AI-generated metric insights, trend explanations, and anomaly alerts directly within dashboards in natural language.'
+        topic: 'Extensions API',
+        explanation: 'worksheet.addEventListener(TableauEventType.MarkSelectionChanged, callback) registers a listener that fires in real time when the user selects or deselects marks — no polling needed.'
       },
       {
-        question: 'Which version of the Tableau Embedding API uses Web Components (modern standard)?',
+        question: 'Which authentication method enables seamless SSO when embedding Tableau views in a custom web app — so users don\'t see a Tableau login prompt?',
         options: [
-          'Tableau JavaScript API v1',
-          'Tableau JS API v2',
-          'Tableau Embedding API v3',
-          'Tableau REST Embed API'
+          'PAT (Personal Access Token) stored in the HTML',
+          'Username/password passed as URL query parameters',
+          'Connected Apps with a server-signed JWT token',
+          'SAML assertion embedded in the iframe src URL'
         ],
         correct: 2,
-        topic: 'Embedding API',
-        explanation: 'The Tableau Embedding API v3 is built on modern Web Components and replaces the older JavaScript API v1 and v2.'
+        topic: 'Embedding API — Auth',
+        explanation: 'Connected Apps generate a signed JWT on your backend server. Passing this JWT as the token attribute on <tableau-viz> allows the embedded view to authenticate silently via trusted authentication.'
       },
       {
-        question: 'Tableau is now owned by which company, enabling tight integration with CRM and Data Cloud?',
+        question: 'What happens in Tableau Pulse\'s insight pipeline AFTER statistical anomaly detection runs?',
         options: [
-          'Microsoft',
-          'Google',
-          'Salesforce',
-          'Oracle'
+          'The anomaly is immediately emailed to the Tableau admin',
+          'An LLM narrates the insight into natural language for delivery to end users',
+          'A Tableau Flow is triggered to create a new dashboard',
+          'The metric definition is automatically adjusted to exclude the anomalous period'
         ],
-        correct: 2,
-        topic: 'Tableau Ecosystem',
-        explanation: 'Salesforce acquired Tableau in 2019, enabling deep integration between Tableau, Salesforce CRM, and Data Cloud.'
+        correct: 1,
+        topic: 'Tableau AI / Pulse',
+        explanation: 'After the analytics engine detects an anomaly or trend, an LLM-based narration layer generates a human-readable summary (e.g., "West Region revenue dropped 18%...") delivered via Pulse UI, email, or Slack.'
+      },
+      {
+        question: 'A Tableau workbook connects to a 50 million row data warehouse table. Performance on the dashboard is poor. What is the recommended architectural fix?',
+        options: [
+          'Upgrade to a larger Tableau Cloud instance',
+          'Switch to an extract (.hyper file) to pre-aggregate data in Tableau\'s in-memory Hyper engine',
+          'Reduce the number of visualizations on the dashboard',
+          'Enable caching in the Embedding API configuration'
+        ],
+        correct: 1,
+        topic: 'Hyper API — Use Cases',
+        explanation: 'For large datasets, Tableau extracts (.hyper files) pre-load data into the Hyper in-memory engine, delivering significantly faster query performance than live connections to large source databases.'
+      },
+      {
+        question: 'What must be configured on a Tableau data source before the Ask Data / NLQ feature can accurately interpret domain-specific terminology?',
+        options: [
+          'A custom LLM must be deployed in the same data center',
+          'Field synonyms that map business terms to data source field names',
+          'The data source must be published with a specific Ask Data license key',
+          'Each field must be tagged with an ISO data classification label'
+        ],
+        correct: 1,
+        topic: 'Tableau AI — NLQ',
+        explanation: 'Ask Data uses field synonyms to map natural language terms to the correct fields. Without synonyms, queries using business terminology (e.g., "revenue" when the field is named "net_sales") will fail to resolve correctly.'
       }
     ]
   });

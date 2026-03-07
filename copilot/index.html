@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Microsoft Copilot Studio — AI Learning Hub</title>
-  <meta name="description" content="Learn Microsoft Copilot Studio: build AI copilots, chatbots, and automation with Microsoft's low-code platform.">
+  <meta name="description" content="Intermediate guide to Microsoft Copilot Studio: topics vs generative answers, action architecture, Power Platform integration, deployment channels, and DLP governance.">
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 </head>
@@ -42,147 +42,327 @@
     </nav>
     <div class="page-hero__icon">🤖</div>
     <h1>Microsoft Copilot Studio</h1>
-    <p>Build, customize, and deploy AI-powered copilots for your organization using Microsoft's low-code platform — no deep coding required.</p>
+    <p>Topics vs. Generative Answers, action architecture, Power Automate integration, publish/deploy workflow, and DLP governance — intermediate practitioner reference.</p>
   </div>
 </section>
 
-<!-- ── Main Content ── -->
-<main class="section">
-  <div class="container">
+<!-- ── Two-Column Layout ── -->
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li><a href="#overview">Platform Overview</a></li>
+      <li><a href="#topics">Topics vs. Generative Answers</a></li>
+      <li><a href="#actions">Actions & Connectors</a></li>
+      <li><a href="#power-platform">Power Platform Integration</a></li>
+      <li><a href="#deployment">Publish & Deploy Workflow</a></li>
+      <li><a href="#governance">Governance & DLP</a></li>
+      <li><a href="#resources">Resources</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
 
     <!-- Overview -->
-    <div class="content-block">
-      <h2>🔍 What Is Microsoft Copilot Studio?</h2>
-      <p>
-        <strong>Microsoft Copilot Studio</strong> (formerly Power Virtual Agents) is a low-code platform that lets you build, configure, and publish AI-powered copilots — conversational assistants that can handle customer inquiries, automate workflows, and surface information from your organization's data.
-      </p>
-      <p>
-        Copilot Studio integrates deeply with the <strong>Microsoft Power Platform</strong> (Power Automate, Power Apps, Dataverse) and Microsoft 365, making it the central hub for building AI experiences across the Microsoft ecosystem.
-      </p>
-      <div class="alert alert-info">
-        💡 <strong>Copilots vs. Chatbots:</strong> Traditional chatbots follow rigid decision trees. Copilot Studio copilots use generative AI to understand intent, retrieve knowledge, and respond dynamically — even to questions you never explicitly programmed.
-      </div>
-    </div>
+    <section id="overview">
+      <div class="content-block">
+        <h2>🔍 Platform Overview</h2>
+        <p>
+          <strong>Microsoft Copilot Studio</strong> is the evolution of Power Virtual Agents — replatformed as a full generative AI copilot builder. It sits at the intersection of the Microsoft Power Platform and Azure AI, enabling practitioners to build copilots that combine deterministic scripted conversation flows (Topics) with LLM-powered open-ended reasoning (Generative Answers and Generative Actions).
+        </p>
+        <p>
+          Copilot Studio copilots run on <strong>Azure OpenAI Service</strong> under the hood, with Microsoft managing the infrastructure, data residency, and compliance guardrails. Org data used for grounding stays within the Microsoft 365 tenant — it's not used for model training and is governed by the same DLP policies as other Power Platform connectors.
+        </p>
 
-    <!-- Who it's for -->
-    <div class="content-block">
-      <h2>👤 Who Is It For?</h2>
-      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Business Users</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Build copilots without writing code using the visual canvas.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>IT Professionals</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Deploy, govern, and secure copilots across the organization.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Developers</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Extend copilots with custom connectors, plugins, and Power Automate flows.</p>
-        </div>
-        <div class="card" style="padding: 1.25rem;">
-          <strong>Customer Service Teams</strong>
-          <p class="text-muted mt-1" style="font-size:0.875rem;">Deflect support tickets and automate FAQs with AI-powered self-service.</p>
+        <h3>Key Architectural Layers</h3>
+        <ul>
+          <li><strong>Conversation runtime:</strong> Hosted in the Microsoft Azure Bot Framework infrastructure. Handles session state, channel routing, and message passing.</li>
+          <li><strong>Topic engine:</strong> Matches user utterances to authored Topics using NLU (Natural Language Understanding) trained on trigger phrases, with generative AI fallback.</li>
+          <li><strong>Generative AI layer:</strong> Azure OpenAI GPT-4 class models — used for Generative Answers (grounded knowledge retrieval) and Generative Actions (intent-driven automation).</li>
+          <li><strong>Integration layer:</strong> Power Automate flows, custom connectors, Microsoft Graph, and 1,000+ prebuilt connectors.</li>
+          <li><strong>Governance layer:</strong> Power Platform Admin Center — DLP policies, environment management, RBAC, audit logging.</li>
+        </ul>
+
+        <div class="alert alert-info">
+          💡 Copilot Studio operates within a Power Platform <strong>Environment</strong>. Each environment has its own DLP policies, connectors, and Dataverse instance. Choosing the right environment at design time avoids costly migrations later.
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Key Concepts -->
-    <div class="content-block">
-      <h2>📚 Key Concepts</h2>
+    <!-- Topics vs Generative Answers -->
+    <section id="topics">
+      <div class="content-block">
+        <h2>📋 Topics vs. Generative Answers</h2>
+        <p>
+          Understanding the distinction between authored Topics and Generative Answers is the central design decision in every Copilot Studio build. They are not mutually exclusive — most enterprise copilots use both.
+        </p>
 
-      <h3>Copilots & Topics</h3>
-      <ul>
-        <li><strong>Copilot:</strong> Your AI assistant — configured with a name, persona, knowledge sources, and conversation flows</li>
-        <li><strong>Topics:</strong> Conversation modules triggered by user intent (e.g., "Check order status", "Reset password")</li>
-        <li><strong>System Topics:</strong> Built-in topics for greetings, escalation, and fallback handling</li>
-        <li><strong>Trigger phrases:</strong> Examples of what users might say to activate a topic</li>
-      </ul>
+        <h3>Authored Topics (Deterministic)</h3>
+        <p>A Topic is a scripted conversation flow triggered when the copilot detects a matching user intent. Topics give you precise control over the conversation flow, validation logic, and action sequencing.</p>
+        <ul>
+          <li>Built visually in the <strong>Authoring Canvas</strong> — a node-based flow designer.</li>
+          <li>Activated via <strong>Trigger Phrases</strong>: example utterances the NLU engine uses to train intent recognition for this Topic.</li>
+          <li>Nodes include: Message (send text/media), Question (collect user input with validation), Condition (branch on variable values), Action (invoke Power Automate/connector), Go To Topic (redirect flow).</li>
+          <li>Variables scoped to Topic or globally across the conversation session.</li>
+          <li><strong>System Topics</strong> handle built-in behaviors: Greeting, Fallback, Escalate, End of Conversation — customizable but always present.</li>
+        </ul>
 
-      <h3>Generative AI Features</h3>
-      <ul>
-        <li><strong>Generative Answers:</strong> Copilot searches your knowledge sources and generates answers in real time using Azure OpenAI</li>
-        <li><strong>Knowledge Sources:</strong> Connect SharePoint, websites, files, or Dataverse tables as knowledge bases</li>
-        <li><strong>Generative Actions:</strong> Copilot can invoke Power Automate flows or plugins based on the user's intent — no explicit topic needed</li>
-      </ul>
+        <p><strong>When to use Topics:</strong></p>
+        <ul>
+          <li>Compliance-sensitive flows that must follow a defined script (e.g., HIPAA intake, legal disclaimers).</li>
+          <li>Structured data collection — multi-step forms where each answer gates the next question.</li>
+          <li>Workflows with required validation (e.g., order number format check before a lookup).</li>
+          <li>Any scenario where you cannot accept LLM variability in the conversation path.</li>
+        </ul>
 
-      <h3>Actions & Integrations</h3>
-      <ul>
-        <li><strong>Power Automate Flows:</strong> Trigger business processes (email, Teams messages, database updates) from within a conversation</li>
-        <li><strong>Connectors:</strong> 1,000+ prebuilt connectors to external services (Salesforce, ServiceNow, SAP, etc.)</li>
-        <li><strong>Custom Plugins:</strong> OpenAI plugin format (API spec-based) for custom backend integration</li>
-        <li><strong>Microsoft Graph:</strong> Access Microsoft 365 data (calendar, email, SharePoint) directly from a copilot</li>
-      </ul>
+        <h3>Generative Answers (LLM-Powered)</h3>
+        <p>Generative Answers allows the copilot to answer questions not explicitly covered by authored Topics, by querying configured Knowledge Sources using Azure OpenAI.</p>
+        <ul>
+          <li>Knowledge Sources include: SharePoint sites, public/internal websites, uploaded documents (PDF, Word, Excel), and Dataverse tables.</li>
+          <li>At runtime: user input → semantic search against knowledge sources → relevant chunks retrieved → Azure OpenAI generates a grounded answer citing the source.</li>
+          <li>Configured in Copilot Settings → Generative AI → Knowledge Sources. Each source can be scoped, with content filtering options.</li>
+          <li>Content moderation is applied before responses reach users — powered by Azure AI Content Safety.</li>
+          <li>Generative Answers activate automatically when no Topic matches the user's intent AND Generative Answers is enabled.</li>
+        </ul>
 
-      <h3>Channels & Deployment</h3>
-      <ul>
-        <li>Microsoft Teams (most common enterprise channel)</li>
-        <li>Web chat widget — embeddable on any website</li>
-        <li>Mobile apps, telephony, Facebook, Slack, and custom channels</li>
-        <li>Microsoft 365 Copilot extensions (surface custom copilots inside M365 apps)</li>
-      </ul>
+        <p><strong>When to use Generative Answers:</strong></p>
+        <ul>
+          <li>FAQ-style content from a large, frequently updated knowledge base where authoring individual Topics would be unsustainable.</li>
+          <li>Policy and procedure lookup — HR handbooks, IT documentation, product manuals.</li>
+          <li>Open-ended informational queries that don't require system actions.</li>
+        </ul>
 
-      <h3>Governance & Security</h3>
-      <ul>
-        <li>Data Loss Prevention (DLP) policies via Power Platform Admin Center</li>
-        <li>Role-based access control for copilot authoring and publishing</li>
-        <li>Content moderation and AI safety filters powered by Azure AI Content Safety</li>
-        <li>Compliance: GDPR, HIPAA, SOC 2 via Microsoft's compliance framework</li>
-      </ul>
-    </div>
+        <div class="alert alert-warning">
+          ⚠️ <strong>Grounding matters:</strong> Generative Answers without well-maintained knowledge sources will hallucinate. Regularly audit source content for accuracy, and use content filtering settings to prevent the copilot from generating answers on sensitive or off-topic domains.
+        </div>
+
+        <h3>Generative Actions (Intent-Driven Automation)</h3>
+        <p>Generative Actions take this further — the copilot can identify and invoke the right Power Automate flow or plugin based purely on the user's natural language request, without requiring an explicit Topic to be triggered first. This enables truly agent-like behavior where the copilot plans and acts, not just responds.</p>
+      </div>
+    </section>
+
+    <!-- Actions & Connectors -->
+    <section id="actions">
+      <div class="content-block">
+        <h2>⚡ Actions & Connectors</h2>
+        <p>Actions are how Copilot Studio copilots interact with the world outside the conversation — retrieving data, triggering processes, and creating or updating records in external systems.</p>
+
+        <h3>Power Automate Flow Actions</h3>
+        <p>The most common action type — invoke a Power Automate cloud flow from within a Topic or as a Generative Action.</p>
+        <ul>
+          <li>The flow must have a <strong>Power Virtual Agents trigger</strong> (under "When an HTTP request is received" or the dedicated PVA trigger).</li>
+          <li>Input variables from the copilot are passed as flow inputs; flow outputs are returned and can be used in subsequent Topic nodes.</li>
+          <li>The flow runs in the context of the copilot's service account or the end user's identity (user impersonation — requires Entra ID authentication on the channel).</li>
+          <li>Flow actions can connect to any of the 1,000+ Power Platform connectors: SharePoint, Dynamics 365, Salesforce, SAP, ServiceNow, SQL Server, custom HTTP APIs, etc.</li>
+        </ul>
+
+        <h3>Custom Connectors & Plugins</h3>
+        <p>For backend APIs not available as prebuilt connectors:</p>
+        <ul>
+          <li><strong>Custom Connectors:</strong> Define a connector using an OpenAPI (Swagger) spec in Power Platform. The connector handles authentication (OAuth, API key, Basic) and can be used in both Power Automate and directly in Copilot Studio as an action.</li>
+          <li><strong>OpenAI Plugins:</strong> Copilot Studio supports the OpenAI plugin format — define your API spec and a description for each operation, and the copilot's generative AI layer can autonomously decide when and how to call the plugin based on user intent.</li>
+          <li><strong>Microsoft Graph Actions:</strong> First-party actions for M365 data (email, calendar, SharePoint files, Teams messages, contacts) — available without custom connector setup when the copilot is deployed in a Microsoft 365 context.</li>
+        </ul>
+
+        <h3>Action Invocation in Generative Actions Mode</h3>
+        <p>When Generative Actions is enabled, the copilot's AI layer reads action descriptions (from the connector's OpenAPI spec or plugin manifest) and determines which action to invoke based on the user's message. This is why action and parameter descriptions are critical — treat them as prompts for the AI, not just documentation:</p>
+        <ul>
+          <li>Write action names and descriptions in plain, specific English: "Retrieves a customer's open support tickets filtered by status and priority" is better than "GetTickets".</li>
+          <li>Parameter descriptions should explain what value is expected: "The case ID in format CASE-XXXXX from the user's account" — this helps the AI extract the right data from conversation context.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Power Platform Integration -->
+    <section id="power-platform">
+      <div class="content-block">
+        <h2>🔗 Power Platform Integration</h2>
+        <p>Copilot Studio is deeply integrated with the Power Platform ecosystem — sharing the same environment, Dataverse, and connector infrastructure as Power Apps and Power Automate.</p>
+
+        <h3>Dataverse as the Backend</h3>
+        <p>Every Copilot Studio environment has an associated <strong>Dataverse</strong> instance (Microsoft's relational database-as-a-service):</p>
+        <ul>
+          <li>Copilot conversation logs and analytics are stored in Dataverse — query them with Power BI or Power Apps for custom reporting.</li>
+          <li>Use Dataverse tables as a knowledge source for Generative Answers — directly query structured org data (product catalog, employee directory, policy tables) from within the copilot.</li>
+          <li>Dataverse supports row-level security — copilot responses can be scoped to data the authenticated user has permission to see.</li>
+        </ul>
+
+        <h3>Power Automate Flows</h3>
+        <p>Power Automate flows provide the primary integration mechanism between Copilot Studio and external systems:</p>
+        <ul>
+          <li>Flows can be built entirely in Power Automate's visual designer — no coding required for common integrations.</li>
+          <li>For complex scenarios, Power Automate supports Azure Functions, custom HTTP connectors, and inline code (JavaScript/C# expression language).</li>
+          <li>Flow runs are asynchronous by default — for synchronous responses within a copilot conversation turn (under ~30s), use the synchronous HTTP response pattern.</li>
+        </ul>
+
+        <h3>Copilot Extensions for Microsoft 365</h3>
+        <p>Copilot Studio copilots can be published as <strong>Microsoft 365 Copilot extensions</strong> — making them available as plugins within Microsoft 365 Copilot (BizChat, Copilot in Teams, etc.):</p>
+        <ul>
+          <li>Users interact with your custom copilot through natural language prompts within the M365 Copilot experience.</li>
+          <li>The M365 Copilot orchestration layer routes relevant queries to your Copilot Studio plugin when it detects the user's intent matches your plugin's description.</li>
+          <li>This enables building org-specific AI capabilities accessible from within any M365 app without requiring users to navigate to a dedicated copilot interface.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Publish & Deploy Workflow -->
+    <section id="deployment">
+      <div class="content-block">
+        <h2>🚀 Publish & Deploy Workflow</h2>
+        <p>Understanding the Copilot Studio deployment lifecycle is essential for teams managing multiple copilots in different stages of maturity.</p>
+
+        <h3>Authoring → Test → Publish Pipeline</h3>
+        <ol>
+          <li>
+            <strong>Authoring Canvas:</strong> Build and modify Topics, configure knowledge sources, and set up actions. Changes are saved to a draft version — they are not live until published.
+          </li>
+          <li>
+            <strong>Test Panel:</strong> The right-side test chat panel runs against the current draft (not the published version). Use this for rapid iteration — test Topic triggers, validate action inputs/outputs, check Generative Answer quality. You can "Track between Topics" to see which Topic was matched and which node is currently active.
+          </li>
+          <li>
+            <strong>Publish:</strong> Clicking Publish promotes the current draft to the live version. All channels immediately serve the published version — there is no staging slot in the default setup. Plan publishes carefully in production environments.
+          </li>
+          <li>
+            <strong>Channel configuration:</strong> After publishing, configure where the copilot is deployed (see below). Channel configurations persist across publish cycles — you configure them once.
+          </li>
+        </ol>
+
+        <h3>Deployment Channels</h3>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Setup Complexity</th>
+              <th>Auth Support</th>
+              <th>Best For</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Microsoft Teams</strong></td>
+              <td>Low</td>
+              <td>Entra ID SSO (automatic)</td>
+              <td>Internal employee copilots</td>
+            </tr>
+            <tr>
+              <td><strong>Web Chat Widget</strong></td>
+              <td>Low</td>
+              <td>Optional (anonymous or custom auth)</td>
+              <td>Public-facing websites</td>
+            </tr>
+            <tr>
+              <td><strong>Direct Line API</strong></td>
+              <td>Medium</td>
+              <td>Custom (token-based)</td>
+              <td>Custom app integrations</td>
+            </tr>
+            <tr>
+              <td><strong>Telephony (voice)</strong></td>
+              <td>High</td>
+              <td>Custom</td>
+              <td>IVR/call center automation</td>
+            </tr>
+            <tr>
+              <td><strong>M365 Copilot Extension</strong></td>
+              <td>Medium</td>
+              <td>Entra ID SSO</td>
+              <td>M365 Copilot ecosystem integration</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>ALM — Application Lifecycle Management</h3>
+        <p>For teams managing copilots across dev/test/prod environments:</p>
+        <ul>
+          <li>Copilot Studio solutions (in Dataverse) support export/import — package your copilot as a solution zip and import into the next environment.</li>
+          <li>Use Power Platform CLI (<code>pac</code>) and GitHub Actions or Azure DevOps pipelines for automated deployment.</li>
+          <li>Environment variables in solutions allow configuration values (URLs, keys) to differ per environment without modifying the copilot definition.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Governance & DLP -->
+    <section id="governance">
+      <div class="content-block">
+        <h2>🛡️ Governance & DLP</h2>
+        <p>Power Platform's governance model applies directly to Copilot Studio — understanding it is critical for deploying copilots in regulated or security-sensitive organizations.</p>
+
+        <h3>Data Loss Prevention (DLP) Policies</h3>
+        <p>DLP policies control which connectors can be used together within a Power Platform environment. They're configured in the <strong>Power Platform Admin Center</strong> at the environment or tenant level.</p>
+        <ul>
+          <li>Connectors are classified into <strong>Business</strong>, <strong>Non-Business</strong>, and <strong>Blocked</strong> groups. Connectors in different groups cannot coexist in the same flow or copilot action.</li>
+          <li>Example: Block the "Twitter" connector in the same policy as SharePoint — preventing copilots from reading SharePoint content and posting to social media in the same action.</li>
+          <li>For Copilot Studio specifically, DLP policies control which connectors copilot actions can use, and which knowledge sources can be connected (e.g., block public internet sources in a HIPAA environment).</li>
+          <li>DLP policies are enforced at runtime — a flow that violates a DLP policy will fail at execution, not at authoring. Test DLP policy impact before production deployment.</li>
+        </ul>
+
+        <h3>Environment Strategy</h3>
+        <ul>
+          <li><strong>Default Environment:</strong> Shared by all users — do NOT deploy production copilots here. No isolation or separate DLP enforcement.</li>
+          <li><strong>Dedicated Production Environment:</strong> Strict DLP policies, limited admin access, managed via Entra ID security groups.</li>
+          <li><strong>Developer/Sandbox Environments:</strong> One per developer or team — more permissive policies for experimentation. Use solution ALM to promote tested copilots to production.</li>
+        </ul>
+
+        <h3>Authentication & Authorization</h3>
+        <ul>
+          <li>In Teams, copilots authenticate users automatically via Entra ID — no additional auth configuration needed. User identity is available as a system variable in Topics.</li>
+          <li>For external channels (web chat, telephony), configure authentication via OAuth 2.0 in copilot Settings → Security → Authentication. Supports Entra ID, custom OAuth providers.</li>
+          <li>Once authenticated, use the user's identity to scope data: pass the authenticated user's email/ID as a parameter to Power Automate flows that query user-specific data in Dataverse or Graph.</li>
+        </ul>
+
+        <h3>Content Moderation</h3>
+        <p>Azure AI Content Safety is applied to Generative Answers and Generative Actions output — filtering harmful, offensive, or off-topic content before it reaches users. Configure severity thresholds in copilot settings per category (hate, violence, sexual, self-harm). In heavily regulated industries, set thresholds to "Low" for maximum filtering.</p>
+      </div>
+    </section>
 
     <!-- Resources -->
-    <div class="content-block">
-      <h2>🔗 Training Resources</h2>
-      <ul class="resource-list">
-        <li>
-          <span class="res-type res-doc">Docs</span>
-          <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/" target="_blank" rel="noopener">Microsoft Copilot Studio Official Documentation</a>
-        </li>
-        <li>
-          <span class="res-type res-course">Course</span>
-          <a href="https://learn.microsoft.com/en-us/training/paths/work-with-microsoft-copilot-studio/" target="_blank" rel="noopener">Microsoft Learn: Work with Copilot Studio (Free Path)</a>
-        </li>
-        <li>
-          <span class="res-type res-cert">Cert</span>
-          <a href="https://learn.microsoft.com/en-us/credentials/certifications/power-virtual-agents-functional-consultant-associate/" target="_blank" rel="noopener">PL-200: Microsoft Power Platform Functional Consultant</a>
-        </li>
-        <li>
-          <span class="res-type res-cert">Cert</span>
-          <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/pl-100/" target="_blank" rel="noopener">PL-100: Microsoft Power Platform App Maker</a>
-        </li>
-        <li>
-          <span class="res-type res-vid">Video</span>
-          <a href="https://www.youtube.com/@MicrosoftCopilotStudio" target="_blank" rel="noopener">Microsoft Copilot Studio YouTube Channel</a>
-        </li>
-        <li>
-          <span class="res-type res-course">Course</span>
-          <a href="https://learn.microsoft.com/en-us/training/modules/build-faq-chatbot-qna-maker-azure-bot-service/" target="_blank" rel="noopener">Microsoft Learn: Build a Bot with Azure AI</a>
-        </li>
-        <li>
-          <span class="res-type res-doc">Docs</span>
-          <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/generative-ai-overview" target="_blank" rel="noopener">Generative AI in Copilot Studio — Overview</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Quick Start Tips -->
-    <div class="tips-box content-block">
-      <h3>🚀 Quick-Start Tips</h3>
-      <ol>
-        <li><strong>Start with a Free Trial:</strong> Go to <a href="https://copilotstudio.microsoft.com" target="_blank" rel="noopener">copilotstudio.microsoft.com</a> and create a free trial copilot in minutes.</li>
-        <li><strong>Add a Knowledge Source:</strong> Connect a SharePoint site or paste a public URL — your copilot instantly gains the ability to answer questions from that content.</li>
-        <li><strong>Test in the Canvas:</strong> Use the built-in test chat panel to validate responses before publishing.</li>
-        <li><strong>Publish to Microsoft Teams:</strong> The Teams channel is the fastest way to deploy a copilot to your organization with zero extra infrastructure.</li>
-        <li><strong>Complete Microsoft Learn Path:</strong> The free "Work with Copilot Studio" path covers everything from basics to advanced generative AI topics.</li>
-      </ol>
-    </div>
+    <section id="resources">
+      <div class="content-block">
+        <h2>🔗 Training Resources</h2>
+        <ul class="resource-list">
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/" target="_blank" rel="noopener">Microsoft Copilot Studio Official Documentation</a>
+          </li>
+          <li>
+            <span class="res-type res-doc">Docs</span>
+            <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/generative-ai-overview" target="_blank" rel="noopener">Generative AI in Copilot Studio — Overview</a>
+          </li>
+          <li>
+            <span class="res-type res-course">Course</span>
+            <a href="https://learn.microsoft.com/en-us/training/paths/work-with-microsoft-copilot-studio/" target="_blank" rel="noopener">Microsoft Learn: Work with Copilot Studio (Free Path)</a>
+          </li>
+          <li>
+            <span class="res-type res-cert">Cert</span>
+            <a href="https://learn.microsoft.com/en-us/credentials/certifications/power-virtual-agents-functional-consultant-associate/" target="_blank" rel="noopener">PL-200: Microsoft Power Platform Functional Consultant</a>
+          </li>
+          <li>
+            <span class="res-type res-cert">Cert</span>
+            <a href="https://learn.microsoft.com/en-us/credentials/certifications/exams/pl-100/" target="_blank" rel="noopener">PL-100: Microsoft Power Platform App Maker</a>
+          </li>
+          <li>
+            <span class="res-type res-vid">Video</span>
+            <a href="https://www.youtube.com/@MicrosoftCopilotStudio" target="_blank" rel="noopener">Microsoft Copilot Studio YouTube Channel</a>
+          </li>
+          <li>
+            <span class="res-type res-course">Course</span>
+            <a href="https://learn.microsoft.com/en-us/training/modules/build-faq-chatbot-qna-maker-azure-bot-service/" target="_blank" rel="noopener">Microsoft Learn: Build a Bot with Azure AI</a>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- Quiz -->
-    <div class="quiz-section" id="quiz-container"></div>
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
 
-  </div>
-</main>
+  </main>
+</div>
 
 <!-- ── Footer ── -->
 <footer class="footer">
@@ -202,100 +382,100 @@
     topic: 'Microsoft Copilot Studio',
     questions: [
       {
-        question: 'What was Microsoft Copilot Studio formerly known as?',
+        question: 'A copilot needs to collect a structured 5-step intake form where each answer gates the next question. Which Copilot Studio feature is most appropriate?',
         options: [
-          'Microsoft Bot Framework',
-          'Power Virtual Agents',
-          'Azure Bot Service',
-          'Microsoft QnA Maker'
+          'Generative Answers with a SharePoint knowledge source',
+          'An authored Topic with Question nodes and conditional branching',
+          'A Generative Action that invokes a Power Automate flow',
+          'A System Topic configured with dynamic questions'
         ],
         correct: 1,
-        topic: 'Platform History',
-        explanation: 'Microsoft Copilot Studio is the evolution of Power Virtual Agents, rebranded and enhanced with generative AI capabilities.'
+        topic: 'Topics vs. Generative Answers',
+        explanation: 'Authored Topics with Question nodes give you deterministic control over each step of a structured data collection flow, including input validation and conditional branching based on prior answers.'
       },
       {
-        question: 'What is a "Topic" in Microsoft Copilot Studio?',
+        question: 'In Generative Actions mode, what determines which Power Automate flow the copilot invokes for a given user request?',
         options: [
-          'A helpdesk ticket category',
-          'A conversation module triggered when a user expresses a specific intent',
-          'A type of Power Automate flow',
-          'A SharePoint document library'
-        ],
-        correct: 1,
-        topic: 'Topics',
-        explanation: 'Topics are modular conversation flows that activate when Copilot Studio detects a matching user intent from trigger phrases or generative AI matching.'
-      },
-      {
-        question: 'What feature allows a Copilot Studio copilot to answer questions from a SharePoint site without explicit topic programming?',
-        options: [
-          'Power BI integration',
-          'Generative Answers with Knowledge Sources',
-          'Azure Logic Apps',
-          'Dataverse triggers'
-        ],
-        correct: 1,
-        topic: 'Generative AI Features',
-        explanation: 'Generative Answers connects your copilot to knowledge sources (SharePoint, websites, files) and uses Azure OpenAI to generate accurate, grounded answers on demand.'
-      },
-      {
-        question: 'Which governance tool controls what external connectors a copilot can access in an organization?',
-        options: [
-          'Azure Policy',
-          'Microsoft Purview',
-          'Data Loss Prevention (DLP) Policies',
-          'Intune Device Management'
-        ],
-        correct: 2,
-        topic: 'Governance & Security',
-        explanation: 'DLP policies in the Power Platform Admin Center control which connectors and data sources copilots can access, preventing unauthorized data leakage.'
-      },
-      {
-        question: 'Which Microsoft 365 application is the most common deployment channel for enterprise Copilot Studio copilots?',
-        options: [
-          'Outlook',
-          'SharePoint',
-          'Microsoft Teams',
-          'OneDrive'
-        ],
-        correct: 2,
-        topic: 'Deployment Channels',
-        explanation: 'Microsoft Teams is the primary enterprise deployment channel, allowing copilots to be accessed directly within the collaboration tool most employees already use daily.'
-      },
-      {
-        question: 'What is a "Generative Action" in Copilot Studio?',
-        options: [
-          'An automated email sent after each conversation',
-          'An action that Copilot Studio automatically identifies and invokes based on user intent, without requiring an explicit topic',
-          'A custom Apex action imported from Salesforce',
-          'A Power BI report refresh triggered by the copilot'
+          'The Topic trigger phrases configured for each flow',
+          'The AI reads the action and parameter descriptions in the plugin/connector spec to match user intent',
+          'The copilot always invokes flows in the order they were created',
+          'Flows must be explicitly mapped to specific user intents in the copilot settings'
         ],
         correct: 1,
         topic: 'Generative Actions',
-        explanation: 'Generative Actions allow the AI to automatically identify the right Power Automate flow or plugin to invoke based on the user\'s natural language request.'
+        explanation: 'In Generative Actions mode, the copilot\'s AI layer reads action descriptions (from the OpenAPI spec or plugin manifest) and autonomously selects the right action based on semantic matching to the user\'s natural language request.'
       },
       {
-        question: 'Which compliance standards does Microsoft Copilot Studio support through its Azure infrastructure?',
+        question: 'A DLP policy classifies SharePoint as "Business" and a social media connector as "Non-Business". What does this prevent?',
         options: [
-          'OSHA and ISO 9001 only',
-          'GDPR, HIPAA, and SOC 2',
-          'FERPA and PCI-DSS only',
-          'None — compliance must be handled externally'
+          'Using SharePoint as a knowledge source in Generative Answers',
+          'A copilot action from reading SharePoint data and posting to social media within the same flow',
+          'Publishing the copilot to the Teams channel',
+          'Creating Topics that reference SharePoint URLs'
         ],
         correct: 1,
-        topic: 'Compliance',
-        explanation: 'Microsoft Copilot Studio inherits Azure\'s comprehensive compliance certifications including GDPR, HIPAA, SOC 2, and many others via Microsoft\'s Compliance Manager.'
+        topic: 'Governance & DLP',
+        explanation: 'DLP policies prevent connectors in different groups (Business vs. Non-Business) from being used together in the same flow. This blocks a copilot from mixing trusted data sources (SharePoint) with external channels (social media) in one action.'
       },
       {
-        question: 'What is the maximum number of prebuilt connectors available in Power Platform for use with Copilot Studio?',
+        question: 'When testing a copilot in the Copilot Studio authoring canvas, which version does the test panel execute against?',
         options: [
-          'Around 50',
-          'Around 200',
-          'Over 1,000',
-          'Exactly 500'
+          'The last published version',
+          'A randomly selected stable version for consistency',
+          'The current draft (unpublished) version',
+          'A sandbox copy isolated from the authoring environment'
         ],
         correct: 2,
-        topic: 'Connectors & Integrations',
-        explanation: 'The Microsoft Power Platform ecosystem offers 1,000+ prebuilt connectors to third-party services including Salesforce, ServiceNow, SAP, and many more.'
+        topic: 'Publish & Deploy Workflow',
+        explanation: 'The Test Panel in Copilot Studio always runs against the current draft — allowing rapid iteration and testing before committing to a Publish that would affect all live channels.'
+      },
+      {
+        question: 'Which Power Platform environment should NOT be used for production copilot deployments?',
+        options: [
+          'A dedicated environment with strict DLP policies',
+          'The Default Environment shared by all tenant users',
+          'A managed environment with Entra ID group restrictions',
+          'A solution-managed environment with ALM pipelines'
+        ],
+        correct: 1,
+        topic: 'Environment Strategy',
+        explanation: 'The Default Environment is shared by all users in the tenant with minimal governance controls. Production copilots should always be deployed to dedicated environments with appropriate DLP policies and access controls.'
+      },
+      {
+        question: 'A copilot deployed on the Teams channel needs to query the authenticated user\'s Outlook calendar. What is the recommended approach?',
+        options: [
+          'Ask the user to paste their calendar data into the chat',
+          'Use a Power Automate flow with the Microsoft Graph connector, passing the authenticated user\'s identity from the copilot session',
+          'Configure the copilot to sign in as a service account that has access to all calendars',
+          'Use a custom connector with hardcoded credentials for the Graph API'
+        ],
+        correct: 1,
+        topic: 'Actions & Connectors',
+        explanation: 'On the Teams channel, the copilot automatically has the authenticated user\'s Entra ID identity available. Pass this to a Power Automate flow using user impersonation with the Microsoft Graph connector to read that specific user\'s calendar data securely.'
+      },
+      {
+        question: 'What is the purpose of Azure AI Content Safety in Copilot Studio\'s Generative Answers?',
+        options: [
+          'To improve the quality of knowledge source indexing',
+          'To filter harmful, offensive, or off-topic content from LLM-generated responses before delivery to users',
+          'To validate that knowledge sources are accessible before the copilot is published',
+          'To encrypt conversation data in transit between the copilot and Azure OpenAI'
+        ],
+        correct: 1,
+        topic: 'Governance & Content Moderation',
+        explanation: 'Azure AI Content Safety applies classification across harm categories (hate, violence, sexual, self-harm) to LLM-generated responses. Content exceeding configured severity thresholds is blocked or replaced with a safe fallback message before reaching users.'
+      },
+      {
+        question: 'How does publishing a Copilot Studio copilot differ from saving changes in the authoring canvas?',
+        options: [
+          'Saving creates a backup; Publishing sends changes for Microsoft review',
+          'Saving preserves the draft; Publishing immediately promotes changes to all configured live channels',
+          'They are equivalent — saving and publishing do the same thing',
+          'Publishing creates a new environment; saving updates the current one'
+        ],
+        correct: 1,
+        topic: 'Publish & Deploy Workflow',
+        explanation: 'Changes in the authoring canvas are saved as a draft visible only in the Test Panel. Publishing promotes the draft to the live version, immediately affecting all configured channels (Teams, web chat, etc.) — there is no staging layer by default.'
       }
     ]
   });
