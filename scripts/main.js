@@ -49,32 +49,90 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── Sidebar Active Link (IntersectionObserver) ────────────────
+let observeActiveSections = () => {};   // forward declaration; overwritten on DOMContentLoaded
+
 window.addEventListener('DOMContentLoaded', () => {
-  const sections = document.querySelectorAll('.main-content section[id]');
   const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
-  if (!sections.length || !sidebarLinks.length) return;
+  if (!sidebarLinks.length) return;
+
+  let observer;
 
   const setActive = (id) => {
     sidebarLinks.forEach(a => {
       const href = a.getAttribute('href');
-      if (href === '#' + id) {
-        a.classList.add('active');
-      } else {
-        a.classList.remove('active');
-      }
+      a.classList.toggle('active', href === '#' + id);
     });
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) setActive(entry.target.id);
+  observeActiveSections = () => {
+    if (observer) observer.disconnect();
+    // Only observe sections inside the currently active level panel (or all if no panels)
+    const activePanel = document.querySelector('.level-content.active') || document.querySelector('.main-content');
+    if (!activePanel) return;
+    const sections = activePanel.querySelectorAll('section[id]');
+    if (!sections.length) return;
+
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
+    }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+    setActive(sections[0].id);
+  };
+
+  observeActiveSections();
+});
+
+// ── Level Tab Switcher (topic pages) ─────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const tabs   = document.querySelectorAll('.level-switcher .level-tab');
+  const panels = document.querySelectorAll('.level-content[data-level]');
+  if (!tabs.length) return;
+
+  const levelDescs = {
+    beginner:     'No prior experience needed — start here',
+    intermediate: 'Assumes familiarity with the platform',
+    advanced:     'Deep dives, architecture & code patterns'
+  };
+
+  const activate = (level) => {
+    // Update tabs
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.level === level));
+    // Show/hide panels
+    panels.forEach(p => p.classList.toggle('active', p.dataset.level === level));
+    // Update description text
+    const desc = document.getElementById('level-desc');
+    if (desc) desc.textContent = levelDescs[level] || '';
+    // Show/hide sidebar links by level
+    document.querySelectorAll('.sidebar-nav li[data-level]').forEach(li => {
+      li.style.display = li.dataset.level === level ? '' : 'none';
     });
-  }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+    // Re-observe sections visible in the new active panel
+    observeActiveSections();
+  };
 
-  sections.forEach(s => observer.observe(s));
+  tabs.forEach(tab => tab.addEventListener('click', () => activate(tab.dataset.level)));
 
-  // Set first as active on load
-  if (sections.length) setActive(sections[0].id);
+  // Detect hash on load: #beginner, #intermediate, #advanced
+  const hash = location.hash.replace('#', '');
+  const startLevel = ['beginner', 'intermediate', 'advanced'].includes(hash) ? hash : 'intermediate';
+  activate(startLevel);
+});
+
+// ── Home Page: Course Card Level Tabs ─────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.course-card').forEach(card => {
+    const tabs = card.querySelectorAll('.course-level-tab');
+    const cta  = card.querySelector('.course-cta');
+    if (!tabs.length || !cta) return;
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        if (cta.dataset.base) cta.href = cta.dataset.base + '#' + tab.dataset.level;
+      });
+    });
+  });
 });
 
 // ── Card Search Filter (home page) ───────────────────────────

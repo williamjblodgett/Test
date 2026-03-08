@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Tools Learning Hub</title>
-  <meta name="description" content="Professional training resources for Salesforce Agentforce, Tableau API, Microsoft Copilot Studio, Microsoft 365 AI, and AI Security & Compliance.">
+  <title>AI Tools Learning Hub — Free Training for Salesforce, Tableau, Copilot & More</title>
+  <meta name="description" content="Free, structured AI tools training across 3 skill levels. Salesforce Agentforce, Tableau API, Copilot Studio, Microsoft 365 AI, and AI Security.">
   <link rel="stylesheet" href="styles/main.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 </head>
@@ -34,139 +34,214 @@
 </nav>
 
 <!-- ── Hero ── -->
-<section class="hero">
-  <div class="container">
-    <div class="hero__badge">🎓 Free Professional Training</div>
-    <h1>Master <span>AI Tools</span> That Drive Results</h1>
-    <p>Curated learning paths, hands-on quizzes, and expert resources for Salesforce Agentforce, Tableau, Microsoft Copilot Studio, MS365 AI, and AI Security.</p>
-    <div class="hero__actions">
-      <a class="btn btn-primary" href="#topics">Explore Topics ↓</a>
-      <a class="btn btn-outline" href="security/index.html">AI Security Guide</a>
+<section class="hero" style="background: var(--color-bg-hero);">
+  <div class="hero-inner">
+
+    <!-- Left: Text -->
+    <div class="hero-text">
+      <div class="hero-badge">✦ Free Professional Training</div>
+      <h1>Master AI Tools<br><span>That Drive Results</span></h1>
+      <p>Structured, in-depth learning paths for Salesforce Agentforce, Tableau, Microsoft Copilot Studio, M365 AI, and AI Security — across Beginner, Intermediate, and Advanced levels.</p>
+      <div class="hero-actions">
+        <a href="#courses" class="btn btn-primary">Browse Courses</a>
+        <a href="salesforce/index.html#beginner" class="btn btn-outline">Start for Free →</a>
+      </div>
+    </div>
+
+    <!-- Right: CSS Illustration -->
+    <div class="hero-illustration" aria-hidden="true">
+      <div class="illus-dot illus-dot-1"></div>
+      <div class="illus-dot illus-dot-2"></div>
+      <div class="illus-triangle"></div>
+
+      <div class="illus-card-main">
+        <div class="illus-screen">🤖</div>
+        <div class="illus-bar w80"></div>
+        <div class="illus-bar w60"></div>
+        <div class="illus-bar w40"></div>
+      </div>
+
+      <div class="illus-chip illus-chip-1">✓ 3 Skill Levels</div>
+      <div class="illus-chip illus-chip-2">⚡ Advanced Deep Dives</div>
+      <div class="illus-chip illus-chip-3">100% Free</div>
     </div>
   </div>
 </section>
 
-<!-- ── Stats ── -->
+<!-- ── Stats Bar ── -->
 <div class="stats-bar">
   <div class="container">
     <div class="stats-grid">
       <div class="stat-item">
-        <strong>5</strong>
-        <span>Core Topics</span>
+        <div class="stat-number">5</div>
+        <div class="stat-label">Core Topics</div>
       </div>
       <div class="stat-item">
-        <strong>50+</strong>
-        <span>Quiz Questions</span>
+        <div class="stat-number">3</div>
+        <div class="stat-label">Skill Levels</div>
       </div>
       <div class="stat-item">
-        <strong>100%</strong>
-        <span>Free Resources</span>
+        <div class="stat-number">75+</div>
+        <div class="stat-label">Quiz Questions</div>
       </div>
       <div class="stat-item">
-        <strong>4</strong>
-        <span>Platforms Covered</span>
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Free</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Platforms</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── Topics ── -->
-<section class="section" id="topics">
+<!-- ── Dark Course Browser ── -->
+<section class="courses-section" id="courses">
   <div class="container">
-    <div class="section-header text-center">
+    <div class="section-header">
       <h2>Choose Your Learning Path</h2>
-      <p>Select a topic to access training content, resources, and a knowledge quiz</p>
+      <p>Pick a topic and select your experience level — Beginner, Intermediate, or Advanced.</p>
     </div>
 
-    <!-- Search -->
-    <div class="search-bar">
-      <input
-        type="text"
-        id="search-input"
-        placeholder="Search topics (e.g. agents, data, compliance)…"
-        aria-label="Search topics"
-      >
-      <button aria-label="Search">🔍</button>
-    </div>
+    <div class="courses-grid">
 
-    <div class="cards-grid">
-
-      <article class="card" data-search="salesforce agentforce ai agents automation crm flows apex">
-        <div class="card__icon icon-sf">☁️</div>
-        <div class="card__title">Salesforce Agentforce</div>
-        <div class="card__desc">
-          Build and deploy autonomous AI agents inside Salesforce CRM. Learn flows, agent topics, Einstein, and Apex integration.
+      <!-- Salesforce -->
+      <div class="course-card" data-search="salesforce agentforce ai agents data cloud einstein trust">
+        <div class="course-card-header">
+          <div class="course-icon sf">☁️</div>
+          <div>
+            <div class="course-card-title">Salesforce Agentforce</div>
+            <div class="course-card-provider">Salesforce · Data Cloud</div>
+          </div>
         </div>
-        <a class="card__link" href="salesforce/index.html">Start Learning →</a>
-      </article>
-
-      <article class="card" data-search="tableau api data visualization analytics dashboards rest hyper">
-        <div class="card__icon icon-tab">📊</div>
-        <div class="card__title">Tableau API</div>
-        <div class="card__desc">
-          Automate dashboards, embed analytics, and connect data sources using the Tableau REST API, Hyper API, and Extensions SDK.
+        <div class="course-card-desc">Build autonomous AI agents using Agentforce, Atlas Reasoning Engine, and Salesforce Data Cloud — from your first agent to multi-agent orchestration.</div>
+        <div class="course-level-tabs">
+          <button class="course-level-tab" data-level="beginner">Beginner</button>
+          <button class="course-level-tab active" data-level="intermediate">Intermediate</button>
+          <button class="course-level-tab" data-level="advanced">Advanced</button>
         </div>
-        <a class="card__link" href="tableau/index.html">Start Learning →</a>
-      </article>
-
-      <article class="card" data-search="copilot studio microsoft power virtual agents chatbot low code bots">
-        <div class="card__icon icon-cop">🤖</div>
-        <div class="card__title">Microsoft Copilot Studio</div>
-        <div class="card__desc">
-          Create, publish, and manage AI-powered copilots using Microsoft's low-code platform — no deep coding required.
+        <div class="course-card-footer">
+          <span class="course-meta"><strong>3</strong> skill levels · Quiz included</span>
+          <a class="course-cta" href="salesforce/index.html#intermediate" data-base="salesforce/index.html">Start Learning →</a>
         </div>
-        <a class="card__link" href="copilot/index.html">Start Learning →</a>
-      </article>
+      </div>
 
-      <article class="card" data-search="microsoft 365 ms365 office copilot teams excel word outlook ai productivity">
-        <div class="card__icon icon-ms">🟩</div>
-        <div class="card__title">Microsoft 365 AI</div>
-        <div class="card__desc">
-          Leverage M365 Copilot across Teams, Word, Excel, Outlook, and SharePoint to supercharge everyday productivity.
+      <!-- Tableau -->
+      <div class="course-card" data-search="tableau api rest hyper extensions embedding analytics">
+        <div class="course-card-header">
+          <div class="course-icon tab">📊</div>
+          <div>
+            <div class="course-card-title">Tableau API</div>
+            <div class="course-card-provider">Salesforce · Tableau Cloud</div>
+          </div>
         </div>
-        <a class="card__link" href="ms365/index.html">Start Learning →</a>
-      </article>
-
-      <article class="card" data-search="security compliance data privacy gdpr hipaa soc2 zero trust safety ai risk">
-        <div class="card__icon icon-sec">🔒</div>
-        <div class="card__title">Security & Compliance</div>
-        <div class="card__desc">
-          Understand AI data risks, privacy regulations (GDPR, HIPAA, SOC 2), and best practices for safe, compliant AI use.
+        <div class="course-card-desc">REST API automation, Hyper extract engineering, Extensions SDK, Embedding API v3, and Tableau AI — from first API call to advanced VizQL patterns.</div>
+        <div class="course-level-tabs">
+          <button class="course-level-tab" data-level="beginner">Beginner</button>
+          <button class="course-level-tab active" data-level="intermediate">Intermediate</button>
+          <button class="course-level-tab" data-level="advanced">Advanced</button>
         </div>
-        <a class="card__link" href="security/index.html">Start Learning →</a>
-      </article>
+        <div class="course-card-footer">
+          <span class="course-meta"><strong>3</strong> skill levels · Quiz included</span>
+          <a class="course-cta" href="tableau/index.html#intermediate" data-base="tableau/index.html">Start Learning →</a>
+        </div>
+      </div>
 
-    </div>
+      <!-- Copilot Studio -->
+      <div class="course-card" data-search="microsoft copilot studio power platform chatbot generative ai">
+        <div class="course-card-header">
+          <div class="course-icon cop">🤖</div>
+          <div>
+            <div class="course-card-title">Microsoft Copilot Studio</div>
+            <div class="course-card-provider">Microsoft · Power Platform</div>
+          </div>
+        </div>
+        <div class="course-card-desc">Build AI copilots with Topics, Generative Answers, and Actions — from your first chatbot to custom connectors, ALM pipelines, and M365 Copilot extensions.</div>
+        <div class="course-level-tabs">
+          <button class="course-level-tab" data-level="beginner">Beginner</button>
+          <button class="course-level-tab active" data-level="intermediate">Intermediate</button>
+          <button class="course-level-tab" data-level="advanced">Advanced</button>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-meta"><strong>3</strong> skill levels · Quiz included</span>
+          <a class="course-cta" href="copilot/index.html#intermediate" data-base="copilot/index.html">Start Learning →</a>
+        </div>
+      </div>
+
+      <!-- MS365 AI -->
+      <div class="course-card" data-search="microsoft 365 copilot graph teams outlook word excel ai">
+        <div class="course-card-header">
+          <div class="course-icon ms">🟩</div>
+          <div>
+            <div class="course-card-title">Microsoft 365 AI</div>
+            <div class="course-card-provider">Microsoft · M365 Copilot</div>
+          </div>
+        </div>
+        <div class="course-card-desc">Microsoft Graph retrieval, per-app Copilot capabilities, prompt engineering, and Declarative Agent development — from first prompts to Graph API integrations.</div>
+        <div class="course-level-tabs">
+          <button class="course-level-tab" data-level="beginner">Beginner</button>
+          <button class="course-level-tab active" data-level="intermediate">Intermediate</button>
+          <button class="course-level-tab" data-level="advanced">Advanced</button>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-meta"><strong>3</strong> skill levels · Quiz included</span>
+          <a class="course-cta" href="ms365/index.html#intermediate" data-base="ms365/index.html">Start Learning →</a>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="course-card" data-search="ai security compliance gdpr hipaa prompt injection responsible ai">
+        <div class="course-card-header">
+          <div class="course-icon sec">🔒</div>
+          <div>
+            <div class="course-card-title">AI Security & Compliance</div>
+            <div class="course-card-provider">Cross-Platform · Governance</div>
+          </div>
+        </div>
+        <div class="course-card-desc">AI risk landscape, prompt injection mechanics, GDPR/HIPAA/EU AI Act compliance, platform security controls, and red teaming methodologies.</div>
+        <div class="course-level-tabs">
+          <button class="course-level-tab" data-level="beginner">Beginner</button>
+          <button class="course-level-tab active" data-level="intermediate">Intermediate</button>
+          <button class="course-level-tab" data-level="advanced">Advanced</button>
+        </div>
+        <div class="course-card-footer">
+          <span class="course-meta"><strong>3</strong> skill levels · Quiz included</span>
+          <a class="course-cta" href="security/index.html#intermediate" data-base="security/index.html">Start Learning →</a>
+        </div>
+      </div>
+
+    </div><!-- /.courses-grid -->
   </div>
 </section>
 
-<!-- ── Why This Matters ── -->
-<section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+<!-- ── Why AI Skills Matter ── -->
+<section class="section">
   <div class="container">
-    <div class="section-header text-center">
-      <h2>Why AI Skills Matter Now</h2>
-      <p>The organizations that invest in AI literacy today will lead their industries tomorrow</p>
+    <div style="text-align:center; margin-bottom: 2.5rem;">
+      <h2 style="font-size:1.9rem; font-weight:700;">Why These Skills Matter</h2>
+      <p style="color: var(--color-text-muted); margin-top: 0.5rem;">AI tools are transforming every role — practitioners who can configure, extend, and govern them are in high demand.</p>
     </div>
-    <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-      <div style="text-align:center; padding: 1.5rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">⚡</div>
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Boost Productivity</h3>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted);">AI tools can reduce repetitive work by up to 40%, freeing time for high-value tasks.</p>
+    <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem;">
+      <div class="card" style="padding:1.5rem; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">🚀</div>
+        <strong>Boost Productivity</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">Automate repetitive tasks and accelerate workflows with AI agents and Copilot features.</p>
       </div>
-      <div style="text-align:center; padding: 1.5rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎯</div>
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Career Advancement</h3>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted);">AI proficiency is now among the most sought-after skills across every industry.</p>
+      <div class="card" style="padding:1.5rem; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">📈</div>
+        <strong>Career Advancement</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">AI platform skills are among the most sought-after capabilities in the current job market.</p>
       </div>
-      <div style="text-align:center; padding: 1.5rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🛡️</div>
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Stay Compliant</h3>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted);">Understanding AI security keeps your organization protected and audit-ready.</p>
+      <div class="card" style="padding:1.5rem; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">🛡️</div>
+        <strong>Stay Compliant</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">Understand GDPR, HIPAA, and the EU AI Act to deploy AI responsibly and avoid costly violations.</p>
       </div>
-      <div style="text-align:center; padding: 1.5rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📈</div>
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Data-Driven Decisions</h3>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted);">Tools like Tableau and Copilot turn raw data into actionable business insights.</p>
+      <div class="card" style="padding:1.5rem; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">📊</div>
+        <strong>Data-Driven Decisions</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">Combine Tableau, Salesforce Data Cloud, and M365 Copilot to surface insights that drive action.</p>
       </div>
     </div>
   </div>
@@ -176,15 +251,15 @@
 <footer class="footer">
   <div class="container">
     <div class="footer__inner">
-      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Free resources for AI-powered professionals</span>
-      <span>Last updated: <time id="last-updated"></time> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — <span id="footer-year"></span></span>
+      <span><a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
     </div>
   </div>
 </footer>
 
 <script src="scripts/main.js"></script>
 <script>
-  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
