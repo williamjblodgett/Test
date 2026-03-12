@@ -1281,3 +1281,57 @@ pre code {
   .level-tab { padding: 0.3rem 0.7rem; font-size: 0.75rem; }
   .level-desc { display: none; }
 }
+
+/* ── AI Comparison Table ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.compare-table thead tr {
+  background: var(--color-bg-alt, #f1f5f9);
+}
+
+.compare-table thead th {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.compare-table tbody tr:last-child td { border-bottom: none; }
+
+.compare-table tbody tr:hover {
+  background: rgba(37,99,235,0.04);
+}
+
+.compare-badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.compare-badge--claude  { background: rgba(193,122,255,0.15); color: #c17aff; border: 1px solid rgba(193,122,255,0.35); }
+.compare-badge--copilot { background: rgba(45,155,240,0.12);  color: #2d9bf0; border: 1px solid rgba(45,155,240,0.3); }
+.compare-badge--chatgpt { background: rgba(25,194,126,0.12);  color: #19c27e; border: 1px solid rgba(25,194,126,0.3); }
+
+@media (max-width: 700px) {
+  .compare-table th:nth-child(3),
+  .compare-table td:nth-child(3) { display: none; }
+}

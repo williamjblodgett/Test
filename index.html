@@ -247,6 +247,104 @@
   </div>
 </section>
 
+<!-- ── Claude vs Copilot vs ChatGPT ── -->
+<section class="section" id="ai-comparison">
+  <div class="container">
+    <div style="text-align:center; margin-bottom: 2.5rem;">
+      <h2 style="font-size:1.9rem; font-weight:700;">Claude vs. Copilot vs. ChatGPT</h2>
+      <p style="color: var(--color-text-muted); margin-top: 0.5rem;">Not all AI assistants are the same. Here's how the major tools compare across key dimensions.</p>
+    </div>
+
+    <!-- Comparison Table -->
+    <div style="overflow-x:auto; margin-bottom: 2.5rem;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th><span class="compare-badge compare-badge--claude">Claude</span></th>
+            <th><span class="compare-badge compare-badge--copilot">GitHub Copilot</span></th>
+            <th><span class="compare-badge compare-badge--chatgpt">ChatGPT</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Made by</td>
+            <td>Anthropic</td>
+            <td>Microsoft / GitHub</td>
+            <td>OpenAI</td>
+          </tr>
+          <tr>
+            <td>Primary use case</td>
+            <td>Long-form reasoning, analysis, coding, writing</td>
+            <td>In-editor code completion &amp; review</td>
+            <td>General-purpose chat, coding, image gen</td>
+          </tr>
+          <tr>
+            <td>Context window</td>
+            <td>200k tokens (Claude 3.x)</td>
+            <td>Limited (editor scope)</td>
+            <td>128k tokens (GPT-4o)</td>
+          </tr>
+          <tr>
+            <td>Safety focus</td>
+            <td>Constitutional AI, strong refusal behavior</td>
+            <td>Moderate (Microsoft policies)</td>
+            <td>RLHF + policy filters</td>
+          </tr>
+          <tr>
+            <td>IDE integration</td>
+            <td>VS Code (Claude Dev / Cline), JetBrains</td>
+            <td>VS Code, JetBrains, Vim, Neovim — native</td>
+            <td>Via plugins (Cursor, Continue)</td>
+          </tr>
+          <tr>
+            <td>Enterprise API</td>
+            <td>Yes — Anthropic API</td>
+            <td>Yes — GitHub Copilot API / Azure</td>
+            <td>Yes — OpenAI API / Azure OpenAI</td>
+          </tr>
+          <tr>
+            <td>Multimodal</td>
+            <td>Text + images (Claude 3+)</td>
+            <td>Code + text (no image gen)</td>
+            <td>Text + images + DALL·E image gen</td>
+          </tr>
+          <tr>
+            <td>Best for</td>
+            <td>Deep analysis, nuanced writing, large codebases</td>
+            <td>Line-by-line coding in your IDE</td>
+            <td>Broad tasks, image creation, plugins/GPTs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Highlight Cards -->
+    <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      <div class="card" style="padding:1.5rem; border-top: 3px solid #c17aff;">
+        <div style="font-size:1.75rem; margin-bottom:0.75rem;">🟣</div>
+        <strong style="font-size:1.05rem;">Claude (Anthropic)</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">Excels at long document analysis, nuanced reasoning, and following complex multi-step instructions. Large 200k context window makes it ideal for reviewing entire codebases or lengthy documents at once. Strong safety properties via Constitutional AI.</p>
+        <a href="https://claude.ai" target="_blank" rel="noopener" style="font-size:0.8rem; color: var(--color-primary); text-decoration:none; display:inline-block; margin-top:0.75rem;">Try Claude →</a>
+      </div>
+      <div class="card" style="padding:1.5rem; border-top: 3px solid #2d9bf0;">
+        <div style="font-size:1.75rem; margin-bottom:0.75rem;">🔵</div>
+        <strong style="font-size:1.05rem;">GitHub Copilot (Microsoft)</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">The gold standard for in-editor code completion. Tightly integrated into VS Code, JetBrains, and other IDEs. Copilot Chat adds conversational coding help directly in your workspace. Best choice if your primary use case is writing and reviewing code.</p>
+        <a href="https://github.com/features/copilot" target="_blank" rel="noopener" style="font-size:0.8rem; color: var(--color-primary); text-decoration:none; display:inline-block; margin-top:0.75rem;">Learn more →</a>
+      </div>
+      <div class="card" style="padding:1.5rem; border-top: 3px solid #19c27e;">
+        <div style="font-size:1.75rem; margin-bottom:0.75rem;">🟢</div>
+        <strong style="font-size:1.05rem;">ChatGPT (OpenAI)</strong>
+        <p class="text-muted mt-1" style="font-size:0.875rem;">The most widely recognized AI assistant. GPT-4o supports text, images, and audio. The GPT Store offers specialized plugins for hundreds of use cases. DALL·E integration enables image generation. Great starting point for general-purpose AI exploration.</p>
+        <a href="https://chatgpt.com" target="_blank" rel="noopener" style="font-size:0.8rem; color: var(--color-primary); text-decoration:none; display:inline-block; margin-top:0.75rem;">Try ChatGPT →</a>
+      </div>
+    </div>
+
+    <p style="text-align:center; color: var(--color-text-muted); font-size:0.825rem; margin-top:2rem;">Many teams use all three — Claude for analysis and writing, Copilot for coding, and ChatGPT for everyday tasks. The best tool depends on your workflow.</p>
+  </div>
+</section>
+
 <!-- ── Footer ── -->
 <footer class="footer">
   <div class="container">
