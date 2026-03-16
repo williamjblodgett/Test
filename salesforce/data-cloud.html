@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Cloud — Salesforce AI · AI Learning Hub</title>
+  <meta name="description" content="Comprehensive Salesforce Data Cloud guide: unified profiles, identity resolution, segmentation, vector search, RAG pipelines, streaming data, and Data Cloud APIs — Beginner through Advanced.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html"><span class="navbar__brand-icon">🤖</span>AI Learning Hub</a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html" class="active">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions"><button class="btn-theme" id="theme-toggle" title="Toggle dark/light mode">🌙</button></div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Salesforce</a><span>/</span>
+      <span>Data Cloud</span>
+    </nav>
+    <div class="page-hero__icon">☁️</div>
+    <h1>Salesforce Data Cloud</h1>
+    <p>From unified customer profiles and identity resolution to vector search, RAG pipelines, and the Data Cloud API — a comprehensive guide to Salesforce's real-time CDP.</p>
+  </div>
+</section>
+
+<div style="background:var(--color-bg-alt,#f8fafc);border-bottom:1px solid var(--color-border);padding:0.75rem 0;position:sticky;top:57px;z-index:90;">
+  <div class="container">
+    <div class="level-switcher">
+      <span class="level-switcher-label">Skill Level:</span>
+      <div class="level-tabs">
+        <button class="level-tab" data-level="beginner">Beginner</button>
+        <button class="level-tab" data-level="intermediate">Intermediate</button>
+        <button class="level-tab" data-level="advanced">Advanced</button>
+      </div>
+      <span class="level-desc" id="level-desc"></span>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li data-level="beginner"><a href="#b-what">What is Data Cloud?</a></li>
+      <li data-level="beginner"><a href="#b-concepts">Core Concepts</a></li>
+      <li data-level="beginner"><a href="#b-connectors">Data Connectors</a></li>
+      <li data-level="beginner"><a href="#b-profiles">Unified Profiles</a></li>
+      <li data-level="beginner"><a href="#b-resources">Resources</a></li>
+
+      <li data-level="intermediate"><a href="#i-ingestion">Data Ingestion Deep Dive</a></li>
+      <li data-level="intermediate"><a href="#i-identity">Identity Resolution</a></li>
+      <li data-level="intermediate"><a href="#i-insights">Calculated Insights</a></li>
+      <li data-level="intermediate"><a href="#i-segments">Segmentation &amp; Activation</a></li>
+      <li data-level="intermediate"><a href="#i-agentforce">Data Cloud for Agentforce</a></li>
+      <li data-level="intermediate"><a href="#i-governance">Data Governance</a></li>
+      <li data-level="intermediate"><a href="#i-resources">Resources</a></li>
+
+      <li data-level="advanced"><a href="#a-vector">Vector Search &amp; Embeddings</a></li>
+      <li data-level="advanced"><a href="#a-rag">Building RAG Pipelines</a></li>
+      <li data-level="advanced"><a href="#a-streaming">Streaming Data</a></li>
+      <li data-level="advanced"><a href="#a-apis">Data Cloud APIs</a></li>
+      <li data-level="advanced"><a href="#a-models">Custom Data Models</a></li>
+      <li data-level="advanced"><a href="#a-performance">Performance at Scale</a></li>
+      <li data-level="advanced"><a href="#a-resources">Resources</a></li>
+
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BEGINNER -->
+    <div class="level-content" data-level="beginner">
+
+      <section id="b-what">
+        <div class="content-block">
+          <h2>☁️ What is Salesforce Data Cloud?</h2>
+          <p>Salesforce Data Cloud is a <strong>real-time Customer Data Platform (CDP)</strong> built natively into Salesforce. It is the central data layer for the entire Salesforce AI platform — providing the data foundation that powers Agentforce, Einstein, Marketing Cloud personalization, and analytics.</p>
+
+          <p>The core problem Data Cloud solves: enterprise customer data is scattered. A customer might exist as a contact in Salesforce CRM, a subscriber in Marketing Cloud, a shopper in Commerce Cloud, a visitor in web analytics, and a ticket submitter in your support portal. These are four or five disconnected records for the same person. Data Cloud ingests all of these, resolves them into a <strong>single unified profile</strong>, and makes that profile available in real time across every Salesforce product.</p>
+
+          <h3>Why it matters for AI</h3>
+          <ul>
+            <li><strong>Better agent responses:</strong> An Agentforce agent with access to a unified profile can personalize its response based on the customer's full relationship with your company — not just the last support ticket.</li>
+            <li><strong>Grounded AI:</strong> Data Cloud powers vector search, enabling agents to retrieve relevant knowledge content and answer questions without hallucinating.</li>
+            <li><strong>Real-time personalization:</strong> Marketing Cloud and Journey Builder can react to customer data changes as they happen — not hours later via batch sync.</li>
+            <li><strong>Unified analytics:</strong> Tableau and CRM Analytics can query a single source of truth for customer metrics across all channels.</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 <strong>Mental model:</strong> Think of Data Cloud as the "unified truth layer" that sits beneath all of Salesforce. Every app that needs to know something about a customer asks Data Cloud — not each other.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-concepts">
+        <div class="content-block">
+          <h2>🗂️ Core Concepts</h2>
+
+          <h3>Data Lake Objects (DLOs)</h3>
+          <p>A Data Lake Object is the raw landing zone for ingested data. When you connect a data source to Data Cloud, the raw data lands in a DLO. Think of DLOs as the "raw storage layer" — unprocessed, schema-flexible containers for incoming data streams.</p>
+
+          <h3>Data Model Objects (DMOs)</h3>
+          <p>Data Model Objects are the structured, mapped objects that represent business entities in Data Cloud's standard data model. Common DMOs include: Individual (person), Contact Point Email, Contact Point Phone, Sales Order, Case, Engagement (web click/email open), etc. When you map your DLO fields to DMO fields, you're normalizing raw data into a common schema that allows identity resolution and profile building.</p>
+
+          <h3>Identity Resolution</h3>
+          <p>The process of linking records from different sources that belong to the same real person. For example, matching a Marketing Cloud subscriber record (identified by email) with a Salesforce CRM contact (identified by phone number) to confirm they're the same individual. Identity resolution runs as a continuous background process and is the foundation of the unified profile.</p>
+
+          <h3>Unified Profiles</h3>
+          <p>The output of identity resolution. Each unified profile represents a single individual, aggregated from all matched source records. The profile includes all contact points, engagement history, purchase history, support history, and any calculated metrics — a 360-degree view of the customer.</p>
+
+          <h3>Segments</h3>
+          <p>A filtered subset of unified profiles that share common characteristics. Example: "High-value customers who haven't purchased in 90 days and have an open support case." Segments can be activated to Marketing Cloud for targeted campaigns, or used by Agentforce agents to personalize responses based on segment membership.</p>
+
+          <h3>Data Spaces</h3>
+          <p>Data Cloud supports multiple <strong>Data Spaces</strong> within a single org — essentially isolated data environments for different business units or geographies. Data in one Data Space is not visible to another unless explicitly shared. This enables compliance isolation for multi-national organizations.</p>
+        </div>
+      </section>
+
+      <section id="b-connectors">
+        <div class="content-block">
+          <h2>🔌 Data Connectors Overview</h2>
+          <p>Data Cloud connects to dozens of data sources via pre-built connectors. Here are the most common categories:</p>
+
+          <h3>Salesforce Connectors (Native)</h3>
+          <ul>
+            <li><strong>CRM Connector:</strong> Syncs standard and custom Salesforce objects (Contacts, Accounts, Cases, Opportunities, custom objects) in near real time.</li>
+            <li><strong>Marketing Cloud Connector:</strong> Brings in subscriber data, email engagement (opens, clicks), journey events, and audience lists.</li>
+            <li><strong>Commerce Cloud Connector:</strong> Syncs order data, cart events, product interactions, and customer purchase history.</li>
+            <li><strong>Service Cloud Voice Connector:</strong> Imports call transcripts and interaction data from voice channel.</li>
+          </ul>
+
+          <h3>Cloud Storage Connectors</h3>
+          <ul>
+            <li>Amazon S3 — batch file uploads (CSV, JSON, Parquet)</li>
+            <li>Google Cloud Storage</li>
+            <li>Azure Blob Storage</li>
+          </ul>
+
+          <h3>Direct Data Ingestion API</h3>
+          <p>For custom integrations, use the <strong>Ingestion API</strong> to push records directly into Data Cloud from any HTTP-capable system. Ideal for: mobile app events, IoT devices, custom web tracking, or systems without a pre-built connector.</p>
+
+          <h3>MuleSoft Anypoint</h3>
+          <p>Enterprise integration via MuleSoft. Connect virtually any system (SAP, Workday, legacy databases, custom APIs) to Data Cloud via pre-built Anypoint connectors or custom integration flows.</p>
+        </div>
+      </section>
+
+      <section id="b-profiles">
+        <div class="content-block">
+          <h2>👤 Unified Customer Profiles — Walkthrough</h2>
+          <p>Here's how a unified profile is built end-to-end for a real customer scenario.</p>
+
+          <h3>Scenario: Emma, a customer</h3>
+          <p>Emma has interacted with your company across multiple channels:</p>
+          <ul>
+            <li><strong>CRM:</strong> Contact record — Name: Emma Wilson, Email: emma@work.com, Phone: 555-0101</li>
+            <li><strong>Marketing Cloud:</strong> Subscriber — emma.w@personal.com, subscribed to newsletter</li>
+            <li><strong>E-Commerce:</strong> Account — emma.wilson@gmail.com, 3 orders in 12 months</li>
+            <li><strong>Support:</strong> Case submitted via web form — emma@work.com</li>
+          </ul>
+
+          <h3>Step 1 — Ingestion</h3>
+          <p>Each source's data flows into its own DLO in Data Cloud. Emma now exists as four separate records across four DLOs.</p>
+
+          <h3>Step 2 — Mapping to DMOs</h3>
+          <p>Each DLO's fields are mapped to the standard Data Cloud DMO schema:
+          Email addresses become <strong>Contact Point Email</strong> records. Phone numbers become <strong>Contact Point Phone</strong> records. Orders become <strong>Sales Order</strong> records.</p>
+
+          <h3>Step 3 — Identity Resolution</h3>
+          <p>Identity resolution runs its configured ruleset. It matches emma@work.com (CRM) to emma@work.com (support), then finds the phone number match to link the commerce account. After resolution, all four records are linked under a single <strong>Individual ID</strong>.</p>
+
+          <h3>Step 4 — Unified Profile</h3>
+          <p>Emma's unified profile now shows: 3 email addresses, 1 phone number, 3 e-commerce orders, 1 open support case, newsletter subscriber, CRM contact. Any Salesforce product can query this profile by any of Emma's identifiers.</p>
+
+          <div class="alert alert-info">
+            💡 Profile completeness directly impacts agent response quality. An agent that can see Emma's full order history can answer "have I ordered this before?" — an agent with only the support ticket cannot.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-resources">
+        <div class="content-block">
+          <h2>🔗 Beginner Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/salesforce-data-cloud-quick-look" target="_blank" rel="noopener">Trailhead: Data Cloud Quick Look</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_data_cloud.htm" target="_blank" rel="noopener">Data Cloud Official Documentation</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/trails/get-to-know-data-cloud" target="_blank" rel="noopener">Trailhead: Get to Know Data Cloud</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /beginner -->
+
+    <!-- INTERMEDIATE -->
+    <div class="level-content" data-level="intermediate">
+
+      <section id="i-ingestion">
+        <div class="content-block">
+          <h2>📥 Data Ingestion Deep Dive</h2>
+
+          <h3>Batch vs. Streaming Ingestion</h3>
+          <div style="overflow-x:auto;">
+            <table class="compare-table">
+              <thead><tr><th>Factor</th><th>Batch Ingestion</th><th>Streaming Ingestion</th></tr></thead>
+              <tbody>
+                <tr><td>Latency</td><td>Minutes to hours</td><td>Seconds to sub-second</td></tr>
+                <tr><td>Volume</td><td>Very high (millions of records)</td><td>Moderate (event-by-event)</td></tr>
+                <tr><td>Use cases</td><td>Nightly syncs, historical loads, large file imports</td><td>Web clicks, mobile events, real-time transactions</td></tr>
+                <tr><td>Cost</td><td>Lower per-record</td><td>Higher per-record</td></tr>
+                <tr><td>API</td><td>Bulk API, S3/GCS connectors</td><td>Streaming Ingestion API, Event Bus</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Connector Configuration Walkthrough</h3>
+          <p>For the Salesforce CRM Connector (most common):</p>
+          <ol>
+            <li>Navigate to <strong>Data Cloud Setup → Data Stream → New</strong>.</li>
+            <li>Select <strong>Salesforce CRM</strong> as the source.</li>
+            <li>Choose the object to sync (e.g., Contact, Case, Opportunity).</li>
+            <li>Select fields to include — only include fields you will actively use. Unused fields increase data processing costs.</li>
+            <li>Set the refresh schedule: <strong>Real-time</strong> (triggers on record change via Platform Events) or <strong>Scheduled</strong> (batch refresh at set intervals).</li>
+            <li>Map the DLO fields to DMO fields on the next screen.</li>
+          </ol>
+
+          <h3>Field Mapping Best Practices</h3>
+          <ul>
+            <li>Map <strong>primary identifiers</strong> (email, phone, contact ID) to the standard DMO Contact Point fields — identity resolution depends on this.</li>
+            <li>Use the <strong>Data Stream Category</strong> field to correctly classify your data stream type (Profile, Engagement, Other). This affects how identity resolution treats the records.</li>
+            <li>Mark fields as <strong>Match Key</strong> if they should be used in identity resolution matching rules (e.g., email, phone, CRM ID).</li>
+            <li>Map date fields to the standard <strong>DateTime</strong> type — inconsistent date formats are the most common cause of ingestion failures.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-identity">
+        <div class="content-block">
+          <h2>🔍 Identity Resolution</h2>
+          <p>Identity resolution is the process that transforms disconnected records from multiple sources into unified individual profiles. It runs as a continuous background job and is the most architecturally important configuration in Data Cloud.</p>
+
+          <h3>Matching Rules</h3>
+          <p>Matching rules define the criteria used to decide that two records belong to the same individual. Data Cloud supports two types:</p>
+          <ul>
+            <li><strong>Deterministic matching:</strong> Exact-match rules based on specific field values. Example: "If two records have the same email address AND the same phone number, they match." High precision, no false positives, but requires exact data consistency across sources.</li>
+            <li><strong>Probabilistic (fuzzy) matching:</strong> Likelihood-based rules that match even when values aren't identical. Example: "If two records have very similar names AND the same zip code AND one has an email that appears in the other's domain, they probably match." Higher recall but can produce false positives.</li>
+          </ul>
+
+          <h3>Rule Priority and Reconciliation</h3>
+          <p>When records are matched, the resulting unified profile must decide which source value to use for each attribute (e.g., if CRM and Marketing Cloud have different phone numbers for the same person, which is the "true" phone number). This is controlled by <strong>Reconciliation Rules</strong>:</p>
+          <ul>
+            <li><strong>Most Frequent:</strong> Use the value that appears most often across matched records.</li>
+            <li><strong>Most Recent:</strong> Use the value from the most recently updated record.</li>
+            <li><strong>Source Priority:</strong> Explicitly define which data source takes precedence (e.g., CRM > Marketing Cloud > Commerce).</li>
+          </ul>
+
+          <h3>Monitoring Identity Resolution Quality</h3>
+          <ul>
+            <li>Monitor the <strong>Match Rate</strong> — what % of incoming records matched to an existing profile vs. created a new one.</li>
+            <li>Audit the <strong>Merge Rate</strong> — how many separate profiles were merged into one during the last run.</li>
+            <li>Spot-check unified profiles in the Data Cloud Profile Explorer to verify that merged records genuinely represent the same individual.</li>
+            <li>A low match rate often indicates that match key fields (email, phone) are not consistently populated across source systems.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-insights">
+        <div class="content-block">
+          <h2>📊 Calculated Insights</h2>
+          <p>Calculated Insights are derived metrics computed from unified profile data and stored back on the profile. They transform raw event data into actionable business metrics available in real time.</p>
+
+          <h3>Examples</h3>
+          <ul>
+            <li><strong>Lifetime Value (LTV):</strong> Sum of all order amounts for a customer, segmented by calendar year.</li>
+            <li><strong>Days Since Last Purchase:</strong> Recency metric used for lapsed customer targeting.</li>
+            <li><strong>Purchase Frequency:</strong> Average number of orders per month over the last 12 months.</li>
+            <li><strong>Support Intensity:</strong> Number of cases opened in the last 90 days — a risk indicator for churn.</li>
+            <li><strong>Email Engagement Score:</strong> Weighted score of opens, clicks, and conversions over the last 30 days.</li>
+          </ul>
+
+          <h3>Creating a Calculated Insight</h3>
+          <p>Navigate to <strong>Data Cloud → Calculated Insights → New</strong>. You write the insight using ANSI SQL against your Data Cloud DMOs. Example:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>SELECT
+    ssot__Individual__c AS individual_id,
+    SUM(ssot__TotalAmount__c) AS lifetime_value,
+    COUNT(ssot__Id__c) AS total_orders,
+    MAX(ssot__OrderedDate__c) AS last_order_date
+FROM ssot__SalesOrder__dlm
+GROUP BY ssot__Individual__c</code></pre>
+
+          <h3>Using Insights in Agents</h3>
+          <p>Once calculated, insights are stored on the unified profile and available to Agentforce agents as profile attributes. An agent that knows a customer's LTV and support intensity can tailor its tone and escalation behavior without any explicit rule configuration — the LLM infers the appropriate response from the context.</p>
+        </div>
+      </section>
+
+      <section id="i-segments">
+        <div class="content-block">
+          <h2>🎯 Segmentation &amp; Activation</h2>
+
+          <h3>Building Segments</h3>
+          <p>Segments are built in the <strong>Data Cloud Segment Builder</strong> — a visual drag-and-drop interface that filters unified profiles based on profile attributes, Calculated Insights, and engagement history.</p>
+          <p>Example segment: "High-value lapsed customers at risk" =</p>
+          <ul>
+            <li>Lifetime Value &gt; $5,000 (from Calculated Insight)</li>
+            <li>Last Order Date &gt; 90 days ago</li>
+            <li>No open support cases</li>
+            <li>Email engagement score &gt; 50 in the last 90 days (still reading our emails)</li>
+          </ul>
+
+          <h3>Segment Refresh Rates</h3>
+          <ul>
+            <li><strong>Real-time segments:</strong> Update within seconds as profile data changes. Only available for specific segment conditions. Highest cost.</li>
+            <li><strong>Rapid segments:</strong> Refresh every 12 hours. Good for daily campaign targeting.</li>
+            <li><strong>Scheduled segments:</strong> Refresh on a defined schedule (daily, weekly). For non-time-sensitive use cases.</li>
+          </ul>
+
+          <h3>Activation</h3>
+          <p>Segments are activated — pushed to downstream systems for action. Common activation targets:</p>
+          <ul>
+            <li><strong>Marketing Cloud:</strong> Activate segment as a subscriber list for email/SMS campaigns.</li>
+            <li><strong>Advertising:</strong> Push segment to Google Ads or Meta for matched audience targeting.</li>
+            <li><strong>Agentforce:</strong> Use segment membership as a context variable in agent topics — e.g., "If the customer is in the 'At Risk' segment, prioritize retention over upsell."</li>
+            <li><strong>Service Cloud:</strong> Flag high-value segment members for priority routing in the contact center.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-agentforce">
+        <div class="content-block">
+          <h2>🤖 Data Cloud for Agentforce</h2>
+          <p>Data Cloud is the data backbone for Agentforce. This section covers the two main integration points: <strong>profile grounding</strong> and <strong>knowledge retrieval (RAG)</strong>.</p>
+
+          <h3>Profile Grounding</h3>
+          <p>When an authenticated user starts an Agentforce session, their Data Cloud unified profile is automatically available as session context. The Atlas Reasoning Engine can reference profile attributes in its planning without requiring explicit action invocations for common data lookups.</p>
+          <p>To configure profile grounding: in your Agent configuration, enable <strong>Data Cloud Customer Profile</strong> under Agent Context. Specify which profile attributes to include in the agent context window (be selective — including too many attributes increases token consumption and latency).</p>
+
+          <h3>Knowledge Retrieval (RAG)</h3>
+          <p>For agents that need to answer questions based on your organization's specific knowledge content — policies, FAQs, product documentation — configure Data Cloud's <strong>Vector Search</strong> as a retrieval source:</p>
+          <ol>
+            <li>Create a Data Cloud <strong>Vector Database</strong> object for your knowledge content type.</li>
+            <li>Connect your content source (Knowledge Articles, uploaded PDFs, web crawl, etc.).</li>
+            <li>Data Cloud automatically chunks the content and generates vector embeddings.</li>
+            <li>In Prompt Builder, add a <strong>Data Cloud Search</strong> resource to your prompt template — this executes a semantic search at inference time and injects the most relevant chunks as grounding context.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="i-governance">
+        <div class="content-block">
+          <h2>🔒 Data Governance &amp; Privacy</h2>
+
+          <h3>Consent Management</h3>
+          <p>Data Cloud has a built-in <strong>Consent Manager</strong> that tracks customer consent preferences across channels. Consent decisions (opt-in/opt-out) are enforced automatically when activating segments — profiles without the required consent for a given activation channel are automatically excluded.</p>
+
+          <h3>Data Retention Policies</h3>
+          <p>Configure data retention rules per Data Lake Object. Records older than the retention window are automatically purged. This directly supports GDPR's "right to be forgotten" — when a deletion request is processed, it propagates across all DLOs and the unified profile is updated.</p>
+
+          <h3>Right to Be Forgotten Workflow</h3>
+          <ol>
+            <li>Receive a data subject deletion request.</li>
+            <li>Trigger a Deletion Request via the Data Cloud API or the Privacy Center interface.</li>
+            <li>Data Cloud identifies all records linked to the individual's unified profile across all DLOs.</li>
+            <li>Records are deleted from all DLOs within the configured SLA (typically 30 days for GDPR).</li>
+            <li>The unified profile is deleted. An audit record is maintained to prove deletion occurred (without retaining the deleted data itself).</li>
+          </ol>
+
+          <h3>Data Spaces for Compliance Isolation</h3>
+          <p>Use separate Data Spaces for different regulatory jurisdictions (e.g., EU customers in a dedicated Data Space with stricter retention policies). Data Spaces prevent cross-contamination of data subject to different regulatory frameworks.</p>
+        </div>
+      </section>
+
+      <section id="i-resources">
+        <div class="content-block">
+          <h2>🔗 Intermediate Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/salesforce-data-cloud-data-modeling" target="_blank" rel="noopener">Trailhead: Data Cloud Data Modeling</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/einstein/genai/guide/data-cloud-vector-database.html" target="_blank" rel="noopener">Data Cloud Vector Database Developer Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_identity_resolution.htm" target="_blank" rel="noopener">Identity Resolution Documentation</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/salesforcedatacloudconsultant" target="_blank" rel="noopener">Salesforce Data Cloud Consultant Certification</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /intermediate -->
+
+    <!-- ADVANCED -->
+    <div class="level-content" data-level="advanced">
+
+      <section id="a-vector">
+        <div class="content-block">
+          <h2>🔢 Vector Search &amp; Embeddings</h2>
+          <p>Vector search is the foundation of RAG (Retrieval-Augmented Generation) in Data Cloud. Understanding how it works at the technical level is essential for building high-quality knowledge retrieval systems.</p>
+
+          <h3>How Embeddings Work</h3>
+          <p>An <strong>embedding</strong> is a numerical representation of text as a high-dimensional vector (typically 768–3072 dimensions). Similar meanings produce similar vectors — measured by cosine similarity or dot product. The embedding process:</p>
+          <ol>
+            <li>Text content (knowledge article, FAQ, policy document) is <strong>chunked</strong> into segments of a configured size (typically 500–1000 tokens per chunk, with overlap).</li>
+            <li>Each chunk is passed through an <strong>embedding model</strong> (Data Cloud uses a hosted embedding model — you don't manage it directly).</li>
+            <li>The resulting vector is stored in the <strong>Vector Database object</strong> alongside the original text chunk and source metadata.</li>
+          </ol>
+
+          <h3>Semantic Search at Inference Time</h3>
+          <p>When an Agentforce agent needs to retrieve knowledge:</p>
+          <ol>
+            <li>The agent's current query (or a derived search query) is passed to the embedding model to generate a query vector.</li>
+            <li>The query vector is compared against all stored content vectors using approximate nearest neighbor (ANN) search.</li>
+            <li>The top K most similar chunks are returned (K is configurable — typically 3–10).</li>
+            <li>These chunks are injected into the prompt as grounding context.</li>
+          </ol>
+
+          <h3>Chunking Strategy Matters</h3>
+          <ul>
+            <li><strong>Too small chunks:</strong> Each chunk lacks sufficient context for the LLM to understand it. The retrieved chunk might be a sentence fragment that's technically similar but lacks the surrounding explanation.</li>
+            <li><strong>Too large chunks:</strong> Less precise retrieval — a 2000-token chunk matches many queries broadly, reducing relevance of retrieved content.</li>
+            <li><strong>Recommended approach:</strong> 400–600 tokens per chunk with 10–15% overlap. Structure chunks around natural document boundaries (paragraphs, sections) rather than arbitrary token counts.</li>
+            <li><strong>Hybrid chunking:</strong> For structured documents (FAQs, policy tables), consider chunking by question-answer pair rather than fixed token size.</li>
+          </ul>
+
+          <h3>Metadata Filtering</h3>
+          <p>Vector search can be combined with metadata filters to scope retrieval. Example: retrieve only from knowledge articles tagged "returns_policy" when the agent is handling a returns topic. Metadata filtering dramatically improves retrieval precision in large knowledge bases.</p>
+        </div>
+      </section>
+
+      <section id="a-rag">
+        <div class="content-block">
+          <h2>🏗️ Building RAG Pipelines</h2>
+
+          <h3>End-to-End RAG Architecture</h3>
+          <p>A production RAG pipeline has three stages:</p>
+
+          <h3>Stage 1: Indexing Pipeline (runs continuously)</h3>
+          <ol>
+            <li>Source content (Salesforce Knowledge Articles, uploaded PDFs, web-crawled pages) is ingested into a Data Cloud Data Lake Object.</li>
+            <li>A data stream maps the DLO to the Vector Database DMO.</li>
+            <li>Data Cloud's embedding job processes new/updated chunks automatically — no manual re-indexing required.</li>
+            <li>Deleted source content automatically removes the corresponding vectors via the data stream's delete propagation.</li>
+          </ol>
+
+          <h3>Stage 2: Retrieval at Inference Time</h3>
+          <p>In Prompt Builder, add a <strong>Data Cloud Search</strong> resource to your prompt template:</p>
+          <ul>
+            <li>Configure the search query: usually the user's message or a derived search query from the conversation context.</li>
+            <li>Set K (number of results): typically 3–5 for conversational agents (more dilutes relevance).</li>
+            <li>Apply metadata filters where applicable.</li>
+            <li>Configure the output: how retrieved chunks are formatted and injected into the prompt.</li>
+          </ul>
+
+          <h3>Stage 3: Generation with Grounding</h3>
+          <p>The prompt template injects retrieved chunks into a structured prompt:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>You are a customer service agent for Acme Corp.
+Answer the customer's question using ONLY the information
+provided in the context below. If the answer is not in the
+context, say "I don't have that information" — do NOT make up answers.
+
+CONTEXT:
+{!DataCloudSearch.results}
+
+CUSTOMER QUESTION:
+{!$Input.userMessage}</code></pre>
+
+          <h3>Evaluating RAG Quality</h3>
+          <ul>
+            <li><strong>Retrieval precision:</strong> Are the retrieved chunks actually relevant to the query? Score manually on a test set of 50–100 queries.</li>
+            <li><strong>Answer faithfulness:</strong> Does the LLM's answer stay within the retrieved context (not hallucinate)? Use an LLM-as-judge evaluation pattern.</li>
+            <li><strong>Coverage:</strong> What % of real user queries can be answered from the knowledge base? Identify gaps and add content to fill them.</li>
+            <li><strong>Latency:</strong> The vector search adds ~200–500ms of latency. Monitor retrieval time separately from LLM generation time.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-streaming">
+        <div class="content-block">
+          <h2>⚡ Streaming Data Ingestion</h2>
+
+          <h3>Salesforce Event Bus Integration</h3>
+          <p>Data Cloud can subscribe to Salesforce Platform Events and Change Data Capture (CDC) streams for near-real-time data ingestion from Salesforce orgs. This enables sub-second profile updates when CRM records change.</p>
+          <p>Configure via: <strong>Data Cloud → Data Streams → New → Salesforce CRM → Real-Time</strong>. Enabling "Real-Time" mode activates CDC-based streaming for the selected object.</p>
+
+          <h3>Streaming Ingestion API</h3>
+          <p>For non-Salesforce event sources, use the Streaming Ingestion API to push events directly into Data Cloud:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>POST https://[instance].salesforce.com/api/v1/ingest/sources/[sourceId]/[objectName]
+Authorization: Bearer {access_token}
+Content-Type: application/json
+
+{
+  "data": [
+    {
+      "CustomerId__c": "CUST-001",
+      "EventType__c": "PageView",
+      "PageUrl__c": "/products/widget-pro",
+      "Timestamp__c": "2025-09-15T14:23:00Z",
+      "SessionId__c": "sess-xyz-123"
+    }
+  ]
+}</code></pre>
+
+          <h3>Web SDK (First-Party Event Collection)</h3>
+          <p>Salesforce's Personalization Web SDK enables first-party event collection directly from your website into Data Cloud — without third-party cookies. It tracks page views, clicks, form submissions, and custom events with full consent management integration. Implement by adding the SDK script to your site and configuring event mappings to your Data Cloud DLO schema.</p>
+        </div>
+      </section>
+
+      <section id="a-apis">
+        <div class="content-block">
+          <h2>🔌 Data Cloud APIs</h2>
+
+          <h3>Query API</h3>
+          <p>Execute ANSI SQL queries against Data Cloud DMOs via REST:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>POST /services/data/v62.0/ssot/query
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "sql": "SELECT ssot__Name__c, ssot__Email__c FROM ssot__Individual__dlm WHERE ssot__IndividualId__c = 'IND-001' LIMIT 1"
+}</code></pre>
+
+          <h3>Profile API</h3>
+          <p>Retrieve a specific unified profile by identifier:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>GET /services/data/v62.0/ssot/profile/individuals/{individualId}
+Authorization: Bearer {token}
+<!-- Returns full unified profile including all linked contact points,
+     calculated insights, and segment memberships --></code></pre>
+
+          <h3>Deletion API (Right to be Forgotten)</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>POST /services/data/v62.0/ssot/deletion-jobs
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "deleteRequests": [
+    {
+      "subjectType": "Individual",
+      "subjectId": "IND-001",
+      "reason": "GDPR Right to Erasure"
+    }
+  ]
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="a-models">
+        <div class="content-block">
+          <h2>🗄️ Custom Data Models</h2>
+          <p>Data Cloud's standard data model (based on the Salesforce CDP Data Model) covers most common entities. For industry-specific or company-specific requirements, you can extend it with custom DMOs.</p>
+
+          <h3>When to Create Custom DMOs</h3>
+          <ul>
+            <li>Your business data doesn't map cleanly to any standard DMO (e.g., a healthcare encounter record, a financial portfolio, a manufacturing work order).</li>
+            <li>You need to track relationships between entities that aren't in the standard model.</li>
+            <li>You have high-volume proprietary data (IoT sensor readings, financial tick data) that needs first-class treatment in the model.</li>
+          </ul>
+
+          <h3>Custom DMO Design Principles</h3>
+          <ul>
+            <li>Always include an <strong>Individual ID</strong> foreign key on any custom DMO that should be linked to a unified profile — this is what connects your data to identity resolution.</li>
+            <li>Use <strong>standard field types</strong> (text, number, date, boolean) — avoid overly complex nested structures that make querying difficult.</li>
+            <li>Follow the naming convention: custom DMOs typically end in <code>__dlm</code>.</li>
+            <li>Document your custom DMO schema thoroughly — Data Cloud schemas are long-lived and hard to change once data is flowing.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-performance">
+        <div class="content-block">
+          <h2>🚀 Performance at Scale</h2>
+
+          <h3>Identity Resolution Performance</h3>
+          <ul>
+            <li>Identity resolution is resource-intensive at scale. For orgs with 50M+ profiles, schedule full reconciliation runs during off-peak hours.</li>
+            <li>Prioritize deterministic matching rules — they are significantly faster than probabilistic rules.</li>
+            <li>Limit the number of active match rules to the minimum needed. Each additional rule multiplies the comparison workload.</li>
+          </ul>
+
+          <h3>Query Optimization</h3>
+          <ul>
+            <li>Use <strong>indexed fields</strong> in WHERE clauses (Individual ID, Contact Point fields, data stream source IDs are indexed by default).</li>
+            <li>Avoid <code>SELECT *</code> — explicitly list the fields you need. Wide-schema queries are significantly slower.</li>
+            <li>For Calculated Insights with complex aggregations, materialize intermediate results as helper insights rather than computing everything in one query.</li>
+          </ul>
+
+          <h3>Segment Performance</h3>
+          <ul>
+            <li>Real-time segments are expensive. Reserve them for truly time-critical use cases (&lt;5% of your segments).</li>
+            <li>Reuse segment building blocks — if multiple segments share a common filter (e.g., "active customers only"), create a base segment and build derived segments on top of it.</li>
+            <li>Monitor segment build times in the Data Cloud Jobs dashboard. Segments that take &gt;30 minutes typically indicate a query optimization opportunity.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-resources">
+        <div class="content-block">
+          <h2>🔗 Advanced Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/einstein/genai/guide/data-cloud-vector-database.html" target="_blank" rel="noopener">Vector Database Developer Reference</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.c360a_api.meta/c360a_api/c360a_api_quick_start.htm" target="_blank" rel="noopener">Data Cloud API Developer Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.c360_a_calculated_insight.htm" target="_blank" rel="noopener">Calculated Insights Reference</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/salesforcedatacloudconsultant" target="_blank" rel="noopener">Salesforce Data Cloud Consultant Certification</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /advanced -->
+
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Data Cloud</span>
+      <span><a href="index.html">← Salesforce Hub</a> · <a href="../index.html">Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+new Quiz({
+  containerId: 'quiz-container',
+  topic: 'Data Cloud',
+  questions: [
+    {
+      question: 'What is the primary purpose of Identity Resolution in Data Cloud?',
+      options: [
+        'To encrypt customer data before storing it in Data Lake Objects',
+        'To link records from multiple sources that belong to the same individual into a unified profile',
+        'To generate embeddings for vector search queries',
+        'To assign customer IDs to new records as they are ingested'
+      ],
+      correct: 1,
+      topic: 'Identity Resolution',
+      explanation: 'Identity Resolution matches records from different source systems (CRM, Marketing Cloud, Commerce) that represent the same real person and merges them into a single unified profile.'
+    },
+    {
+      question: 'Which type of matching rule in Identity Resolution uses statistical likelihood to match records that aren\'t exactly identical?',
+      options: [
+        'Deterministic matching',
+        'Reconciliation matching',
+        'Probabilistic (fuzzy) matching',
+        'Composite key matching'
+      ],
+      correct: 2,
+      topic: 'Identity Resolution',
+      explanation: 'Probabilistic (fuzzy) matching uses likelihood scoring to match records even when field values aren\'t exactly the same — for example, matching similar names at the same address. It has higher recall but may produce false positives.'
+    },
+    {
+      question: 'In a RAG pipeline using Data Cloud vector search, what is the purpose of "chunking" content?',
+      options: [
+        'Splitting data into batches for faster network transmission to the LLM provider',
+        'Dividing content into segments of appropriate size for embedding and precise retrieval',
+        'Encrypting content blocks individually for security during vector indexing',
+        'Compressing large documents to reduce Data Cloud storage costs'
+      ],
+      correct: 1,
+      topic: 'Vector Search & RAG',
+      explanation: 'Chunking divides documents into segments (typically 400–600 tokens) that are individually embedded. Appropriately sized chunks balance retrieval precision (smaller = more specific) with context completeness (larger = more context per result).'
+    },
+    {
+      question: 'What does a Reconciliation Rule control in Data Cloud\'s Identity Resolution process?',
+      options: [
+        'How frequently identity resolution runs as a background job',
+        'Which source system\'s field value is used when multiple matched records have conflicting values',
+        'The maximum number of records that can be merged into a single unified profile',
+        'The encryption algorithm applied to unified profile data at rest'
+      ],
+      correct: 1,
+      topic: 'Identity Resolution',
+      explanation: 'When multiple matched records have different values for the same field, Reconciliation Rules determine which source "wins" — either the most recent, most frequent, or from a prioritized source.'
+    },
+    {
+      question: 'What is a Calculated Insight in Data Cloud?',
+      options: [
+        'An AI-generated recommendation for which customers to target in a campaign',
+        'A derived metric computed via SQL from unified profile data and stored back on the profile',
+        'A pre-built report template for CRM Analytics dashboards',
+        'A segment that is automatically refreshed in real time'
+      ],
+      correct: 1,
+      topic: 'Calculated Insights',
+      explanation: 'Calculated Insights are ANSI SQL-defined derived metrics (e.g., lifetime value, days since last purchase) computed from unified profile data and stored back as profile attributes, making them available for segmentation and agent context.'
+    },
+    {
+      question: 'For which scenario is the Streaming Ingestion API most appropriate?',
+      options: [
+        'Loading a historical 5-year backfill of 100 million records overnight',
+        'Nightly sync of Marketing Cloud subscriber list updates',
+        'Capturing real-time web click events from a customer browsing your product catalog',
+        'Monthly import of financial transaction summaries from a data warehouse'
+      ],
+      correct: 2,
+      topic: 'Streaming Data',
+      explanation: 'The Streaming Ingestion API is designed for real-time, event-by-event data injection — like web clicks, mobile app events, and real-time transactions. High-volume historical loads should use the Bulk API or file connectors.'
+    },
+    {
+      question: 'What is the recommended chunk size range for knowledge content in a Data Cloud vector search index?',
+      options: [
+        '10–50 tokens (very small for maximum precision)',
+        '400–600 tokens with some overlap between chunks',
+        '5,000–10,000 tokens (entire sections at once)',
+        'Exactly 128 tokens — matching standard embedding model input size'
+      ],
+      correct: 1,
+      topic: 'Vector Search',
+      explanation: '400–600 tokens with 10–15% overlap balances retrieval precision with content context. Too small loses surrounding context; too large reduces retrieval specificity and may include irrelevant content in retrieved chunks.'
+    },
+    {
+      question: 'When processing a GDPR "right to be forgotten" request via Data Cloud, what happens to the customer\'s unified profile?',
+      options: [
+        'The profile is anonymized — names and contact points are replaced with hashes but behavioral data is retained',
+        'The profile is flagged as inactive but retained for 7 years for legal audit purposes',
+        'All records linked to the individual across all DLOs are deleted, and the unified profile is removed',
+        'The profile is exported to a compliance archive and deleted from the active database only'
+      ],
+      correct: 2,
+      topic: 'Data Governance',
+      explanation: 'A deletion request propagates across all DLOs that contributed to the individual\'s unified profile. All records are deleted within the regulatory SLA. An audit record confirming deletion occurred is maintained (without retaining the personal data).'
+    }
+  ]
+});
+</script>
+</body>
+</html>

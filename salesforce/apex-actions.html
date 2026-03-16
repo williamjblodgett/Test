@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Actions — Salesforce AI · AI Learning Hub</title>
+  <meta name="description" content="Comprehensive Apex Actions guide for Agentforce: @InvocableMethod, input/output types, SOQL patterns, external callouts, async processing, governor limits, and testing — Beginner through Advanced.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html"><span class="navbar__brand-icon">🤖</span>AI Learning Hub</a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html" class="active">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions"><button class="btn-theme" id="theme-toggle">🌙</button></div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Salesforce</a><span>/</span>
+      <span>Apex Actions</span>
+    </nav>
+    <div class="page-hero__icon">💻</div>
+    <h1>Apex Actions for Agentforce</h1>
+    <p>Write custom Apex code that Agentforce agents can invoke — from basic @InvocableMethod patterns to async processing, bulk handling, governor limit management, and comprehensive testing.</p>
+  </div>
+</section>
+
+<div style="background:var(--color-bg-alt,#f8fafc);border-bottom:1px solid var(--color-border);padding:0.75rem 0;position:sticky;top:57px;z-index:90;">
+  <div class="container">
+    <div class="level-switcher">
+      <span class="level-switcher-label">Skill Level:</span>
+      <div class="level-tabs">
+        <button class="level-tab" data-level="beginner">Beginner</button>
+        <button class="level-tab" data-level="intermediate">Intermediate</button>
+        <button class="level-tab" data-level="advanced">Advanced</button>
+      </div>
+      <span class="level-desc" id="level-desc"></span>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li data-level="beginner"><a href="#b-invocable">@InvocableMethod Basics</a></li>
+      <li data-level="beginner"><a href="#b-io-types">Input/Output Types</a></li>
+      <li data-level="beginner"><a href="#b-first">Your First Apex Action</a></li>
+      <li data-level="beginner"><a href="#b-resources">Resources</a></li>
+
+      <li data-level="intermediate"><a href="#i-soql">SOQL Patterns</a></li>
+      <li data-level="intermediate"><a href="#i-callouts">External Callouts</a></li>
+      <li data-level="intermediate"><a href="#i-errors">Error Handling</a></li>
+      <li data-level="intermediate"><a href="#i-dml">DML Best Practices</a></li>
+      <li data-level="intermediate"><a href="#i-testing">Testing Basics</a></li>
+      <li data-level="intermediate"><a href="#i-resources">Resources</a></li>
+
+      <li data-level="advanced"><a href="#a-async">Async Patterns</a></li>
+      <li data-level="advanced"><a href="#a-bulk">Bulk Invocable</a></li>
+      <li data-level="advanced"><a href="#a-cache">Platform Cache</a></li>
+      <li data-level="advanced"><a href="#a-limits">Governor Limit Strategies</a></li>
+      <li data-level="advanced"><a href="#a-mock">Mock Callout Testing</a></li>
+      <li data-level="advanced"><a href="#a-composite">Composite Actions</a></li>
+      <li data-level="advanced"><a href="#a-resources">Resources</a></li>
+
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BEGINNER -->
+    <div class="level-content" data-level="beginner">
+
+      <section id="b-invocable">
+        <div class="content-block">
+          <h2>💻 @InvocableMethod Basics</h2>
+          <p>The <code>@InvocableMethod</code> annotation marks a static Apex method as invocable — callable from Flow, Process Builder, and Agentforce agents. It is the gateway for custom Apex logic to participate in the Salesforce declarative platform.</p>
+
+          <h3>Basic Annotation Structure</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public class MyAction {
+
+    @InvocableMethod(
+        label='My Action Label'
+        description='Clear description of what this action does and when to use it. The LLM reads this.'
+        category='My Category'
+    )
+    public static List&lt;OutputClass&gt; execute(List&lt;InputClass&gt; inputs) {
+        List&lt;OutputClass&gt; results = new List&lt;OutputClass&gt;();
+        for (InputClass input : inputs) {
+            OutputClass output = new OutputClass();
+            // Your logic here
+            results.add(output);
+        }
+        return results;
+    }
+}</code></pre>
+
+          <h3>Key Rules</h3>
+          <ul>
+            <li>The class must be <code>public</code> or <code>global</code>.</li>
+            <li>The method must be <code>static</code>.</li>
+            <li>The method must accept a <code>List</code> parameter and return a <code>List</code>. This is the bulkification contract — even if you only process one item at a time.</li>
+            <li>The annotation's <code>label</code> is what appears in the UI. The <code>description</code> is what the LLM reads to decide when to invoke the action.</li>
+            <li>Write the description as a clear, precise sentence: "Retrieves the current order status and estimated delivery date for a given order number."</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 <strong>The description is the most important part.</strong> A crystal-clear description with a mediocre implementation often performs better than a perfect implementation with a vague description.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-io-types">
+        <div class="content-block">
+          <h2>📦 Input/Output Variable Types</h2>
+          <p>Input and output data is passed via inner classes annotated with <code>@InvocableVariable</code>:</p>
+
+          <h3>@InvocableVariable Annotation</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public class InputClass {
+    @InvocableVariable(
+        label='Customer Email Address'
+        description='The email address of the customer to look up. Use the email from the conversation context.'
+        required=true
+    )
+    public String customerEmail;
+
+    @InvocableVariable(
+        label='Include Order History'
+        description='Set to true to include the last 5 orders in the response.'
+        required=false
+    )
+    public Boolean includeOrders = false;
+}</code></pre>
+
+          <h3>Supported Variable Types</h3>
+          <ul>
+            <li><strong>Primitives:</strong> String, Integer, Long, Double, Boolean, Date, Datetime, Decimal, ID</li>
+            <li><strong>SObject types:</strong> Any Salesforce standard or custom object (e.g., Contact, Case__c)</li>
+            <li><strong>List of primitives:</strong> List&lt;String&gt;, List&lt;Integer&gt;</li>
+            <li><strong>List of SObjects:</strong> List&lt;Contact&gt;</li>
+            <li><strong>Apex-Defined types:</strong> Custom classes decorated with <code>@AuraEnabled</code></li>
+          </ul>
+
+          <h3>Required vs. Optional Variables</h3>
+          <p>Mark variables as <code>required=true</code> for data the agent must provide. Required variables will prevent the action from appearing in agent action selection if the data can't be provided. Optional variables default to null if not provided — always null-check optional inputs in your implementation.</p>
+        </div>
+      </section>
+
+      <section id="b-first">
+        <div class="content-block">
+          <h2>🚀 Your First Apex Action for an Agent</h2>
+          <p>A complete, minimal Apex action that looks up a customer by email and returns key account info:</p>
+
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public class GetCustomerInfoAction {
+
+    @InvocableMethod(
+        label='Get Customer Info by Email'
+        description='Retrieves the customer name, account name, account tier, and number of open cases for a customer identified by email address. Use when you need to identify the customer before personalizing a response.'
+    )
+    public static List&lt;Result&gt; execute(List&lt;Request&gt; requests) {
+        List&lt;Result&gt; results = new List&lt;Result&gt;();
+
+        for (Request req : requests) {
+            Result res = new Result();
+
+            List&lt;Contact&gt; contacts = [
+                SELECT Id, Name, AccountId,
+                       Account.Name, Account.Type,
+                       (SELECT Id FROM Cases WHERE Status != 'Closed' LIMIT 5)
+                FROM Contact
+                WHERE Email = :req.customerEmail
+                LIMIT 1
+            ];
+
+            if (contacts.isEmpty()) {
+                res.found = false;
+                res.message = 'No customer found with that email address.';
+            } else {
+                Contact c = contacts[0];
+                res.found = true;
+                res.customerName = c.Name;
+                res.accountName = c.Account.Name;
+                res.accountTier = c.Account.Type;
+                res.openCaseCount = c.Cases.size();
+                res.message = 'Customer found: ' + c.Name + ' at ' + c.Account.Name;
+            }
+
+            results.add(res);
+        }
+
+        return results;
+    }
+
+    public class Request {
+        @InvocableVariable(label='Customer Email' required=true
+            description='Email address of the customer to look up.')
+        public String customerEmail;
+    }
+
+    public class Result {
+        @InvocableVariable public Boolean found;
+        @InvocableVariable public String customerName;
+        @InvocableVariable public String accountName;
+        @InvocableVariable public String accountTier;
+        @InvocableVariable public Integer openCaseCount;
+        @InvocableVariable public String message;
+    }
+}</code></pre>
+
+          <h3>Adding to Agent Builder</h3>
+          <ol>
+            <li>Save and deploy the Apex class to your Salesforce org.</li>
+            <li>In Agent Builder → Topic → Add Action → Select "Apex Action".</li>
+            <li>Search for "Get Customer Info by Email" — it will appear if the class is deployed and active.</li>
+            <li>Review the auto-populated input/output variables and add an action description for the agent context.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="b-resources">
+        <div class="content-block">
+          <h2>🔗 Beginner Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_InvocableMethod.htm" target="_blank" rel="noopener">@InvocableMethod Annotation Reference</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/apex_basics" target="_blank" rel="noopener">Trailhead: Apex Basics</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_InvocableVariable.htm" target="_blank" rel="noopener">@InvocableVariable Annotation Reference</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /beginner -->
+
+    <!-- INTERMEDIATE -->
+    <div class="level-content" data-level="intermediate">
+
+      <section id="i-soql">
+        <div class="content-block">
+          <h2>🔍 SOQL Patterns for Agent Actions</h2>
+
+          <h3>Relationship Queries</h3>
+          <p>Fetch parent and child data in a single query to minimize SOQL count:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// Parent traversal (child → parent)
+Contact c = [
+    SELECT Name, Email,
+           Account.Name, Account.Type, Account.AnnualRevenue,
+           Account.Owner.Name
+    FROM Contact WHERE Id = :contactId LIMIT 1
+];
+
+// Child subquery (parent → children)
+Account acc = [
+    SELECT Name, Type,
+           (SELECT Id, Subject, Status FROM Cases
+            WHERE Status != 'Closed' ORDER BY CreatedDate DESC LIMIT 5),
+           (SELECT Id, Name, Amount, StageName FROM Opportunities
+            WHERE IsClosed = false ORDER BY CloseDate ASC LIMIT 3)
+    FROM Account WHERE Id = :accountId LIMIT 1
+];</code></pre>
+
+          <h3>Dynamic SOQL for Agent-Extracted Values</h3>
+          <p>When the agent extracts user input (e.g., a search term), use bind variables — never string concatenation:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// ✅ Safe — bind variable
+String searchTerm = '%' + req.productName + '%';
+List&lt;Product2&gt; products = [
+    SELECT Name, Description, ProductCode
+    FROM Product2
+    WHERE Name LIKE :searchTerm AND IsActive = true
+    LIMIT 10
+];
+
+// ❌ DANGEROUS — string concatenation = SOQL injection risk
+String query = 'SELECT Name FROM Product2 WHERE Name LIKE \'%'
+               + req.productName + '%\''; // NEVER DO THIS</code></pre>
+
+          <h3>Null-Safe Field Access</h3>
+          <p>Queried records may have null fields. Always null-check before accessing:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>res.phoneNumber = (c.Phone != null) ? c.Phone : 'Not on file';
+res.accountName = (c.Account != null) ? c.Account.Name : 'No account';</code></pre>
+        </div>
+      </section>
+
+      <section id="i-callouts">
+        <div class="content-block">
+          <h2>🌐 External Callouts from Apex Actions</h2>
+          <p>Apex actions can call external HTTP APIs — ERP systems, logistics providers, payment processors, ticketing systems. Use Named Credentials for authentication.</p>
+
+          <h3>Basic HTTP Callout Pattern</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public class CheckInventoryAction {
+
+    @InvocableMethod(
+        label='Check Product Inventory'
+        description='Checks real-time inventory levels for a product SKU from the ERP system.'
+    )
+    public static List&lt;InventoryResult&gt; execute(List&lt;InventoryRequest&gt; requests) {
+        List&lt;InventoryResult&gt; results = new List&lt;InventoryResult&gt;();
+
+        for (InventoryRequest req : requests) {
+            InventoryResult res = new InventoryResult();
+            try {
+                HttpRequest httpReq = new HttpRequest();
+                // Named Credential — credentials are never in code
+                httpReq.setEndpoint('callout:ERP_System/api/inventory/' + req.productSku);
+                httpReq.setMethod('GET');
+                httpReq.setHeader('Content-Type', 'application/json');
+                httpReq.setTimeout(10000); // 10 second timeout
+
+                Http http = new Http();
+                HttpResponse httpRes = http.send(httpReq);
+
+                if (httpRes.getStatusCode() == 200) {
+                    Map&lt;String, Object&gt; body = (Map&lt;String, Object&gt;)
+                        JSON.deserializeUntyped(httpRes.getBody());
+                    res.quantityAvailable = (Integer) body.get('quantity');
+                    res.warehouse = (String) body.get('warehouse');
+                    res.success = true;
+                } else {
+                    res.success = false;
+                    res.errorMessage = 'ERP returned status ' + httpRes.getStatusCode();
+                }
+            } catch (Exception e) {
+                res.success = false;
+                res.errorMessage = 'Could not reach inventory system. Please try again.';
+            }
+            results.add(res);
+        }
+        return results;
+    }
+
+    public class InventoryRequest {
+        @InvocableVariable(label='Product SKU' required=true) public String productSku;
+    }
+    public class InventoryResult {
+        @InvocableVariable public Boolean success;
+        @InvocableVariable public Integer quantityAvailable;
+        @InvocableVariable public String warehouse;
+        @InvocableVariable public String errorMessage;
+    }
+}</code></pre>
+
+          <div class="alert alert-warning">
+            ⚠️ Callouts cannot be made in the same transaction as DML operations unless the callout happens before the DML. Structure your agent action flows to call external APIs before making any Salesforce record changes.
+          </div>
+        </div>
+      </section>
+
+      <section id="i-errors">
+        <div class="content-block">
+          <h2>⚠️ Error Handling in Apex Actions</h2>
+          <p>Unhandled exceptions in Apex actions cause the agent to throw a generic error and often trigger an escalation. Always catch and handle exceptions explicitly.</p>
+
+          <h3>Try-Catch Pattern</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>try {
+    // Business logic here
+    res.success = true;
+} catch (QueryException qe) {
+    // Specific: record not found, too many rows, etc.
+    res.success = false;
+    res.userMessage = 'I couldn\'t find that record. Please check the details and try again.';
+    logError('QueryException in GetOrderAction', qe.getMessage(), req.orderId);
+} catch (CalloutException ce) {
+    // Specific: external API unreachable
+    res.success = false;
+    res.userMessage = 'I\'m having trouble reaching the external system. Please try again in a moment.';
+    logError('CalloutException in GetOrderAction', ce.getMessage(), null);
+} catch (Exception e) {
+    // Generic fallback
+    res.success = false;
+    res.userMessage = 'Something went wrong. Please try again or contact support.';
+    logError('UnexpectedException in GetOrderAction', e.getMessage(), null);
+}</code></pre>
+
+          <h3>User-Facing vs. Technical Error Messages</h3>
+          <ul>
+            <li>The <code>userMessage</code> output variable is what the agent relays to the customer — write it empathetically, without technical details.</li>
+            <li>Log the technical error message (exception class, message, stack trace) to a custom ErrorLog__c object for engineering review.</li>
+            <li>Never expose SOQL error messages or Apex stack traces in agent responses.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-dml">
+        <div class="content-block">
+          <h2>✏️ DML Best Practices in Agent Actions</h2>
+          <p>DML operations (insert, update, delete, upsert) in Apex actions modify Salesforce data. This is powerful but requires careful handling.</p>
+
+          <h3>Confirmation Before Destructive Operations</h3>
+          <p>For actions that modify or delete data, design your agent topic with a confirmation step. In the topic instructions: "Before executing the Cancel Order action, confirm with the customer: 'I'm about to cancel order [order number]. Please confirm you want to proceed.'" Only proceed after explicit confirmation.</p>
+
+          <h3>DML Error Handling</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>try {
+    // Database.insert with allOrNothing = false allows partial success
+    List&lt;Database.SaveResult&gt; saveResults =
+        Database.insert(recordsToCreate, false);
+
+    Integer successCount = 0;
+    for (Database.SaveResult sr : saveResults) {
+        if (sr.isSuccess()) successCount++;
+        else {
+            for (Database.Error err : sr.getErrors()) {
+                // Log each individual record error
+                System.debug('DML Error: ' + err.getMessage()
+                    + ' Fields: ' + err.getFields());
+            }
+        }
+    }
+    res.recordsCreated = successCount;
+    res.success = (successCount > 0);
+} catch (DmlException de) {
+    res.success = false;
+    res.userMessage = 'I wasn\'t able to complete that change. Please try again.';
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="i-testing">
+        <div class="content-block">
+          <h2>🧪 Testing Apex Actions</h2>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>@isTest
+public class GetCustomerInfoActionTest {
+
+    @TestSetup
+    static void setup() {
+        Account acc = new Account(Name='Test Corp', Type='Enterprise');
+        insert acc;
+
+        Contact con = new Contact(
+            FirstName='Test', LastName='User',
+            Email='test@example.com', AccountId=acc.Id
+        );
+        insert con;
+
+        Case c = new Case(ContactId=con.Id, Status='Open', Subject='Test Issue');
+        insert c;
+    }
+
+    @isTest
+    static void testCustomerFound() {
+        GetCustomerInfoAction.Request req = new GetCustomerInfoAction.Request();
+        req.customerEmail = 'test@example.com';
+
+        Test.startTest();
+        List&lt;GetCustomerInfoAction.Result&gt; results =
+            GetCustomerInfoAction.execute(new List&lt;GetCustomerInfoAction.Request&gt;{req});
+        Test.stopTest();
+
+        System.assertEquals(1, results.size());
+        System.assertEquals(true, results[0].found);
+        System.assertEquals('Test Corp', results[0].accountName);
+        System.assertEquals('Enterprise', results[0].accountTier);
+        System.assertEquals(1, results[0].openCaseCount);
+    }
+
+    @isTest
+    static void testCustomerNotFound() {
+        GetCustomerInfoAction.Request req = new GetCustomerInfoAction.Request();
+        req.customerEmail = 'notfound@nowhere.com';
+
+        Test.startTest();
+        List&lt;GetCustomerInfoAction.Result&gt; results =
+            GetCustomerInfoAction.execute(new List&lt;GetCustomerInfoAction.Request&gt;{req});
+        Test.stopTest();
+
+        System.assertEquals(false, results[0].found);
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="i-resources">
+        <div class="content-block">
+          <h2>🔗 Intermediate Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_web_services_http.htm" target="_blank" rel="noopener">Apex HTTP Callouts Documentation</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/apex_testing" target="_blank" rel="noopener">Trailhead: Apex Testing</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/langCon_apex_SOQL.htm" target="_blank" rel="noopener">SOQL and SOSL Reference</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /intermediate -->
+
+    <!-- ADVANCED -->
+    <div class="level-content" data-level="advanced">
+
+      <section id="a-async">
+        <div class="content-block">
+          <h2>⚡ Async Patterns for Agent Actions</h2>
+          <p>Some operations are too slow or resource-intensive for a synchronous agent action. Use async Apex to fire long-running processes and return immediately.</p>
+
+          <h3>Queueable Apex Pattern</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// The agent action — synchronous, returns immediately
+@InvocableMethod(
+    label='Trigger Refund Processing'
+    description='Initiates an asynchronous refund process for an order. Returns a job ID immediately.'
+)
+public static List&lt;RefundResult&gt; triggerRefund(List&lt;RefundRequest&gt; requests) {
+    List&lt;RefundResult&gt; results = new List&lt;RefundResult&gt;();
+    for (RefundRequest req : requests) {
+        // Enqueue async job and return job ID
+        ID jobId = System.enqueueJob(new RefundProcessor(req.orderId, req.amount));
+        RefundResult res = new RefundResult();
+        res.jobId = jobId;
+        res.message = 'Refund is being processed. Reference ID: ' + jobId
+                    + '. You will receive a confirmation email within 24 hours.';
+        results.add(res);
+    }
+    return results;
+}
+
+// The async processor
+public class RefundProcessor implements Queueable, Database.AllowsCallouts {
+    private String orderId;
+    private Decimal amount;
+
+    public RefundProcessor(String orderId, Decimal amount) {
+        this.orderId = orderId;
+        this.amount = amount;
+    }
+
+    public void execute(QueueableContext ctx) {
+        // Long-running refund logic here
+        // Can make callouts (Database.AllowsCallouts)
+        // Has higher limits than synchronous execution
+    }
+}</code></pre>
+
+          <h3>When to Use Async</h3>
+          <ul>
+            <li>Operations that take more than 3–5 seconds (will cause visible agent latency)</li>
+            <li>Operations that make multiple sequential external API calls</li>
+            <li>Large batch DML operations (thousands of records)</li>
+            <li>Operations that require elevated governor limits (Queueable has higher CPU and SOQL limits)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-bulk">
+        <div class="content-block">
+          <h2>📦 Bulk Invocable Handling</h2>
+          <p>Although agents typically call actions with a single input, the invocable contract requires List parameters for bulkification. Properly bulkified actions are more efficient and reusable.</p>
+
+          <h3>True Bulk Pattern</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public static List&lt;Result&gt; execute(List&lt;Request&gt; requests) {
+    // Step 1: Collect all input values
+    Set&lt;String&gt; allOrderIds = new Set&lt;String&gt;();
+    for (Request req : requests) {
+        allOrderIds.add(req.orderId);
+    }
+
+    // Step 2: ONE query for all inputs (not one query per input)
+    Map&lt;String, Order&gt; orderMap = new Map&lt;String, Order&gt;();
+    for (Order o : [SELECT Id, OrderNumber, Status, ShipDate
+                    FROM Order WHERE Id IN :allOrderIds]) {
+        orderMap.put(o.Id, o);
+    }
+
+    // Step 3: Map results back to requests
+    List&lt;Result&gt; results = new List&lt;Result&gt;();
+    for (Request req : requests) {
+        Result res = new Result();
+        Order o = orderMap.get(req.orderId);
+        if (o != null) {
+            res.found = true;
+            res.status = o.Status;
+        } else {
+            res.found = false;
+        }
+        results.add(res);
+    }
+    return results;
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="a-cache">
+        <div class="content-block">
+          <h2>🗄️ Platform Cache for Agent Performance</h2>
+          <p>Platform Cache is Salesforce's in-memory key-value store. For agent actions that repeatedly query the same reference data, caching reduces latency and SOQL consumption dramatically.</p>
+
+          <h3>Session vs. Org Cache</h3>
+          <ul>
+            <li><strong>Session Cache:</strong> Scoped to a specific user session. Data expires with the session. Use for: user-specific data that changes rarely during a session (e.g., user preferences, authenticated customer profile).</li>
+            <li><strong>Org Cache:</strong> Shared across all sessions in the org. Use for: configuration data, reference tables, product catalog, policy documents that are the same for all users.</li>
+          </ul>
+
+          <h3>Cache-Aside Pattern for Agent Actions</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>public static List&lt;Result&gt; execute(List&lt;Request&gt; requests) {
+    String cacheKey = 'local.ProductCache.' + requests[0].productCode;
+    Cache.OrgPartition orgCache = Cache.Org.getPartition('local.ProductCache');
+
+    Product2 product = (Product2) orgCache.get(cacheKey);
+
+    if (product == null) {
+        // Cache miss — query the database
+        product = [SELECT Name, Description, Price__c
+                   FROM Product2 WHERE ProductCode = :requests[0].productCode LIMIT 1];
+        // Cache for 1 hour (3600 seconds)
+        orgCache.put(cacheKey, product, 3600);
+    }
+    // Use product...
+}</code></pre>
+
+          <h3>Cache Invalidation</h3>
+          <p>Cache entries expire automatically after the configured TTL. For data that changes on a schedule (e.g., pricing updates at midnight), set the TTL to match the update frequency. For data that can change at any time (e.g., stock levels), either use a very short TTL or trigger cache invalidation from your record-triggered flows when the source data changes.</p>
+        </div>
+      </section>
+
+      <section id="a-limits">
+        <div class="content-block">
+          <h2>📊 Governor Limit Strategies</h2>
+
+          <h3>Monitoring Limit Consumption</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// Add to your action for debugging/monitoring
+System.debug('SOQL queries used: ' + Limits.getQueries()
+    + ' / ' + Limits.getLimitQueries());
+System.debug('CPU time used: ' + Limits.getCpuTime()
+    + 'ms / ' + Limits.getLimitCpuTime() + 'ms');
+System.debug('DML rows used: ' + Limits.getDmlRows()
+    + ' / ' + Limits.getLimitDmlRows());</code></pre>
+
+          <h3>Limit-Safe Design Patterns</h3>
+          <ul>
+            <li><strong>SOQL limit:</strong> Use parent-child relationship queries to fetch related data in one query. Use Platform Cache for repeated lookups. Use aggregate SOQL instead of iterating records for counts/sums.</li>
+            <li><strong>CPU limit:</strong> Offload heavy computation to Queueable or Batch Apex. Avoid complex string manipulation in loops. Pre-sort data in SOQL using ORDER BY instead of in code.</li>
+            <li><strong>DML limit:</strong> Always collect records in a list and DML the list once (never DML inside a loop). Use upsert for create-or-update scenarios instead of separate insert/update.</li>
+            <li><strong>Heap size:</strong> Don't keep large result sets in memory longer than needed. Process and discard records within the loop rather than accumulating them all first.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-mock">
+        <div class="content-block">
+          <h2>🧪 Mock HTTP Callout Testing</h2>
+          <p>Apex tests cannot make real HTTP callouts. Use the <code>HttpCalloutMock</code> interface to mock external API responses in your tests.</p>
+
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// Mock implementation
+public class MockInventoryAPI implements HttpCalloutMock {
+    private Integer statusCode;
+    private String responseBody;
+
+    public MockInventoryAPI(Integer code, String body) {
+        this.statusCode = code;
+        this.responseBody = body;
+    }
+
+    public HttpResponse respond(HttpRequest req) {
+        HttpResponse res = new HttpResponse();
+        res.setStatusCode(statusCode);
+        res.setBody(responseBody);
+        res.setHeader('Content-Type', 'application/json');
+        return res;
+    }
+}
+
+// Test class
+@isTest
+public class CheckInventoryActionTest {
+
+    @isTest
+    static void testSuccessResponse() {
+        String mockBody = '{"quantity": 150, "warehouse": "WEST-01"}';
+        Test.setMock(HttpCalloutMock.class, new MockInventoryAPI(200, mockBody));
+
+        CheckInventoryAction.InventoryRequest req = new CheckInventoryAction.InventoryRequest();
+        req.productSku = 'SKU-001';
+
+        Test.startTest();
+        List&lt;CheckInventoryAction.InventoryResult&gt; results =
+            CheckInventoryAction.execute(
+                new List&lt;CheckInventoryAction.InventoryRequest&gt;{req}
+            );
+        Test.stopTest();
+
+        System.assertEquals(true, results[0].success);
+        System.assertEquals(150, results[0].quantityAvailable);
+        System.assertEquals('WEST-01', results[0].warehouse);
+    }
+
+    @isTest
+    static void testApiError() {
+        Test.setMock(HttpCalloutMock.class, new MockInventoryAPI(503, ''));
+
+        CheckInventoryAction.InventoryRequest req = new CheckInventoryAction.InventoryRequest();
+        req.productSku = 'SKU-999';
+
+        Test.startTest();
+        List&lt;CheckInventoryAction.InventoryResult&gt; results =
+            CheckInventoryAction.execute(
+                new List&lt;CheckInventoryAction.InventoryRequest&gt;{req}
+            );
+        Test.stopTest();
+
+        System.assertEquals(false, results[0].success);
+        System.assertNotEquals(null, results[0].errorMessage);
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="a-composite">
+        <div class="content-block">
+          <h2>🏗️ Composite Actions</h2>
+          <p>A composite action fetches data from multiple sources and returns a single rich result object — reducing the number of agent iterations needed per turn.</p>
+
+          <h3>When to Build a Composite Action</h3>
+          <ul>
+            <li>The agent consistently needs 3+ pieces of data before it can respond, currently requiring 3 separate action calls</li>
+            <li>You want to reduce agent latency by parallelizing data fetches (fetch from Salesforce and an external API simultaneously)</li>
+            <li>The combined result provides context that's more useful than the individual parts (e.g., order + customer profile + open cases = complete service context)</li>
+          </ul>
+
+          <h3>Parallelizing Data Fetches</h3>
+          <p>Standard Apex executes synchronously — you can't truly parallelize within a single transaction. However, you can minimize round trips by batching all SOQL queries before processing:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>// Fetch everything you need upfront — don't query in sequence
+Contact contact = [SELECT Id, Name, AccountId, Account.Name, Account.Type
+                   FROM Contact WHERE Email = :req.email LIMIT 1];
+
+// Now use contact.AccountId in a second query
+List&lt;Order&gt; recentOrders = [SELECT Id, OrderNumber, Status, TotalAmount
+                              FROM Order WHERE AccountId = :contact.AccountId
+                              ORDER BY CreatedDate DESC LIMIT 5];
+
+List&lt;Case&gt; openCases = [SELECT Id, CaseNumber, Subject, Status
+                         FROM Case WHERE AccountId = :contact.AccountId
+                         AND Status != 'Closed' ORDER BY CreatedDate DESC LIMIT 3];
+
+// Assemble composite result
+res.customerName = contact.Name;
+res.accountName = contact.Account.Name;
+res.recentOrderCount = recentOrders.size();
+res.openCaseCount = openCases.size();
+// ... build formatted summary string</code></pre>
+        </div>
+      </section>
+
+      <section id="a-resources">
+        <div class="content-block">
+          <h2>🔗 Advanced Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_gov_limits.htm" target="_blank" rel="noopener">Apex Governor Limits Reference</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_cache.htm" target="_blank" rel="noopener">Platform Cache Developer Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_queueing_jobs.htm" target="_blank" rel="noopener">Queueable Apex Documentation</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/apex_integration_services" target="_blank" rel="noopener">Trailhead: Apex Integration Services</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /advanced -->
+
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Apex Actions</span>
+      <span><a href="index.html">← Salesforce Hub</a> · <a href="../index.html">Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+new Quiz({
+  containerId: 'quiz-container',
+  topic: 'Apex Actions',
+  questions: [
+    {
+      question: 'Why must @InvocableMethod accept a List parameter even when the agent only passes one input at a time?',
+      options: [
+        'Salesforce requires a List for security scanning of each input parameter',
+        'The List contract satisfies the bulkification requirement, enabling efficient processing when multiple records trigger the action simultaneously',
+        'Lists are required to support async processing in Queueable contexts',
+        'The Einstein Trust Layer needs a List format to apply PII masking to each item'
+      ],
+      correct: 1,
+      topic: '@InvocableMethod',
+      explanation: 'The List contract is Salesforce\'s bulkification contract for invocable methods — it ensures the method can handle multiple inputs efficiently in a single transaction (important for Flow bulk contexts). Always implement the method to process all items in the list, not just the first.'
+    },
+    {
+      question: 'What is the key difference between String concatenation and bind variables in Apex SOQL, and why does it matter for agent actions?',
+      options: [
+        'Bind variables are faster; string concatenation allows more complex WHERE clauses',
+        'String concatenation enables dynamic field selection; bind variables only support static fields',
+        'String concatenation is vulnerable to SOQL injection from user-supplied inputs; bind variables prevent injection by treating inputs as literal values',
+        'Bind variables require the field to be indexed; string concatenation works with any field'
+      ],
+      correct: 2,
+      topic: 'SOQL Security',
+      explanation: 'When an agent extracts a value from user input (e.g., a product name or order number), that value is untrusted. String concatenation into a SOQL query allows the user to inject SOQL syntax to manipulate the query. Bind variables (WHERE Field = :variable) treat the value as a literal string, preventing injection.'
+    },
+    {
+      question: 'Why can\'t HTTP callouts and DML operations be mixed in the same Apex transaction?',
+      options: [
+        'HTTP callouts are asynchronous by definition and cannot run in the same context as synchronous DML',
+        'Salesforce prevents this to avoid committing data to the database before confirming the external service responded successfully — the callout must happen before any DML',
+        'Governor limits prevent more than one type of operation per transaction',
+        'The Einstein Trust Layer blocks HTTP calls from transactions that also contain DML to prevent data leaks'
+      ],
+      correct: 1,
+      topic: 'External Callouts',
+      explanation: 'Salesforce doesn\'t allow HTTP callouts after DML in the same transaction because DML might have already committed data to the database, and if the callout then fails, you can\'t roll back the already-committed data. Structure agent action flows to call external APIs before any DML.'
+    },
+    {
+      question: 'What is the primary benefit of implementing Platform Cache in a frequently-called agent action?',
+      options: [
+        'It allows the action to bypass the Einstein Trust Layer for faster execution',
+        'It enables the action to make unlimited HTTP callouts within a single session',
+        'It stores frequently-accessed reference data in memory, reducing SOQL queries and latency for subsequent calls',
+        'It automatically batches multiple agent action invocations together for bulk processing'
+      ],
+      correct: 2,
+      topic: 'Platform Cache',
+      explanation: 'Platform Cache stores data in Salesforce\'s in-memory layer. For frequently-accessed, rarely-changing data (product catalog, policy configs, reference tables), caching avoids repeated SOQL queries across agent turns and sessions — reducing both SOQL governor limit consumption and response latency.'
+    },
+    {
+      question: 'When should you use Queueable Apex instead of synchronous execution for an Agentforce action?',
+      options: [
+        'When the action needs to read more than 5 records from Salesforce',
+        'When the operation takes more than 3–5 seconds, requires multiple callouts, or needs elevated governor limits that synchronous execution can\'t provide',
+        'When the action needs to write data back to the agent\'s conversation context',
+        'When the action is called by more than one agent topic simultaneously'
+      ],
+      correct: 1,
+      topic: 'Async Processing',
+      explanation: 'Queueable Apex runs asynchronously with higher governor limits and the ability to chain callouts. It\'s appropriate when a synchronous action would cause visible latency (>5s), require multiple sequential API calls, or need to process large data volumes that exceed synchronous limits.'
+    }
+  ]
+});
+</script>
+</body>
+</html>

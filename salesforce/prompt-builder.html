@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Builder — Salesforce AI · AI Learning Hub</title>
+  <meta name="description" content="Comprehensive Salesforce Prompt Builder guide: template types, merge fields, Data Cloud grounding, RAG patterns, response formatting, token budgets, and prompt optimization — Beginner through Advanced.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html"><span class="navbar__brand-icon">🤖</span>AI Learning Hub</a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html" class="active">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions"><button class="btn-theme" id="theme-toggle">🌙</button></div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Salesforce</a><span>/</span>
+      <span>Prompt Builder</span>
+    </nav>
+    <div class="page-hero__icon">📝</div>
+    <h1>Salesforce Prompt Builder</h1>
+    <p>Design powerful prompt templates grounded in your Salesforce data — from basic merge fields to advanced RAG patterns, token budgets, and production-grade evaluation strategies.</p>
+  </div>
+</section>
+
+<div style="background:var(--color-bg-alt,#f8fafc);border-bottom:1px solid var(--color-border);padding:0.75rem 0;position:sticky;top:57px;z-index:90;">
+  <div class="container">
+    <div class="level-switcher">
+      <span class="level-switcher-label">Skill Level:</span>
+      <div class="level-tabs">
+        <button class="level-tab" data-level="beginner">Beginner</button>
+        <button class="level-tab" data-level="intermediate">Intermediate</button>
+        <button class="level-tab" data-level="advanced">Advanced</button>
+      </div>
+      <span class="level-desc" id="level-desc"></span>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li data-level="beginner"><a href="#b-what">What is Prompt Builder?</a></li>
+      <li data-level="beginner"><a href="#b-types">Template Types</a></li>
+      <li data-level="beginner"><a href="#b-merge-fields">Basic Merge Fields</a></li>
+      <li data-level="beginner"><a href="#b-models">Model Selection</a></li>
+      <li data-level="beginner"><a href="#b-resources">Resources</a></li>
+
+      <li data-level="intermediate"><a href="#i-grounding">Data Cloud Grounding</a></li>
+      <li data-level="intermediate"><a href="#i-rag">RAG Patterns</a></li>
+      <li data-level="intermediate"><a href="#i-formatting">Response Formatting</a></li>
+      <li data-level="intermediate"><a href="#i-chaining">Prompt Chaining</a></li>
+      <li data-level="intermediate"><a href="#i-agentforce">In Agentforce Actions</a></li>
+      <li data-level="intermediate"><a href="#i-resources">Resources</a></li>
+
+      <li data-level="advanced"><a href="#a-optimization">Prompt Optimization</a></li>
+      <li data-level="advanced"><a href="#a-tokens">Token Budget Management</a></li>
+      <li data-level="advanced"><a href="#a-evaluation">Evaluation &amp; Testing</a></li>
+      <li data-level="advanced"><a href="#a-custom-grounding">Custom Grounding</a></li>
+      <li data-level="advanced"><a href="#a-ab-testing">A/B Testing</a></li>
+      <li data-level="advanced"><a href="#a-resources">Resources</a></li>
+
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BEGINNER -->
+    <div class="level-content" data-level="beginner">
+
+      <section id="b-what">
+        <div class="content-block">
+          <h2>📝 What is Prompt Builder?</h2>
+          <p>Salesforce Prompt Builder is a low-code tool for creating <strong>prompt templates</strong> — structured prompts that combine static text, dynamic Salesforce record data (via merge fields), and optional AI-retrieved context (via Data Cloud vector search) to generate LLM-powered outputs.</p>
+
+          <h3>What Can Prompt Templates Do?</h3>
+          <ul>
+            <li><strong>Draft emails:</strong> Generate personalized sales emails from an Opportunity record with the prospect's industry, deal stage, and recent activity merged in automatically.</li>
+            <li><strong>Summarize records:</strong> Produce a concise case summary from a Case record's subject, description, and related account data — for service agents to review before a call.</li>
+            <li><strong>Generate recommendations:</strong> Suggest next-best actions for a sales rep based on merged account data, engagement history, and product interest signals.</li>
+            <li><strong>Answer knowledge questions:</strong> Provide knowledge-grounded answers to customer questions by retrieving relevant knowledge articles from Data Cloud and injecting them as context.</li>
+          </ul>
+
+          <h3>Where are Prompt Templates Used?</h3>
+          <ul>
+            <li><strong>Agentforce actions:</strong> A Prompt Template Action in an agent topic generates LLM-powered responses grounded in CRM data.</li>
+            <li><strong>Einstein features:</strong> Sales Emails (Sales Cloud), Case Summaries (Service Cloud), and other Einstein features are built on top of Prompt Builder templates.</li>
+            <li><strong>Flow actions:</strong> A Flow can invoke a Prompt Template to generate text as part of a larger automation.</li>
+            <li><strong>Apex:</strong> The ConnectApi.EinsteinLLM class allows calling prompt templates programmatically from Apex code.</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 <strong>Trust Layer integration:</strong> Every Prompt Template invocation passes through the Einstein Trust Layer automatically. PII in merged record data is masked before reaching the LLM — you don't need to manually sanitize your merge fields.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-types">
+        <div class="content-block">
+          <h2>📋 Template Types</h2>
+          <p>Prompt Builder offers several template types, each suited to different use cases:</p>
+
+          <h3>Field Generation Template</h3>
+          <p>Generates or enriches a single field value on a Salesforce record. Example: auto-populate a "Case Summary" long text field based on the case description and comments. Output replaces or sets the target field value.</p>
+          <ul>
+            <li>Context: A single Salesforce record of the configured object type</li>
+            <li>Output: A text value that can be written to a record field</li>
+            <li>Typical use: Auto-draft summaries, recommendations, or classifications</li>
+          </ul>
+
+          <h3>Record Summary Template</h3>
+          <p>Generates a comprehensive narrative summary of a record for human consumption. Unlike Field Generation, the output is displayed rather than written to a field.</p>
+          <ul>
+            <li>Context: A record + related data from related objects</li>
+            <li>Output: Formatted summary text</li>
+            <li>Typical use: Pre-call prep summaries, handoff notes, management briefings</li>
+          </ul>
+
+          <h3>Sales Email Template</h3>
+          <p>A specialized template for generating personalized sales emails. Includes built-in CRM data merge (contact name, account industry, opportunity details) and instructions for tone and structure.</p>
+
+          <h3>Flex Template (Free-Form)</h3>
+          <p>The most flexible type — define your own prompt structure, merge fields, and output format. Use this for any use case that doesn't fit the structured types above, including Agentforce action templates with custom grounding.</p>
+        </div>
+      </section>
+
+      <section id="b-merge-fields">
+        <div class="content-block">
+          <h2>🔀 Basic Merge Fields</h2>
+          <p>Merge fields inject Salesforce record data into your prompt template at inference time. This is what makes Prompt Templates fundamentally different from static prompts — the content is personalized and grounded in real CRM data.</p>
+
+          <h3>Merge Field Syntax</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>{!ObjectAPIName.FieldAPIName}
+
+Examples:
+{!Account.Name}               → "Acme Corporation"
+{!Contact.FirstName}          → "Emma"
+{!Opportunity.Amount}         → "45000"
+{!Case.Description}           → "Customer reports error on checkout..."
+{!Account.Industry}           → "Technology"</code></pre>
+
+          <h3>Relationship Traversal</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>{!Contact.Account.Name}       → Account name from the Contact's Account
+{!Opportunity.Account.Type}   → Account type from the Opportunity's Account</code></pre>
+
+          <h3>Example Template with Merge Fields</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>You are a professional B2B sales executive.
+
+Draft a concise, personalized follow-up email for the following opportunity:
+- Contact: {!Opportunity.Contact.Name} at {!Opportunity.Account.Name}
+- Industry: {!Opportunity.Account.Industry}
+- Deal Stage: {!Opportunity.StageName}
+- Deal Value: {!Opportunity.Amount}
+- Last Activity: {!Opportunity.LastActivityDate}
+
+The email should:
+1. Reference the contact's industry specifically
+2. Focus on business value, not product features
+3. Have a clear single call-to-action
+4. Be 3–4 sentences maximum</code></pre>
+
+          <div class="alert alert-info">
+            💡 Merge field values are fetched at invocation time — they reflect the current state of the record when the template is called, not when the template was created.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-models">
+        <div class="content-block">
+          <h2>🤖 Model Selection</h2>
+          <p>Prompt Builder allows you to choose which LLM model processes your template. The available models depend on your org's Model Gateway configuration in the Einstein Trust Layer.</p>
+
+          <h3>Default Model</h3>
+          <p>The default is Salesforce's hosted LLM (typically GPT-4 class). This requires no configuration and is covered by Salesforce's zero data retention commitments.</p>
+
+          <h3>Choosing the Right Model</h3>
+          <ul>
+            <li><strong>GPT-4 class (default):</strong> Best for complex reasoning, nuanced writing, and multi-step analysis. Higher cost per token.</li>
+            <li><strong>Faster/smaller models:</strong> For simple summarization or field population where speed matters more than nuance. Lower cost, lower latency.</li>
+            <li><strong>Anthropic Claude (via Bedrock):</strong> Strong instruction-following and long-context performance. Good for templates with many merge fields and complex formatting requirements.</li>
+          </ul>
+
+          <p>Configure additional model options via <strong>Setup → Einstein → LLM Gateway → Model Connectors</strong>. Once configured, they appear in the model dropdown when creating or editing a template.</p>
+        </div>
+      </section>
+
+      <section id="b-resources">
+        <div class="content-block">
+          <h2>🔗 Beginner Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/prompt-builder-quick-look" target="_blank" rel="noopener">Trailhead: Prompt Builder Quick Look</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=ai.prompt_builder.htm" target="_blank" rel="noopener">Prompt Builder Official Documentation</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /beginner -->
+
+    <!-- INTERMEDIATE -->
+    <div class="level-content" data-level="intermediate">
+
+      <section id="i-grounding">
+        <div class="content-block">
+          <h2>🌐 Data Cloud Grounding</h2>
+          <p>Grounding connects your prompt template to a Data Cloud vector database, enabling the LLM to answer questions using your organization's specific knowledge — without hallucinating.</p>
+
+          <h3>Adding a Data Cloud Search Resource</h3>
+          <ol>
+            <li>In Prompt Builder, click <strong>Add Resource → Data Cloud Search</strong>.</li>
+            <li>Select the <strong>Vector Database object</strong> configured in Data Cloud (e.g., "Knowledge Articles").</li>
+            <li>Configure the <strong>search query source</strong>: either a static query string, a merge field value, or a specific input variable from the template context.</li>
+            <li>Set the number of results (K): typically 3–5 for conversational use cases.</li>
+            <li>Optionally add metadata filters to scope retrieval (e.g., only retrieve articles with Category = "Returns Policy").</li>
+          </ol>
+
+          <h3>Using Retrieved Context in Your Prompt</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>You are a customer service assistant for Acme Corp.
+Answer the customer's question using ONLY the information in the
+provided context. Do not make up information not found in the context.
+If the answer isn't in the context, say "I don't have that information."
+
+CONTEXT FROM KNOWLEDGE BASE:
+{!DataCloud_KnowledgeSearch.results}
+
+CUSTOMER QUESTION:
+{!$Input.userQuestion}
+
+CUSTOMER ACCOUNT:
+{!Contact.Account.Name} — Account Type: {!Contact.Account.Type}</code></pre>
+
+          <h3>The Reference Token: {!DataCloud_[Name].results}</h3>
+          <p>The Data Cloud search results are injected via a special resource token. The <code>.results</code> suffix returns the retrieved content chunks as a formatted text block. Each chunk includes the source article title and the content excerpt.</p>
+
+          <div class="alert alert-info">
+            💡 <strong>Grounding principle:</strong> The instruction "Use ONLY the information in the provided context" is the most important line in a RAG prompt. Without it, the LLM will supplement retrieved context with its training data — potentially introducing inaccurate information.
+          </div>
+        </div>
+      </section>
+
+      <section id="i-rag">
+        <div class="content-block">
+          <h2>🏗️ RAG Patterns in Prompt Builder</h2>
+
+          <h3>Pattern 1: Pure Knowledge Retrieval</h3>
+          <p>The simplest pattern — the user's question drives the search, and the template answers based solely on retrieved content. Best for: FAQ chatbots, policy lookup agents, product documentation assistants.</p>
+
+          <h3>Pattern 2: Hybrid (Record Data + Knowledge)</h3>
+          <p>Combines CRM record data (account tier, purchase history, open cases) with retrieved knowledge content. The LLM uses both the customer's specific context AND relevant policy/knowledge to generate a personalized answer. Best for: customer service agents that need to apply policies differently based on customer tier.</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>CUSTOMER CONTEXT:
+- Name: {!Contact.Name}
+- Account Tier: {!Contact.Account.Type}
+- Recent Orders: {!DataCloud_OrderHistory.results}
+
+RELEVANT POLICY (from knowledge base):
+{!DataCloud_PolicySearch.results}
+
+QUESTION: {!$Input.question}
+
+Apply the policy appropriately given the customer's tier.</code></pre>
+
+          <h3>Pattern 3: Multi-Source Retrieval</h3>
+          <p>Use multiple Data Cloud search resources in a single template — one for product documentation, one for policy documents, one for troubleshooting guides. Each resource has its own vector database and search query configuration. The template structures the output to draw from the most relevant source.</p>
+        </div>
+      </section>
+
+      <section id="i-formatting">
+        <div class="content-block">
+          <h2>🎨 Response Formatting</h2>
+          <p>How you instruct the LLM to format its output significantly impacts the usability of the generated content.</p>
+
+          <h3>Structured vs. Free-Form Output</h3>
+          <ul>
+            <li><strong>Agent responses:</strong> Keep free-form. Instructing agents to respond in "2–3 sentences, conversational tone" works better than rigid structure for chat interactions.</li>
+            <li><strong>Field population (Field Generation templates):</strong> Specify a clear format. "Return only the summary text, no preamble or explanation. Maximum 150 words."</li>
+            <li><strong>Email drafts:</strong> Specify structure explicitly: "Subject line: [subject]\n\nBody:\n[body text]"</li>
+            <li><strong>JSON output (for programmatic processing):</strong> Instruct to return valid JSON: "Respond with a JSON object with keys: sentiment (positive/negative/neutral), confidence (0–1), reason (string)."</li>
+          </ul>
+
+          <h3>Controlling Length</h3>
+          <p>LLMs tend to over-generate without explicit length constraints. Always specify max length in your templates:</p>
+          <ul>
+            <li>"Respond in 2–3 sentences." — conversational agents</li>
+            <li>"Maximum 150 words." — field population</li>
+            <li>"3 bullet points maximum, each under 20 words." — summary templates</li>
+          </ul>
+
+          <h3>Tone and Register</h3>
+          <p>Match the tone specification to your use case:</p>
+          <ul>
+            <li>"Professional and empathetic" — customer service</li>
+            <li>"Concise and data-focused" — sales ops / management briefings</li>
+            <li>"Friendly and approachable" — consumer-facing</li>
+            <li>"Technical and precise" — developer / IT helpdesk</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-chaining">
+        <div class="content-block">
+          <h2>🔗 Prompt Chaining</h2>
+          <p>Prompt chaining uses the output of one template as the input to another — enabling multi-step LLM processing that no single prompt can accomplish reliably.</p>
+
+          <h3>When to Use Chaining</h3>
+          <ul>
+            <li>Step 1 extracts structured data from unstructured input; Step 2 uses that structure to generate a formatted output.</li>
+            <li>Step 1 classifies the request type; Step 2 generates an appropriate response based on the classification.</li>
+            <li>Step 1 generates a draft; Step 2 reviews and polishes the draft.</li>
+          </ul>
+
+          <h3>Implementing Chaining in Agentforce</h3>
+          <p>In an Agentforce context, chaining is implemented via multiple sequential Prompt Template Actions within a single topic. The first action's output is captured in a conversation context variable, which becomes an input merge field for the second action.</p>
+          <p>Alternatively, use a Flow action that programmatically calls multiple templates via the <code>ConnectApi.EinsteinLLM.generateMessagesForPromptTemplate()</code> method, passing the output of the first call as a variable to the second.</p>
+
+          <div class="alert alert-warning">
+            ⚠️ Each chained template invocation adds latency and token cost. Reserve chaining for scenarios where a single template genuinely cannot produce the required quality. If a single well-designed prompt can achieve the result, prefer that.
+          </div>
+        </div>
+      </section>
+
+      <section id="i-agentforce">
+        <div class="content-block">
+          <h2>🤖 Using Prompt Templates as Agentforce Actions</h2>
+          <p>A Prompt Template Action is one of the four Agentforce action types. It invokes a Prompt Template and returns the generated text as an output variable available to the reasoning engine.</p>
+
+          <h3>Configuring a Prompt Template Action</h3>
+          <ol>
+            <li>In Agent Builder, go to your Topic → Add Action → Action Type: Prompt Template.</li>
+            <li>Select the Prompt Template you created in Prompt Builder.</li>
+            <li>Configure the input bindings: map conversation context variables or agent variables to the template's required inputs.</li>
+            <li>Name the action clearly and write a description that the LLM can use to decide when to invoke it.</li>
+          </ol>
+
+          <h3>Best Practices for Agent Prompt Templates</h3>
+          <ul>
+            <li>Keep templates focused on generating output, not on reasoning or decision-making — leave reasoning to the agent's topic instructions.</li>
+            <li>Always include an explicit instruction about what to do when the grounding context doesn't contain a relevant answer.</li>
+            <li>Test the template in Prompt Builder's preview panel with several realistic inputs before deploying it as an agent action.</li>
+            <li>Monitor token consumption per invocation — templates with large knowledge retrieval contexts can be expensive.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-resources">
+        <div class="content-block">
+          <h2>🔗 Intermediate Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/einstein/genai/guide/prompt-builder.html" target="_blank" rel="noopener">Prompt Builder Developer Guide</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/einstein-prompt-builder" target="_blank" rel="noopener">Trailhead: Einstein Prompt Builder</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/einstein/genai/guide/data-cloud-vector-database.html" target="_blank" rel="noopener">Data Cloud Vector Database for Grounding</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /intermediate -->
+
+    <!-- ADVANCED -->
+    <div class="level-content" data-level="advanced">
+
+      <section id="a-optimization">
+        <div class="content-block">
+          <h2>🔬 Prompt Optimization Techniques</h2>
+
+          <h3>The Prompt Engineering Hierarchy</h3>
+          <p>When optimizing a prompt template, apply improvements in this order (least to most expensive):</p>
+          <ol>
+            <li><strong>Clarity of instructions:</strong> Are the instructions unambiguous? Is there any way they could be interpreted differently than intended?</li>
+            <li><strong>Specificity:</strong> Replace generic terms with specific ones. "Good response" → "Empathetic, under 3 sentences, ends with a question."</li>
+            <li><strong>Examples (few-shot prompting):</strong> Include 2–3 example input/output pairs in the prompt. Few-shot examples dramatically improve consistency for complex formatting tasks.</li>
+            <li><strong>Context quality:</strong> Improve the quality and relevance of grounding context before trying other fixes. Bad retrieval quality cannot be compensated by better instructions.</li>
+            <li><strong>Chain of thought:</strong> For reasoning-heavy tasks, add "Think step by step before responding." This improves accuracy at the cost of additional output tokens.</li>
+          </ol>
+
+          <h3>Few-Shot Prompting in Prompt Builder</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>Classify the sentiment of the customer message as: Positive, Neutral, or Negative.
+
+Examples:
+Message: "Great, my order arrived early!"
+Classification: Positive
+
+Message: "I need to know the status of my order."
+Classification: Neutral
+
+Message: "This is completely unacceptable — my third delivery failure!"
+Classification: Negative
+
+Now classify:
+Message: {!Case.Description}
+Classification:</code></pre>
+
+          <h3>Handling Edge Cases Explicitly</h3>
+          <p>Identify the 5–10 edge cases most likely to produce bad outputs and add explicit handling for each in your instructions. Common edge cases:</p>
+          <ul>
+            <li>Missing merge field data (null values)</li>
+            <li>Very short or very long input text</li>
+            <li>Input in a language other than English</li>
+            <li>Input that is off-topic for the template's purpose</li>
+            <li>Input containing sensitive data the LLM shouldn't reference directly</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-tokens">
+        <div class="content-block">
+          <h2>💰 Token Budget Management</h2>
+          <p>Every Prompt Template invocation consumes tokens — both for the input (prompt + context + grounding) and the output (generated text). Understanding and managing token consumption is important for both cost control and response latency.</p>
+
+          <h3>Token Breakdown for a Typical Agentforce Template</h3>
+          <div style="overflow-x:auto;">
+            <table class="compare-table">
+              <thead><tr><th>Component</th><th>Typical Token Range</th><th>Optimization Lever</th></tr></thead>
+              <tbody>
+                <tr><td>System instructions</td><td>50–300 tokens</td><td>Concise writing, remove redundancy</td></tr>
+                <tr><td>Merged CRM data</td><td>100–500 tokens</td><td>Include only needed fields</td></tr>
+                <tr><td>Grounding context (RAG)</td><td>500–3000 tokens</td><td>Reduce K, reduce chunk size, add filters</td></tr>
+                <tr><td>User input</td><td>20–200 tokens</td><td>Cannot be controlled</td></tr>
+                <tr><td>Generated output</td><td>50–500 tokens</td><td>Max length constraints in instructions</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Cost Reduction Strategies</h3>
+          <ul>
+            <li><strong>Right-size your context:</strong> A template that pulls in 10 merge fields when only 3 are actually used in the instructions wastes tokens. Audit your templates for unused context.</li>
+            <li><strong>Use metadata filters on RAG retrieval:</strong> Topic-scoped retrieval returns fewer but more relevant chunks — reducing K from 5 to 3 with better filtering often improves quality AND reduces tokens.</li>
+            <li><strong>Choose the right model:</strong> A smaller, faster model for simple classification or short-form generation can be 10x cheaper than GPT-4 class for equivalent quality on those tasks.</li>
+            <li><strong>Cache stable content:</strong> If your instructions reference large amounts of static content (e.g., your entire returns policy), consider summarizing it into a few hundred tokens rather than including the full text.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-evaluation">
+        <div class="content-block">
+          <h2>📊 Evaluation &amp; Testing Strategies</h2>
+
+          <h3>Offline Evaluation (Before Deployment)</h3>
+          <ol>
+            <li>Build a <strong>golden test set</strong>: 50–100 representative inputs with manually written ideal outputs. Cover normal cases, edge cases, and tricky scenarios.</li>
+            <li>Run all templates against the test set. Score outputs on: accuracy, relevance, format compliance, tone, and length.</li>
+            <li>Use an <strong>LLM-as-judge</strong> approach for scalable scoring: write a second prompt that evaluates the first template's output against the ideal output. Score 1–5 on each dimension.</li>
+            <li>Set minimum pass thresholds (e.g., average accuracy ≥ 4.0/5.0) before promoting a template to production.</li>
+          </ol>
+
+          <h3>Online Evaluation (Production Monitoring)</h3>
+          <ul>
+            <li>Track <strong>thumbs up/down feedback</strong> if your UI exposes it — direct quality signal from users.</li>
+            <li>Monitor the Einstein AI Audit Trail for templates that frequently produce responses the agent then has to rephrase (indicating the template output isn't usable directly).</li>
+            <li>Set up a <strong>shadow mode</strong> for new template versions: run the old and new versions in parallel, compare outputs, and measure quality differences before full cutover.</li>
+          </ul>
+
+          <h3>RAG-Specific Evaluation</h3>
+          <ul>
+            <li><strong>Retrieval recall:</strong> For each test query, is the correct knowledge content being retrieved? If not, the problem is in chunking or embedding — not the prompt.</li>
+            <li><strong>Answer faithfulness:</strong> Is the generated answer factually consistent with the retrieved context? Hallucination here means the LLM is ignoring the context — strengthen the "use only the provided context" instruction.</li>
+            <li><strong>Context relevance:</strong> Are the retrieved chunks actually relevant to the query? If not, adjust the search query formulation or add metadata filters.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-custom-grounding">
+        <div class="content-block">
+          <h2>🔧 Custom Grounding Connectors</h2>
+          <p>Beyond Data Cloud vector search, Prompt Builder supports custom grounding via <strong>External Services</strong> and <strong>Apex actions</strong> that retrieve context from any source.</p>
+
+          <h3>Apex-Based Custom Grounding</h3>
+          <p>Use an Apex <code>@InvocableMethod</code> to retrieve context from any source — your company wiki, a third-party knowledge base API, a custom vector database — and return it as a text variable that's injected into the prompt template as a merge field.</p>
+
+          <h3>External Service Grounding</h3>
+          <p>Register an external REST API as a Salesforce External Service. This creates an invocable action that can be called from a Flow action, which then passes the result as an input to a Prompt Template. Useful for: retrieving real-time pricing data to ground a sales email template, or pulling live support ticket context from a third-party ITSM tool.</p>
+
+          <h3>Hybrid Grounding Architecture</h3>
+          <p>For the most accurate grounding, combine multiple sources:</p>
+          <ol>
+            <li><strong>Data Cloud vector search:</strong> Semantic retrieval from your knowledge base (policy docs, product specs)</li>
+            <li><strong>CRM merge fields:</strong> Exact customer record data (account tier, recent purchases, open cases)</li>
+            <li><strong>Real-time external API:</strong> Live data not in Salesforce (inventory levels, delivery ETAs, live pricing)</li>
+          </ol>
+          <p>All three sources are injected into the prompt template as separate sections, labeled clearly so the LLM knows the source and authority of each piece of context.</p>
+        </div>
+      </section>
+
+      <section id="a-ab-testing">
+        <div class="content-block">
+          <h2>🔬 A/B Testing Prompt Templates</h2>
+
+          <h3>Setting Up a Controlled Experiment</h3>
+          <ol>
+            <li>Create two versions of the template: A (current) and B (candidate).</li>
+            <li>In your Agentforce configuration, create two parallel agent configurations (A and B) using the respective template versions.</li>
+            <li>Route traffic 80/20 (A/B) via your deployment channel configuration — expose only 20% of users to the candidate.</li>
+            <li>Run for at least 200–500 invocations per variant before evaluating — small samples produce misleading results.</li>
+            <li>Compare metrics: quality scores from LLM-as-judge, user feedback signals, and downstream business metrics (CSAT, resolution rate).</li>
+          </ol>
+
+          <h3>What's Worth A/B Testing</h3>
+          <ul>
+            <li>Instruction wording: Does "Be concise" vs. "Respond in 2–3 sentences" produce meaningfully different output?</li>
+            <li>Few-shot examples: Does adding 3 examples improve consistency for your specific use case?</li>
+            <li>Grounding K (number of retrieved chunks): Does K=3 vs. K=5 change answer quality?</li>
+            <li>Model selection: Does Claude vs. GPT-4o produce better outputs for your specific template?</li>
+            <li>Instruction position: Instructions at the top vs. bottom of the prompt can affect adherence.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-resources">
+        <div class="content-block">
+          <h2>🔗 Advanced Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/einstein/genai/guide/prompt-builder.html" target="_blank" rel="noopener">Prompt Builder Developer Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_connectapi_input_einstein_llm_messages.htm" target="_blank" rel="noopener">ConnectApi.EinsteinLLM Apex Reference</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/aispecialist" target="_blank" rel="noopener">Salesforce AI Specialist Certification</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /advanced -->
+
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Prompt Builder</span>
+      <span><a href="index.html">← Salesforce Hub</a> · <a href="../index.html">Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+new Quiz({
+  containerId: 'quiz-container',
+  topic: 'Prompt Builder',
+  questions: [
+    {
+      question: 'What is the most critical instruction to include in a RAG prompt template to prevent the LLM from hallucinating answers?',
+      options: [
+        '"Format your response as a numbered list."',
+        '"Use ONLY the information provided in the context. Do not make up answers not found in the context."',
+        '"Respond in the language used by the customer."',
+        '"Search the internet to supplement your answer if the context is insufficient."'
+      ],
+      correct: 1,
+      topic: 'RAG Patterns',
+      explanation: 'Without an explicit instruction to use only the provided context, the LLM will supplement retrieved knowledge with its training data — introducing potentially inaccurate information. The "context only" constraint is the most important hallucination prevention mechanism in RAG.'
+    },
+    {
+      question: 'Which Prompt Builder template type is most appropriate for automatically populating a "Case Summary" field on a Salesforce Case record?',
+      options: [
+        'Flex Template — to allow free-form prompt design',
+        'Sales Email Template — because it supports multi-field merge',
+        'Field Generation Template — designed to generate a value for a specific record field',
+        'Record Summary Template — the output is displayed to users'
+      ],
+      correct: 2,
+      topic: 'Template Types',
+      explanation: 'Field Generation Templates are designed to produce a value that is written to a specific field on a Salesforce record. Record Summary Templates display content to users but don\'t write back to fields.'
+    },
+    {
+      question: 'In prompt optimization, which technique involves including example input/output pairs directly in the prompt to improve output consistency?',
+      options: [
+        'Chain-of-thought prompting',
+        'Zero-shot prompting',
+        'Few-shot prompting',
+        'Retrieval-augmented generation'
+      ],
+      correct: 2,
+      topic: 'Prompt Optimization',
+      explanation: 'Few-shot prompting includes 2–5 example input/output pairs in the prompt, demonstrating the expected output format and style. It is particularly effective for complex formatting requirements and classification tasks.'
+    },
+    {
+      question: 'What is the most effective way to reduce token consumption in a Prompt Template that uses Data Cloud RAG retrieval?',
+      options: [
+        'Switch to a smaller LLM model that produces shorter outputs',
+        'Remove all CRM merge fields and rely entirely on retrieved context',
+        'Add metadata filters to scope retrieval and reduce K (number of retrieved chunks)',
+        'Disable the Einstein Trust Layer PII masking to reduce preprocessing overhead'
+      ],
+      correct: 2,
+      topic: 'Token Budget',
+      explanation: 'Grounding context (RAG retrieval) typically represents the largest token cost in a template. Adding metadata filters improves retrieval precision (allowing lower K values), and reducing K directly reduces token consumption while often improving response quality.'
+    },
+    {
+      question: 'How does prompt chaining work in an Agentforce context?',
+      options: [
+        'Multiple topics are linked together in a sequential pipeline within a single agent configuration',
+        'The output of one Prompt Template Action becomes an input to a subsequent template via conversation context variables',
+        'Two separate agents exchange information via the Agent API in real time',
+        'Prompt templates are version-controlled and deployed in chain-linked releases'
+      ],
+      correct: 1,
+      topic: 'Prompt Chaining',
+      explanation: 'In Agentforce, chaining is implemented by capturing the first Prompt Template Action\'s output as a conversation context variable, which then becomes a merge field input for the second template. This enables multi-step LLM processing within a single agent topic.'
+    }
+  ]
+});
+</script>
+</body>
+</html>

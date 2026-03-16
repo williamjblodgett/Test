@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Salesforce Agentforce — AI Learning Hub</title>
-  <meta name="description" content="Intermediate-level guide to Salesforce Agentforce: agent lifecycle, Atlas Reasoning Engine, Einstein Trust Layer, actions, and Data Cloud integration.">
+  <title>Salesforce AI — Learning Hub</title>
+  <meta name="description" content="Comprehensive Salesforce AI training: Agentforce, Data Cloud, Einstein Trust Layer, Flow Builder, Prompt Builder, Apex Actions, and more — across Beginner, Intermediate, and Advanced levels.">
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
 </head>
@@ -38,426 +38,284 @@
   <div class="container">
     <nav class="breadcrumb">
       <a href="../index.html">Home</a>
-      <span>Salesforce Agentforce</span>
+      <span>/</span>
+      <span>Salesforce AI</span>
     </nav>
     <div class="page-hero__icon">☁️</div>
-    <h1>Salesforce Agentforce</h1>
-    <p>Architecture, agent lifecycle, Einstein Trust Layer internals, action types, and Data Cloud integration — intermediate-level reference for practitioners.</p>
+    <h1>Salesforce AI Learning Hub</h1>
+    <p>Eight deep-dive guides covering every layer of the Salesforce AI platform — from building your first Agentforce agent to enterprise-scale Data Cloud RAG pipelines and DevOps automation.</p>
+    <div style="margin-top:1.5rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+      <a href="agentforce.html#beginner" class="btn btn-primary" style="font-size:0.9rem;">Start with Agentforce</a>
+      <a href="#topics" class="btn btn-outline" style="font-size:0.9rem;">Browse All Topics</a>
+    </div>
   </div>
 </section>
 
-<!-- ── Two-Column Layout ── -->
-<div class="page-layout">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-label">On This Page</div>
-    <ul class="sidebar-nav">
-      <li><a href="#overview">Platform Overview</a></li>
-      <li><a href="#lifecycle">Agent Lifecycle</a></li>
-      <li><a href="#topics">Topics & Instructions</a></li>
-      <li><a href="#actions">Actions Deep Dive</a></li>
-      <li><a href="#trust-layer">Einstein Trust Layer</a></li>
-      <li><a href="#data-cloud">Data Cloud Integration</a></li>
-      <li><a href="#testing">Testing & Deployment</a></li>
-      <li><a href="#resources">Resources</a></li>
-      <li><a href="#quiz">Quiz</a></li>
-    </ul>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
-
-    <!-- Overview -->
-    <section id="overview">
-      <div class="content-block">
-        <h2>🔍 Platform Overview</h2>
-        <p>
-          <strong>Agentforce</strong> is Salesforce's autonomous AI agent platform built on three architectural pillars: the <strong>Atlas Reasoning Engine</strong> (the LLM-based decision layer), <strong>Data Cloud</strong> (the real-time data retrieval and grounding layer), and the <strong>Einstein Trust Layer</strong> (the security and compliance enforcement layer).
-        </p>
-        <p>
-          Unlike prompt-based AI assistants, Agentforce agents operate in a continuous <em>plan → act → observe → iterate</em> loop. They are assigned a role (e.g., Service Agent), a set of scoped Topics, and a library of callable Actions — then they autonomously determine which actions to invoke based on the user's intent.
-        </p>
-        <div class="alert alert-info">
-          💡 <strong>Architectural distinction:</strong> Agentforce agents are stateful within a session. They maintain conversation context, track which actions have already been taken, and can branch logic based on intermediate results — unlike a single-turn LLM call.
-        </div>
-        <h3>Core Components</h3>
-        <ul>
-          <li><strong>Agent:</strong> The top-level entity — a configured AI persona with a name, role description, and channel assignments.</li>
-          <li><strong>Atlas Reasoning Engine:</strong> Orchestrates the reasoning loop using a hosted LLM (currently based on GPT-4 class models via Salesforce's infrastructure). It decides which Topic to invoke and which Actions to execute.</li>
-          <li><strong>Topics:</strong> Scoped business domains (e.g., "Order Management") that define what the agent is allowed to help with, with their own instructions and action sets.</li>
-          <li><strong>Actions:</strong> Callable units of work — Flows, Apex methods, Prompt Templates, or REST API calls.</li>
-          <li><strong>Einstein Trust Layer:</strong> Security middleware between the agent and external LLMs — masks PII, enforces zero data retention, and logs all AI interactions.</li>
-        </ul>
+<!-- ── Ecosystem Overview ── -->
+<section class="section" style="padding: 3rem 0; background: var(--color-bg-alt, #f8fafc);">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <h2 style="font-size:1.75rem; font-weight:700;">The Salesforce AI Platform</h2>
+      <p style="color:var(--color-text-muted); margin-top:0.4rem;">Agentforce doesn't stand alone — it's powered by a layered architecture. Understanding each layer is the key to building reliable, scalable AI solutions.</p>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; text-align:center;">
+      <div class="card" style="padding:1.25rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">🤖</div>
+        <strong style="font-size:0.9rem;">Agentforce</strong>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">Autonomous agent runtime — handles user sessions, reasoning loops, and action dispatch.</p>
       </div>
-    </section>
-
-    <!-- Agent Lifecycle -->
-    <section id="lifecycle">
-      <div class="content-block">
-        <h2>🔄 Agent Lifecycle & Reasoning Loop</h2>
-        <p>Understanding how an Agentforce agent processes a request is essential for debugging unexpected behavior and optimizing performance.</p>
-
-        <h3>Step-by-Step Execution Flow</h3>
-        <ol>
-          <li><strong>Input received:</strong> A user message arrives via a configured channel (Messaging for In-App, Experience Cloud, API endpoint, etc.).</li>
-          <li><strong>Topic classification:</strong> The Atlas Reasoning Engine evaluates the input against all configured Topics for this agent. It selects the best-matching Topic based on Topic instructions and trigger examples.</li>
-          <li><strong>Planning phase:</strong> Within the matched Topic, the engine generates a reasoning plan — it considers the conversation history, the Topic's instructions, and the available Actions.</li>
-          <li><strong>Action invocation:</strong> The engine calls one or more Actions sequentially or in branches. Each Action returns a result (record data, confirmation, generated text, etc.).</li>
-          <li><strong>Observation & iteration:</strong> The engine evaluates action results. If the task isn't complete, it replans and calls additional Actions. This loop continues until the agent determines it has a final response.</li>
-          <li><strong>Response generation:</strong> A final natural language response is generated (optionally using a Prompt Template Action) and delivered to the user.</li>
-          <li><strong>Session state update:</strong> Conversation context is persisted for the session duration, allowing follow-up questions to reference earlier turns.</li>
-        </ol>
-
-        <div class="alert alert-warning">
-          ⚠️ <strong>Loop guard:</strong> Agentforce has built-in iteration limits to prevent runaway reasoning loops. If the agent cannot resolve a task within the limit, it hands off to a human or returns a fallback message. Configure this in the Agent's escalation settings.
-        </div>
-
-        <h3>Concrete Example: Order Status Lookup</h3>
-        <p>A customer messages: <em>"Where is my order #12345? It was supposed to arrive yesterday."</em></p>
-        <ol>
-          <li>Atlas matches this to the "Order Management" Topic.</li>
-          <li>The engine identifies it needs to retrieve order data — invokes a <strong>Flow Action</strong> that queries the Order object via SOQL, filtered by order number.</li>
-          <li>The Flow returns: Order status = "In Transit", carrier = "FedEx", estimated delivery = tomorrow.</li>
-          <li>The engine detects a delay (delivery missed SLA) and invokes a second Action — a <strong>Prompt Template Action</strong> to draft an empathetic response with the tracking link.</li>
-          <li>Final response is delivered. The session logs the interaction for supervisor review.</li>
-        </ol>
+      <div class="card" style="padding:1.25rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">🧠</div>
+        <strong style="font-size:0.9rem;">Atlas Reasoning Engine</strong>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">LLM-based planning layer that decides which topics and actions to invoke each turn.</p>
       </div>
-    </section>
+      <div class="card" style="padding:1.25rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">☁️</div>
+        <strong style="font-size:0.9rem;">Data Cloud</strong>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">Real-time CDP powering unified profiles, vector search, and RAG grounding for agents.</p>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">🛡️</div>
+        <strong style="font-size:0.9rem;">Einstein Trust Layer</strong>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">Security middleware: PII masking, toxicity filtering, zero data retention, audit logging.</p>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">⚡</div>
+        <strong style="font-size:0.9rem;">Flow Builder &amp; Apex</strong>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">Action execution layer — the business logic agents invoke to read and write data.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Topics & Instructions -->
-    <section id="topics">
-      <div class="content-block">
-        <h2>📋 Topics & Instructions</h2>
-        <p>
-          Topics are the primary scoping mechanism in Agentforce. They define what the agent knows how to do and prevent scope creep — an agent will only attempt tasks covered by its assigned Topics.
-        </p>
+<!-- ── Topic Cards ── -->
+<section class="section" id="topics">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:2.5rem;">
+      <h2 style="font-size:1.75rem; font-weight:700;">Choose Your Topic</h2>
+      <p style="color:var(--color-text-muted); margin-top:0.4rem;">Each guide covers Beginner, Intermediate, and Advanced material with quizzes and resources.</p>
+    </div>
 
-        <h3>Anatomy of a Topic</h3>
-        <ul>
-          <li><strong>Name:</strong> A business-meaningful label (e.g., "Case Resolution", "Lead Qualification").</li>
-          <li><strong>Description:</strong> A plain-language description used by the reasoning engine to determine when this Topic is applicable. Be precise — vague descriptions lead to misrouting.</li>
-          <li><strong>Instructions:</strong> Natural language behavioral guidelines for the agent within this Topic scope. Examples: "Always verify the customer's account before making changes", "Never quote pricing — escalate to Sales".</li>
-          <li><strong>Actions:</strong> The specific Actions available to the agent when handling this Topic. Actions not listed here are inaccessible, even if defined elsewhere.</li>
-          <li><strong>Scope boundary:</strong> If a user's request falls outside the Topic's scope, the agent either routes to another Topic or escalates to a human.</li>
-        </ul>
+    <div class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:1.5rem;">
 
-        <h3>Writing Effective Instructions</h3>
-        <p>Instructions are evaluated by the LLM at runtime — treat them like system prompts for a specific domain:</p>
-        <ul>
-          <li>Use <strong>imperative language</strong>: "Confirm the customer's identity before accessing account details."</li>
-          <li>Define <strong>escalation triggers</strong>: "If the customer mentions a legal dispute, immediately escalate to a live agent."</li>
-          <li>Set <strong>output constraints</strong>: "Responses should be no more than 3 sentences. Always end with a follow-up question."</li>
-          <li>Avoid contradictory instructions — the LLM will attempt to reconcile them, often unpredictably.</li>
-        </ul>
-
-        <div class="alert alert-info">
-          💡 Instructions are not hardcoded decision trees — they are LLM-interpreted guidance. Test edge cases thoroughly in the Agent Testing Center before deploying to production.
+      <!-- Agentforce -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #009edb;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">🤖</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Agentforce</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Autonomous AI Agents</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Build autonomous AI agents with Topics, Actions, and the Atlas Reasoning Engine. Covers agent lifecycle, multi-agent orchestration, production deployment, and monitoring.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="agentforce.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="agentforce.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="agentforce.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
         </div>
       </div>
-    </section>
 
-    <!-- Actions Deep Dive -->
-    <section id="actions">
-      <div class="content-block">
-        <h2>⚡ Actions Deep Dive</h2>
-        <p>Actions are the callable operations Agentforce agents invoke during reasoning. Each Action type has different use cases, invocation patterns, and limitations.</p>
-
-        <h3>Flow Actions</h3>
-        <p>Invoke an auto-launched Salesforce Flow. This is the most common Action type for reading and writing Salesforce records.</p>
-        <ul>
-          <li>The Flow must be of type <strong>"Autolaunched Flow (No Trigger)"</strong> — screen flows are not supported.</li>
-          <li>Input variables are passed from the agent's conversation context. Output variables are returned to the reasoning engine.</li>
-          <li>Flow Actions have access to the full Salesforce platform: SOQL, DML, external callouts, Platform Events.</li>
-          <li>Performance consideration: Complex Flows with multiple SOQL queries add latency to the reasoning loop. Keep agent-facing Flows focused and fast.</li>
-        </ul>
-
-        <h3>Apex Actions</h3>
-        <p>Invoke a public static Apex method decorated with <code>@InvocableMethod</code>. Use for complex logic that isn't practical in Flow.</p>
-        <ul>
-          <li>Apex Actions run in the context of the running user's permissions unless <code>with sharing</code> is overridden.</li>
-          <li>Use for: complex data transformations, external callouts requiring custom HTTP handling, business rules that require procedural logic.</li>
-          <li>Apex governor limits apply — be mindful of SOQL row limits and CPU time in agent contexts where multiple Actions may run per turn.</li>
-        </ul>
-
-        <h3>Prompt Template Actions</h3>
-        <p>Generate dynamic text using a Prompt Template — a structured prompt that merges Salesforce record data with LLM-generated content.</p>
-        <ul>
-          <li>Templates are created in <strong>Prompt Builder</strong> and can reference Salesforce record fields using merge fields.</li>
-          <li>Use for: drafting emails, generating case summaries, creating personalized messages from CRM data.</li>
-          <li>Supports grounding with Data Cloud vector search for RAG (Retrieval-Augmented Generation) patterns.</li>
-          <li>All Prompt Template calls pass through the Einstein Trust Layer — PII masking is applied before reaching the LLM.</li>
-        </ul>
-
-        <h3>API Actions (External APIs)</h3>
-        <p>Call external REST APIs directly from the agent, using Named Credentials for authentication management.</p>
-        <ul>
-          <li>Define the API spec (OpenAPI/Swagger format preferred) to expose specific endpoints as callable Actions.</li>
-          <li>Authentication is handled via Named Credentials — secrets are never exposed in the agent configuration.</li>
-          <li>Use for: checking inventory in an ERP, submitting a support ticket to ServiceNow, querying a third-party logistics API.</li>
-        </ul>
-
-        <h3>Action Input/Output Mapping</h3>
-        <p>The Atlas Reasoning Engine maps conversation context to Action inputs using its understanding of the prompt — but you can make this explicit by providing well-named input parameters and clear Action descriptions. The better your Action descriptions, the more reliably the engine invokes the right Action with the right inputs.</p>
+      <!-- Data Cloud -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #00a1e0;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">☁️</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Data Cloud</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Real-Time CDP &amp; RAG</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Master unified customer profiles, identity resolution, segmentation, and vector search. Learn how Data Cloud powers grounding and RAG for Agentforce agents.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="data-cloud.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="data-cloud.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="data-cloud.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Einstein Trust Layer -->
-    <section id="trust-layer">
-      <div class="content-block">
-        <h2>🛡️ Einstein Trust Layer — Internals</h2>
-        <p>
-          The Einstein Trust Layer (ETL) is Salesforce's security middleware that sits between your Agentforce agents and any external LLM provider. It enforces data privacy and compliance policies in real time without requiring custom code.
-        </p>
-
-        <h3>How It Works</h3>
-        <ol>
-          <li><strong>Data assembly:</strong> The agent assembles a prompt, which may include Salesforce record data, user inputs, and conversation history.</li>
-          <li><strong>PII detection & masking:</strong> The ETL scans the prompt for personally identifiable information (email addresses, phone numbers, SSNs, account numbers) using pattern matching and ML-based detection. Detected PII is replaced with anonymized tokens (e.g., <code>[EMAIL_1]</code>).</li>
-          <li><strong>Prompt sent to LLM:</strong> The masked prompt is forwarded to the configured LLM provider (OpenAI, Anthropic, or Salesforce's hosted model).</li>
-          <li><strong>Response received:</strong> The LLM response is returned. The ETL re-inserts the original PII in place of the tokens where appropriate in the final response.</li>
-          <li><strong>Toxicity filtering:</strong> The response is scanned for harmful content before being delivered to the end user. Blocked responses trigger a configurable fallback message.</li>
-          <li><strong>Audit logging:</strong> Every prompt/response pair is logged in the <strong>Einstein AI Audit Trail</strong>, accessible via Salesforce Data Cloud or direct query. Logs include: timestamp, user, masked prompt, response, and any filters triggered.</li>
-        </ol>
-
-        <h3>Zero Data Retention</h3>
-        <p>Salesforce negotiates <strong>zero data retention agreements</strong> with its LLM providers. This means the external LLM does not store your prompts, cannot use your data for model training, and your data is not accessible to other tenants. This is contractually enforced and is a key differentiator from consumer LLM APIs.</p>
-
-        <h3>Key ETL Capabilities</h3>
-        <ul>
-          <li><strong>Dynamic grounding:</strong> Injects verified Salesforce record data into prompts at inference time — reducing hallucination risk for domain-specific responses.</li>
-          <li><strong>Data masking customization:</strong> Admins can define custom masking rules for organization-specific sensitive fields beyond standard PII patterns.</li>
-          <li><strong>Model gateway:</strong> Acts as an abstraction layer — you can switch LLM providers without changing agent configuration.</li>
-          <li><strong>Rate limiting & monitoring:</strong> Tracks LLM token consumption per org, per agent, and per user for cost management.</li>
-        </ul>
+      <!-- Einstein Trust Layer -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #f59e0b;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">🛡️</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Einstein Trust Layer</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Security &amp; Compliance</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Understand PII masking, toxicity filtering, zero data retention, and the model gateway. Learn compliance requirements under GDPR, HIPAA, and the EU AI Act.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="einstein-trust.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="einstein-trust.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="einstein-trust.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Data Cloud Integration -->
-    <section id="data-cloud">
-      <div class="content-block">
-        <h2>☁️ Data Cloud Integration</h2>
-        <p>
-          Salesforce Data Cloud is a real-time customer data platform (CDP) that acts as the data backbone for Agentforce. It enables agents to access unified customer profiles and perform semantic (vector) search across unstructured knowledge content.
-        </p>
-
-        <h3>Unified Customer Profiles</h3>
-        <p>Data Cloud ingests data from multiple sources — Salesforce CRM, Marketing Cloud, Commerce Cloud, external ERPs, web/mobile event streams — and resolves them into a single unified profile per customer.</p>
-        <ul>
-          <li>Agents can query these profiles in real time using Data Cloud's <strong>Retrieval Augmented Generation (RAG)</strong> capabilities.</li>
-          <li>Profile data is surfaced in agent context without requiring explicit SOQL queries — the reasoning engine can reference "the customer's recent purchases" and Data Cloud resolves the lookup.</li>
-          <li>Profile completeness directly impacts agent response quality — incomplete data = less contextually accurate responses.</li>
-        </ul>
-
-        <h3>Vector Search & RAG</h3>
-        <p>For knowledge base retrieval, Agentforce uses Data Cloud's vector search to find semantically relevant content:</p>
-        <ul>
-          <li>Knowledge articles, case history, product documentation, and policy documents are chunked and embedded as vectors in Data Cloud.</li>
-          <li>When an agent needs reference content, it submits a semantic query — the embedding similarity search returns the most contextually relevant chunks.</li>
-          <li>These chunks are inserted into the prompt as grounding context, dramatically reducing hallucinations on organization-specific questions.</li>
-          <li>Embedding is handled automatically when content is connected to Data Cloud — no custom ML pipeline required.</li>
-        </ul>
-
-        <h3>Real-Time Data Considerations</h3>
-        <ul>
-          <li>Data Cloud ingestion latency varies by source connector — batch-synced sources may lag by minutes to hours, while real-time event sources (e.g., web clicks via the Web SDK) are near-instantaneous.</li>
-          <li>Agent responses are only as current as the data in Data Cloud. For truly real-time CRM data (e.g., just-submitted orders), use Flow Actions to query Salesforce CRM directly rather than relying on Data Cloud profiles.</li>
-        </ul>
+      <!-- Flow Builder -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #10b981;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">⚡</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Flow Builder for Agents</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Action Execution Layer</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Build autolaunched flows that power Agentforce actions. Covers record operations, loops, fault paths, subflows, bulk processing, and performance optimization.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="flow-builder.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="flow-builder.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="flow-builder.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Testing & Deployment -->
-    <section id="testing">
-      <div class="content-block">
-        <h2>🧪 Testing & Deployment</h2>
-
-        <h3>Agent Testing Center</h3>
-        <p>The built-in Agent Testing Center (available in Setup → Agentforce → Agents) provides a conversational sandbox where you can:</p>
-        <ul>
-          <li>Simulate multi-turn conversations against your agent configuration.</li>
-          <li>Inspect the full reasoning trace: which Topic was matched, which Actions were called, what inputs/outputs were passed, and the final LLM prompt (masked).</li>
-          <li>Test edge cases: ambiguous inputs, off-topic requests, escalation triggers.</li>
-          <li>Compare responses across different instruction variations without redeploying.</li>
-        </ul>
-
-        <h3>Deployment Channels</h3>
-        <ul>
-          <li><strong>Messaging for In-App & Web:</strong> Embed the agent in your website or mobile app via the Embedded Service SDK. Supports SSO via Experience Cloud.</li>
-          <li><strong>Experience Cloud Sites:</strong> Deploy agents directly in portal/community sites with data scoped to the authenticated user's profile.</li>
-          <li><strong>Salesforce Service Cloud (Live Agent):</strong> Agents handle initial triage — escalate to human agents in the Service Console when needed, with full conversation context transferred.</li>
-          <li><strong>API access:</strong> Call Agentforce agents programmatically via the Agent API, enabling integration with custom apps, IVR systems, or third-party platforms.</li>
-        </ul>
-
-        <h3>Monitoring & Iteration</h3>
-        <ul>
-          <li>Use the <strong>Einstein Activity Tracker</strong> to review production conversations — identify where agents are failing to route correctly or generating poor responses.</li>
-          <li>Monitor <strong>Escalation Rate</strong> as your primary quality metric — high escalation rates indicate Topics are not covering user needs adequately.</li>
-          <li>Review <strong>Topic Misclassification</strong> events: cases where the agent matched the wrong Topic. Refine Topic descriptions and instructions accordingly.</li>
-          <li>Use A/B testing via Agentforce's configuration versioning to compare instruction variants in production with controlled traffic splits.</li>
-        </ul>
+      <!-- Prompt Builder -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #8b5cf6;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">📝</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Prompt Builder</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Templates &amp; Grounding</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Design prompt templates with merge fields, Data Cloud grounding, and RAG patterns. Covers template types, response formatting, token budgets, and evaluation.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="prompt-builder.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="prompt-builder.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="prompt-builder.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Resources -->
-    <section id="resources">
-      <div class="content-block">
-        <h2>🔗 Training Resources</h2>
-        <ul class="resource-list">
-          <li>
-            <span class="res-type res-doc">Docs</span>
-            <a href="https://help.salesforce.com/s/articleView?id=ai.agentforce.htm" target="_blank" rel="noopener">Salesforce Agentforce Official Documentation</a>
-          </li>
-          <li>
-            <span class="res-type res-doc">Docs</span>
-            <a href="https://developer.salesforce.com/docs/einstein/genai/guide/agents.html" target="_blank" rel="noopener">Salesforce Developer: Einstein AI Agents Guide</a>
-          </li>
-          <li>
-            <span class="res-type res-course">Course</span>
-            <a href="https://trailhead.salesforce.com/content/learn/trails/build-ai-assistants-with-agentforce" target="_blank" rel="noopener">Trailhead: Build AI Assistants with Agentforce</a>
-          </li>
-          <li>
-            <span class="res-type res-course">Course</span>
-            <a href="https://trailhead.salesforce.com/content/learn/modules/agentforce-quick-look" target="_blank" rel="noopener">Trailhead: Agentforce Quick Look</a>
-          </li>
-          <li>
-            <span class="res-type res-cert">Cert</span>
-            <a href="https://trailhead.salesforce.com/credentials/aiassociate" target="_blank" rel="noopener">Salesforce AI Associate Certification</a>
-          </li>
-          <li>
-            <span class="res-type res-cert">Cert</span>
-            <a href="https://trailhead.salesforce.com/credentials/aispecialist" target="_blank" rel="noopener">Salesforce AI Specialist Certification</a>
-          </li>
-          <li>
-            <span class="res-type res-vid">Video</span>
-            <a href="https://www.youtube.com/@SalesforceAdmins" target="_blank" rel="noopener">Salesforce Admins YouTube — Agentforce Demos & Tutorials</a>
-          </li>
-        </ul>
+      <!-- Apex Actions -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #ef4444;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">💻</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Apex Actions</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Custom Code for Agents</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Write @InvocableMethod Apex classes that Agentforce can call. Covers input/output types, SOQL patterns, external callouts, async processing, and governor limits.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="apex-actions.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="apex-actions.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="apex-actions.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
       </div>
-    </section>
 
-    <!-- Quiz -->
-    <section id="quiz">
-      <div class="quiz-section" id="quiz-container"></div>
-    </section>
+      <!-- Admin Setup -->
+      <div class="card" style="padding:1.75rem; border-top:3px solid #64748b;">
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+          <div style="font-size:2rem;">⚙️</div>
+          <div>
+            <div style="font-weight:700; font-size:1.05rem;">Admin Setup &amp; DevOps</div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted);">Deployment &amp; Governance</div>
+          </div>
+        </div>
+        <p style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem;">Enable Agentforce, configure permissions, manage sandboxes, and deploy with Change Sets or DevOps Center. Includes certification paths and study resources.</p>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class="level-badge level-badge-beginner">Beginner</span>
+          <span class="level-badge level-badge-intermediate">Intermediate</span>
+          <span class="level-badge level-badge-advanced">Advanced</span>
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="admin-setup.html#beginner" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Beginner →</a>
+          <a href="admin-setup.html#intermediate" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Intermediate →</a>
+          <a href="admin-setup.html#advanced" style="font-size:0.8rem; color:var(--color-primary); text-decoration:none; font-weight:600;">Advanced →</a>
+        </div>
+      </div>
 
-  </main>
-</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Recommended Learning Path ── -->
+<section class="section" style="background: var(--color-bg-alt, #f8fafc); padding:3rem 0;">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <h2 style="font-size:1.75rem; font-weight:700;">Recommended Learning Path</h2>
+      <p style="color:var(--color-text-muted); margin-top:0.4rem;">New to Salesforce AI? Follow this sequence for the fastest path to productivity.</p>
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; text-align:center; align-items:start;">
+      <div style="position:relative;">
+        <div class="card" style="padding:1.25rem;">
+          <div style="width:2rem; height:2rem; background:var(--color-primary); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">1</div>
+          <div style="font-weight:700; font-size:0.9rem;">Agentforce Beginner</div>
+          <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Understand what agents are and build your first one.</p>
+          <a href="agentforce.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+        </div>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="width:2rem; height:2rem; background:#10b981; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">2</div>
+        <div style="font-weight:700; font-size:0.9rem;">Flow Builder Beginner</div>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Learn to build autolaunched flows as agent actions.</p>
+        <a href="flow-builder.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="width:2rem; height:2rem; background:#f59e0b; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">3</div>
+        <div style="font-weight:700; font-size:0.9rem;">Einstein Trust Layer</div>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Understand security, PII masking, and compliance.</p>
+        <a href="einstein-trust.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="width:2rem; height:2rem; background:#8b5cf6; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">4</div>
+        <div style="font-weight:700; font-size:0.9rem;">Prompt Builder</div>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Create grounded prompt templates for agent responses.</p>
+        <a href="prompt-builder.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="width:2rem; height:2rem; background:#00a1e0; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">5</div>
+        <div style="font-weight:700; font-size:0.9rem;">Data Cloud</div>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Connect your data platform and enable RAG grounding.</p>
+        <a href="data-cloud.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <div style="width:2rem; height:2rem; background:#ef4444; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:0.5rem;">6</div>
+        <div style="font-weight:700; font-size:0.9rem;">Apex &amp; Admin</div>
+        <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.3rem;">Extend agents with code and deploy to production.</p>
+        <a href="apex-actions.html#beginner" style="font-size:0.75rem; color:var(--color-primary); text-decoration:none;">Start →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ── Footer ── -->
 <footer class="footer">
   <div class="container">
     <div class="footer__inner">
-      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong></span>
-      <span><a href="../index.html">← Back to Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Salesforce AI Track</span>
+      <span><a href="../index.html">← Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
     </div>
   </div>
 </footer>
 
 <script src="../scripts/main.js"></script>
-<script src="../scripts/quiz.js"></script>
-<script>
-  new Quiz({
-    containerId: 'quiz-container',
-    topic: 'Salesforce Agentforce',
-    questions: [
-      {
-        question: 'In the Agentforce reasoning loop, what does the Atlas Reasoning Engine do after receiving an Action\'s output?',
-        options: [
-          'Immediately sends the output to the user',
-          'Evaluates the result and replans if the task is not yet complete',
-          'Archives the result in the audit log and stops',
-          'Sends the result to Data Cloud for indexing'
-        ],
-        correct: 1,
-        topic: 'Agent Lifecycle',
-        explanation: 'The reasoning loop is iterative: after each Action, Atlas evaluates whether the task is complete. If not, it replans and invokes additional Actions before generating a final response.'
-      },
-      {
-        question: 'What type of Salesforce Flow is compatible with Agentforce Flow Actions?',
-        options: [
-          'Screen Flows with user input',
-          'Record-Triggered Flows only',
-          'Autolaunched Flows (No Trigger)',
-          'Scheduled Flows'
-        ],
-        correct: 2,
-        topic: 'Actions — Flow',
-        explanation: 'Only Autolaunched (No Trigger) Flows can be invoked as Agentforce Actions. Screen Flows require user interaction and are not compatible with agent invocation.'
-      },
-      {
-        question: 'What happens to PII in a prompt before it reaches an external LLM in Agentforce?',
-        options: [
-          'It is encrypted using AES-256 but still sent in full',
-          'It is replaced with anonymized tokens by the Einstein Trust Layer',
-          'It is stripped entirely and never included in LLM calls',
-          'It is sent only if the user has given consent via the agent conversation'
-        ],
-        correct: 1,
-        topic: 'Einstein Trust Layer',
-        explanation: 'The ETL detects and replaces PII with tokens (e.g., [EMAIL_1]) before the prompt leaves Salesforce. The LLM receives the masked prompt; the original values are re-inserted where needed in the response.'
-      },
-      {
-        question: 'When an Agentforce agent uses a Prompt Template Action to generate a response, what makes it less likely to hallucinate org-specific facts?',
-        options: [
-          'The LLM has been fine-tuned on Salesforce data',
-          'Merge fields pull verified Salesforce record data into the prompt at inference time',
-          'The agent checks the internet before responding',
-          'Prompt Templates are validated by Salesforce support before deployment'
-        ],
-        correct: 1,
-        topic: 'Prompt Template Actions',
-        explanation: 'Prompt Templates use merge fields to inject real Salesforce record values (e.g., account name, order status) directly into the prompt — grounding the LLM in verified data rather than relying on training knowledge.'
-      },
-      {
-        question: 'Which metric is the most meaningful indicator of Agentforce Topic quality in production?',
-        options: [
-          'LLM token consumption per conversation',
-          'Number of Actions invoked per session',
-          'Escalation Rate to human agents',
-          'Average response length in characters'
-        ],
-        correct: 2,
-        topic: 'Monitoring & Iteration',
-        explanation: 'Escalation Rate measures how often the agent fails to resolve issues autonomously. A high rate signals that Topics are incomplete, instructions are unclear, or Actions are missing coverage for real user needs.'
-      },
-      {
-        question: 'What is the primary benefit of Salesforce Data Cloud\'s vector search in Agentforce?',
-        options: [
-          'It replaces all SOQL queries with SQL for faster data retrieval',
-          'It enables semantic retrieval of relevant knowledge content to ground agent responses',
-          'It gives agents access to the public internet for research',
-          'It automatically trains a custom LLM on your Salesforce data'
-        ],
-        correct: 1,
-        topic: 'Data Cloud Integration',
-        explanation: 'Vector search finds semantically similar content (knowledge articles, documentation) by embedding similarity rather than keyword matching. Retrieved chunks are injected into the prompt as grounding context, reducing hallucinations.'
-      },
-      {
-        question: 'What is the purpose of the "zero data retention" agreement Salesforce holds with LLM providers?',
-        options: [
-          'To limit the number of tokens stored per API call for cost reasons',
-          'To ensure the LLM provider cannot store, access, or train on your org\'s prompt data',
-          'To prevent agents from retaining session context between conversations',
-          'To comply with Salesforce\'s internal data deletion policies'
-        ],
-        correct: 1,
-        topic: 'Einstein Trust Layer',
-        explanation: 'Zero data retention agreements contractually prevent external LLM providers from storing your data, using it for model training, or sharing it with other tenants — a critical compliance requirement for enterprise customers.'
-      },
-      {
-        question: 'An agent consistently routes customer billing questions to the "Technical Support" Topic instead of "Billing & Payments". What is the most likely root cause?',
-        options: [
-          'The Flow Actions for billing are broken',
-          'The Einstein Trust Layer is blocking billing-related keywords',
-          'The Topic Description for "Billing & Payments" is too vague or similar to "Technical Support"',
-          'Billing Topics are not supported in the current Agentforce version'
-        ],
-        correct: 2,
-        topic: 'Topics & Instructions',
-        explanation: 'Topic classification is driven by the Topic Description evaluated by the LLM. Overlapping or vague descriptions cause misrouting. The fix is to make descriptions more specific and distinct, and to add contrasting examples that differentiate Topics.'
-      }
-    ]
-  });
-</script>
 </body>
 </html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Builder for Agents — Salesforce AI · AI Learning Hub</title>
+  <meta name="description" content="Comprehensive Flow Builder guide for Agentforce: flow types, autolaunched flows, loops, fault paths, bulk processing, Platform Events, and performance optimization — Beginner through Advanced.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html"><span class="navbar__brand-icon">🤖</span>AI Learning Hub</a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html" class="active">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions"><button class="btn-theme" id="theme-toggle">🌙</button></div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Salesforce</a><span>/</span>
+      <span>Flow Builder for Agents</span>
+    </nav>
+    <div class="page-hero__icon">⚡</div>
+    <h1>Flow Builder for Agentforce</h1>
+    <p>Build the autolaunched flows that power Agentforce actions — from basic record operations to bulk processing, Platform Events, and production-grade performance patterns.</p>
+  </div>
+</section>
+
+<div style="background:var(--color-bg-alt,#f8fafc);border-bottom:1px solid var(--color-border);padding:0.75rem 0;position:sticky;top:57px;z-index:90;">
+  <div class="container">
+    <div class="level-switcher">
+      <span class="level-switcher-label">Skill Level:</span>
+      <div class="level-tabs">
+        <button class="level-tab" data-level="beginner">Beginner</button>
+        <button class="level-tab" data-level="intermediate">Intermediate</button>
+        <button class="level-tab" data-level="advanced">Advanced</button>
+      </div>
+      <span class="level-desc" id="level-desc"></span>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li data-level="beginner"><a href="#b-intro">Introduction to Flow Builder</a></li>
+      <li data-level="beginner"><a href="#b-types">Flow Types</a></li>
+      <li data-level="beginner"><a href="#b-elements">Core Elements</a></li>
+      <li data-level="beginner"><a href="#b-first-flow">Your First Autolaunched Flow</a></li>
+      <li data-level="beginner"><a href="#b-variables">Variables &amp; Resources</a></li>
+      <li data-level="beginner"><a href="#b-resources">Resources</a></li>
+
+      <li data-level="intermediate"><a href="#i-agent-flows">Flows for Agentforce</a></li>
+      <li data-level="intermediate"><a href="#i-collections">Collections &amp; Loops</a></li>
+      <li data-level="intermediate"><a href="#i-errors">Fault Paths &amp; Error Handling</a></li>
+      <li data-level="intermediate"><a href="#i-subflows">Subflows</a></li>
+      <li data-level="intermediate"><a href="#i-decisions">Complex Decisions</a></li>
+      <li data-level="intermediate"><a href="#i-testing">Testing Flows</a></li>
+      <li data-level="intermediate"><a href="#i-resources">Resources</a></li>
+
+      <li data-level="advanced"><a href="#a-bulk">Bulk Processing Patterns</a></li>
+      <li data-level="advanced"><a href="#a-events">Platform Events</a></li>
+      <li data-level="advanced"><a href="#a-performance">Performance Optimization</a></li>
+      <li data-level="advanced"><a href="#a-apex-types">Apex-Defined Types</a></li>
+      <li data-level="advanced"><a href="#a-testing">Apex Testing for Flows</a></li>
+      <li data-level="advanced"><a href="#a-resources">Resources</a></li>
+
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BEGINNER -->
+    <div class="level-content" data-level="beginner">
+
+      <section id="b-intro">
+        <div class="content-block">
+          <h2>⚡ Introduction to Flow Builder</h2>
+          <p>Salesforce Flow Builder is a visual tool for building automated workflows — no code required. Flows are the primary way Agentforce actions interact with Salesforce data: looking up records, creating cases, updating accounts, sending emails, and calling external APIs.</p>
+          <p>For Agentforce specifically, you'll primarily build <strong>Autolaunched Flows</strong> — background processes that run server-side when an agent calls them as an action. Understanding Flow Builder is essential for anyone building real-world Agentforce implementations.</p>
+          <div class="alert alert-info">
+            💡 Even if you're a developer who would naturally reach for Apex, start with Flow for agent actions — Flow is easier to test, debug, and maintain, and it's what Salesforce recommends as the default action type.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-types">
+        <div class="content-block">
+          <h2>📋 Flow Types</h2>
+          <p>Salesforce offers several flow types, each designed for different trigger models:</p>
+
+          <div style="overflow-x:auto;">
+            <table class="compare-table">
+              <thead><tr><th>Flow Type</th><th>Triggered By</th><th>Agentforce Compatible?</th></tr></thead>
+              <tbody>
+                <tr><td>Autolaunched Flow (No Trigger)</td><td>Invoked programmatically (Apex, other flows, agents)</td><td style="color:#10b981;font-weight:700;">✓ Yes — primary type</td></tr>
+                <tr><td>Record-Triggered Flow</td><td>Record create/update/delete in Salesforce</td><td style="color:#ef4444;">✗ No</td></tr>
+                <tr><td>Screen Flow</td><td>Launched by a user who interacts with UI screens</td><td style="color:#ef4444;">✗ No</td></tr>
+                <tr><td>Scheduled Flow</td><td>Runs on a time schedule</td><td style="color:#ef4444;">✗ No</td></tr>
+                <tr><td>Platform Event–Triggered Flow</td><td>A Platform Event message is published</td><td style="color:#ef4444;">✗ (indirect use)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-warning">
+            ⚠️ <strong>Common mistake:</strong> Agents only work with Autolaunched Flows (No Trigger). A Screen Flow will never appear as an available action in Agent Builder — even if it's well-built and perfectly functional.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-elements">
+        <div class="content-block">
+          <h2>🧩 Core Flow Elements</h2>
+          <p>Flow Builder provides a palette of elements that you connect together visually. Here are the most important ones for agent actions:</p>
+
+          <h3>Data Elements</h3>
+          <ul>
+            <li><strong>Get Records:</strong> Query Salesforce records using filter criteria. Returns one or many records (your choice). The most commonly used element in agent flows.</li>
+            <li><strong>Create Records:</strong> Create one or more new Salesforce records. Returns the ID of the created record.</li>
+            <li><strong>Update Records:</strong> Update one or more existing records that match criteria.</li>
+            <li><strong>Delete Records:</strong> Delete records matching criteria. Use carefully — this is irreversible.</li>
+          </ul>
+
+          <h3>Logic Elements</h3>
+          <ul>
+            <li><strong>Decision:</strong> Branch your flow based on conditions (like an if/else statement). Each branch is a separate path through the flow.</li>
+            <li><strong>Assignment:</strong> Set or update a variable's value. Used to build up results, concatenate strings, or initialize counters.</li>
+            <li><strong>Loop:</strong> Iterate over a collection of records or values, performing operations on each item.</li>
+          </ul>
+
+          <h3>Action Elements</h3>
+          <ul>
+            <li><strong>Action:</strong> Call an Apex @InvocableMethod, a quick action, a flow action, or a named credential external service.</li>
+            <li><strong>Subflow:</strong> Call another Flow from within your flow — excellent for modular design.</li>
+            <li><strong>Send Email:</strong> Send an email using a configured email template or free-form text.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="b-first-flow">
+        <div class="content-block">
+          <h2>🚀 Your First Autolaunched Flow for an Agent</h2>
+          <p>Let's build a "Get Order Status" flow that an Agentforce action can call.</p>
+
+          <h3>Step 1 — Create the Flow</h3>
+          <ol>
+            <li>Navigate to <strong>Setup → Flows → New Flow</strong>.</li>
+            <li>Select <strong>Autolaunched Flow (No Trigger)</strong>.</li>
+            <li>Click Create.</li>
+          </ol>
+
+          <h3>Step 2 — Add Input Variables</h3>
+          <p>In the left panel, click <strong>Manager → New Resource → Variable</strong>:</p>
+          <ul>
+            <li>API Name: <code>inputOrderNumber</code></li>
+            <li>Data Type: Text</li>
+            <li>Available for Input: ✓ (checked)</li>
+            <li>Available for Output: unchecked</li>
+            <li>Description: "The order number provided by the customer"</li>
+          </ul>
+
+          <h3>Step 3 — Add a Get Records Element</h3>
+          <p>Drag a <strong>Get Records</strong> element onto the canvas and connect it from Start:</p>
+          <ul>
+            <li>Object: Order</li>
+            <li>Filter: OrderNumber equals {!inputOrderNumber}</li>
+            <li>How many records: Only the first record</li>
+            <li>Store record data: Choose fields and assign to variables</li>
+            <li>Assign output fields to: create output variables for Status, ShipmentTrackingNumber, DeliveryDate</li>
+          </ul>
+
+          <h3>Step 4 — Add a Decision Element</h3>
+          <p>Add a <strong>Decision</strong> to check if a record was found:</p>
+          <ul>
+            <li>Outcome 1: "Order Found" — condition: <code>{!Get_Order.Id} is null = False</code></li>
+            <li>Default Outcome: "Order Not Found"</li>
+          </ul>
+
+          <h3>Step 5 — Add Output Variables</h3>
+          <p>Create output variables (Available for Output: ✓):</p>
+          <ul>
+            <li><code>outputOrderStatus</code> (Text) — set via Assignment element to <code>{!Get_Order.Status}</code></li>
+            <li><code>outputFound</code> (Boolean) — set to True in the "Order Found" path, False in "Not Found"</li>
+            <li><code>outputMessage</code> (Text) — set to a human-readable message in each path</li>
+          </ul>
+
+          <h3>Step 6 — Save and Activate</h3>
+          <p>Save the flow with a clear name ("Get Order Status for Agent") and click <strong>Activate</strong>. Active autolaunched flows are available as actions in Agent Builder.</p>
+        </div>
+      </section>
+
+      <section id="b-variables">
+        <div class="content-block">
+          <h2>📦 Variables &amp; Resources</h2>
+          <p>Variables are the containers that store data as your flow runs. Getting variable configuration right is critical for agent flows.</p>
+
+          <h3>Variable types available in Flow</h3>
+          <ul>
+            <li><strong>Text:</strong> String values — names, messages, IDs, URLs</li>
+            <li><strong>Number:</strong> Integer or decimal values</li>
+            <li><strong>Currency:</strong> Monetary amounts with currency formatting</li>
+            <li><strong>Date / Date/Time:</strong> Date and timestamp values</li>
+            <li><strong>Boolean:</strong> True/false flags</li>
+            <li><strong>Record:</strong> A single Salesforce record of a specific object type</li>
+            <li><strong>Record Collection:</strong> A list of Salesforce records of a specific type</li>
+            <li><strong>Apex-Defined:</strong> Complex types defined by an Apex class (advanced)</li>
+          </ul>
+
+          <h3>Input vs. Output Variables</h3>
+          <p>For agent actions, this distinction is critical:</p>
+          <ul>
+            <li><strong>Available for Input = true:</strong> The Atlas Reasoning Engine can pass a value into this variable from the conversation context. These are the parameters the agent must provide to run the flow.</li>
+            <li><strong>Available for Output = true:</strong> The flow returns this variable's value back to the agent after execution. The agent uses output values in its response.</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 <strong>Naming matters:</strong> Variable names and descriptions are used by the LLM to understand what to pass in and what to expect back. Use clear, descriptive names like <code>customerEmailAddress</code> instead of <code>var1</code>.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-resources">
+        <div class="content-block">
+          <h2>🔗 Beginner Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/flow-builder-basics" target="_blank" rel="noopener">Trailhead: Flow Builder Basics</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/trails/automate-business-processes" target="_blank" rel="noopener">Trailhead: Automate Business Processes with Flow</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.flow_concepts.htm" target="_blank" rel="noopener">Flow Concepts Documentation</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /beginner -->
+
+    <!-- INTERMEDIATE -->
+    <div class="level-content" data-level="intermediate">
+
+      <section id="i-agent-flows">
+        <div class="content-block">
+          <h2>🤖 Designing Flows Specifically for Agentforce</h2>
+          <p>Agent-facing flows have unique design considerations vs. general Salesforce automation. The agent's reasoning engine is the "user" of your flow — design with that in mind.</p>
+
+          <h3>Keep Each Action Focused</h3>
+          <p>Unlike human-facing flows that might do 10 things in sequence, agent flows should do <em>one thing well</em>. The agent reasons about which action to invoke — give it composable, single-purpose tools rather than monolithic mega-flows. Example: separate flows for "Get Order Status", "Create Return Request", and "Send Tracking Link" — not one flow that does all three based on parameters.</p>
+
+          <h3>Explicit Success/Failure Output</h3>
+          <p>Always include a boolean <code>outputSuccess</code> and a text <code>outputMessage</code> in every agent flow. The agent uses these to determine how to respond:</p>
+          <ul>
+            <li>Success = false + message = "No order found for that number" → agent reports the issue to the user</li>
+            <li>Success = true + message = "Order found: status is In Transit" → agent uses the structured data to form a response</li>
+          </ul>
+          <p>Without explicit success indicators, the agent has to infer success from the presence/absence of data — which can lead to confusing responses when data is legitimately empty.</p>
+
+          <h3>Well-Described Input Variables</h3>
+          <p>The LLM maps conversation data to your flow's input variables by reading their names and descriptions. For each input variable:</p>
+          <ul>
+            <li>API Name: camelCase, descriptive (e.g., <code>customerOrderNumber</code>)</li>
+            <li>Description: Plain English explanation of what value is expected, including format if relevant (e.g., "The customer's order number in format ORD-XXXXXX. Ask the customer for this if not provided.")</li>
+          </ul>
+
+          <h3>Action Description in Agent Builder</h3>
+          <p>When you add a Flow as an action in Agent Builder, write a clear action description. This is separate from the flow's own label. The action description is what the Atlas Reasoning Engine reads to decide when to invoke this action. Example: "Use this action to retrieve the current status, shipping carrier, and estimated delivery date for a customer order. Requires an order number."</p>
+        </div>
+      </section>
+
+      <section id="i-collections">
+        <div class="content-block">
+          <h2>📚 Collections &amp; Loops</h2>
+          <p>Many agent scenarios require processing multiple records — a customer's open cases, recent orders, or product recommendations. Understanding collections and loops in Flow is essential.</p>
+
+          <h3>Get Records with Multiple Records</h3>
+          <p>When you configure a <strong>Get Records</strong> element to retrieve "All records", the output is a <strong>Record Collection</strong> — a list of records. You can then iterate over this list with a <strong>Loop</strong> element.</p>
+
+          <h3>Using Loop Elements</h3>
+          <ol>
+            <li>Add a <strong>Loop</strong> element, set the collection to your Record Collection variable.</li>
+            <li>Each iteration, the current record is available as a Loop Variable (a single record of the same type).</li>
+            <li>Inside the loop, add logic to process each record — check conditions, accumulate data, or build output strings.</li>
+            <li>Use an <strong>Assignment</strong> element to append to a Text Variable with each iteration, building up a formatted summary string.</li>
+          </ol>
+
+          <h3>Practical Example: Summarize Open Cases</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>Input: customerAccountId (Text)
+Get Records: Cases WHERE AccountId = {!customerAccountId}
+             AND Status != 'Closed' → casesCollection
+Loop over casesCollection:
+  Assignment: outputSummary += "• Case " + {!currentCase.CaseNumber}
+              + " — " + {!currentCase.Subject}
+              + " (" + {!currentCase.Status} + ")\n"
+Output: outputSummary (Text), outputCaseCount (Number)</code></pre>
+
+          <h3>Collection Filtering Without Loops</h3>
+          <p>For simple filtering operations, use the <strong>Filter</strong> element on a collection instead of a loop with a decision — it's more performant and concise. Available in API version 54.0+.</p>
+        </div>
+      </section>
+
+      <section id="i-errors">
+        <div class="content-block">
+          <h2>⚠️ Fault Paths &amp; Error Handling</h2>
+          <p>Every element in a Flow that performs data operations (Get Records, Create Records, Action elements) can fail. Unhandled failures cause the agent to show a generic error message and potentially escalate to a human agent unnecessarily. Good error handling prevents this.</p>
+
+          <h3>Fault Connectors</h3>
+          <p>Every data or action element has a <strong>Fault</strong> connector (shown as a red diamond). Connect this to a fault path that:</p>
+          <ol>
+            <li>Sets <code>outputSuccess = false</code></li>
+            <li>Sets <code>outputMessage</code> to a user-friendly error description (not a Salesforce error code)</li>
+            <li>Optionally logs the technical error to a custom log object for debugging</li>
+          </ol>
+
+          <h3>Example Fault Path</h3>
+          <ul>
+            <li>Fault connector → Assignment element:
+              <ul>
+                <li><code>outputSuccess</code> = <code>false</code></li>
+                <li><code>outputMessage</code> = "I wasn't able to retrieve that order right now. Please try again or contact us directly."</li>
+                <li><code>outputErrorDetail</code> = <code>{!$Flow.FaultMessage}</code> (for logging only — don't show to users)</li>
+              </ul>
+            </li>
+            <li>Create Records → ErrorLog__c record with the fault message and timestamp (for ops monitoring)</li>
+          </ul>
+
+          <div class="alert alert-warning">
+            ⚠️ Never expose <code>{!$Flow.FaultMessage}</code> directly to the agent's output — it contains technical Salesforce error codes that are confusing to end users and may expose internal system details.
+          </div>
+        </div>
+      </section>
+
+      <section id="i-subflows">
+        <div class="content-block">
+          <h2>🧩 Subflows — Modular Design</h2>
+          <p>Subflows let you call one Flow from another. This is the Flow equivalent of a helper function in code — it promotes reuse and keeps individual flows manageable.</p>
+
+          <h3>When to Use Subflows</h3>
+          <ul>
+            <li>Logic that appears in multiple agent actions (e.g., "validate and look up a customer by email" is needed in both the Order Status and Account Update flows)</li>
+            <li>A complex operation that would make the parent flow too large to understand visually</li>
+            <li>Shared error logging logic — centralize it in one subflow called from every agent action</li>
+          </ul>
+
+          <h3>Subflow Design Pattern</h3>
+          <p>Build subflows as pure input-output transformers: they take inputs, do work, and return outputs. Avoid flows that have side effects AND return data — separate the query flow from the mutation flow for clarity and safety.</p>
+
+          <h3>Passing Data Between Parent and Subflow</h3>
+          <p>When adding a Subflow element, you'll see input/output variable mapping. Map your parent flow's variables to the subflow's input variables explicitly. Output variable mapping works the same way in reverse — the parent receives the subflow's outputs back after it completes.</p>
+        </div>
+      </section>
+
+      <section id="i-decisions">
+        <div class="content-block">
+          <h2>🔀 Complex Decision Logic</h2>
+          <p>The Decision element supports multi-path branching with multiple outcomes. Each outcome has its own set of conditions, all of which must be true for that outcome to be taken.</p>
+
+          <h3>Condition Operators Available</h3>
+          <ul>
+            <li>Equals / Does Not Equal</li>
+            <li>Greater Than / Less Than / Greater Than or Equal / Less Than or Equal</li>
+            <li>Contains / Does Not Contain (text)</li>
+            <li>Starts With / Ends With</li>
+            <li>Is Null / Is Changed</li>
+            <li>Includes / Excludes (multi-select picklists)</li>
+          </ul>
+
+          <h3>AND vs. OR Logic</h3>
+          <p>Within a single outcome, conditions can use AND logic (all conditions must be true) or you can configure OR logic. For complex combinations, use formula resources (see below).</p>
+
+          <h3>Formula Resources</h3>
+          <p>For decision conditions too complex for the standard condition builder, use a <strong>Formula</strong> resource. Formulas support Salesforce formula syntax — you can build complex Boolean expressions and reference any flow variable. The formula evaluates to a Boolean value that the Decision element can branch on.</p>
+        </div>
+      </section>
+
+      <section id="i-testing">
+        <div class="content-block">
+          <h2>🧪 Testing Flows</h2>
+
+          <h3>Debug Mode in Flow Builder</h3>
+          <p>Use the <strong>Debug</strong> button in Flow Builder (top right) to run your flow with specific test inputs and trace execution step-by-step. The debug trace shows:</p>
+          <ul>
+            <li>Which elements executed and in what order</li>
+            <li>Variable values at each step</li>
+            <li>SOQL queries executed and their results</li>
+            <li>Any fault messages from failed elements</li>
+          </ul>
+
+          <h3>Flow Test Cases (Formal Test Suite)</h3>
+          <p>Flow Builder supports a formal test suite. Create test cases for:</p>
+          <ul>
+            <li>Happy path: valid input that returns expected output</li>
+            <li>Not found path: input that matches no records — verify the "not found" output variables are set correctly</li>
+            <li>Fault path: test that your fault handling logic activates (you can trigger faults by providing invalid object IDs in DML operations)</li>
+            <li>Edge cases: empty strings, null values, maximum-length inputs</li>
+          </ul>
+
+          <h3>Testing via Agentforce Testing Center</h3>
+          <p>The best end-to-end test is always through the Agent Testing Center — it shows you exactly what inputs the LLM passed to your flow action and what outputs it received back. Review the reasoning trace for every test scenario to confirm input/output mapping is working as intended.</p>
+        </div>
+      </section>
+
+      <section id="i-resources">
+        <div class="content-block">
+          <h2>🔗 Intermediate Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/flow_building_blocks" target="_blank" rel="noopener">Trailhead: Flow Building Blocks</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.flow.meta/flow/flow_concepts.htm" target="_blank" rel="noopener">Flow Developer Guide</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/flow_troubleshooting" target="_blank" rel="noopener">Trailhead: Flow Troubleshooting</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /intermediate -->
+
+    <!-- ADVANCED -->
+    <div class="level-content" data-level="advanced">
+
+      <section id="a-bulk">
+        <div class="content-block">
+          <h2>📦 Bulk Processing Patterns</h2>
+          <p>Flow governor limits apply per-transaction — not per-element. When your agent action processes large data sets, you need to design for bulkification.</p>
+
+          <h3>Governor Limits Relevant to Agent Flows</h3>
+          <ul>
+            <li>SOQL queries: 100 per transaction</li>
+            <li>DML statements: 150 per transaction</li>
+            <li>Records retrieved: 50,000 per transaction</li>
+            <li>CPU time: 10,000ms (synchronous), 60,000ms (asynchronous)</li>
+            <li>Heap size: 6MB (synchronous), 12MB (asynchronous)</li>
+          </ul>
+
+          <h3>Bulkification in Loops</h3>
+          <p>One of the most common performance mistakes is performing DML inside a loop — creating one record per iteration instead of building a collection and creating all records at once:</p>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>❌ BAD: DML inside loop
+Loop over orderItems:
+  Create Record: OrderLineItem (1 DML per iteration = N DML)
+
+✅ GOOD: Collect then bulk-create
+Loop over orderItems:
+  Assignment: Add currentItem to newItemsCollection
+[After loop]
+Create Records: newItemsCollection (1 DML for all)</code></pre>
+
+          <h3>Pre-Aggregating with SOQL</h3>
+          <p>Instead of fetching 100 records and summing them in a Flow loop, use SOQL aggregate functions in a Get Records element with a custom formula resource or an Apex action. Moving aggregation to the database layer is orders of magnitude faster.</p>
+        </div>
+      </section>
+
+      <section id="a-events">
+        <div class="content-block">
+          <h2>📡 Platform Events in Agent Flows</h2>
+          <p>Platform Events enable real-time, event-driven communication between Salesforce components. In agent flows, they can be used to trigger asynchronous processes or notify other systems that an agent has taken an action.</p>
+
+          <h3>Publishing a Platform Event from a Flow</h3>
+          <p>Use an <strong>Action</strong> element with the Platform Event as the target to publish an event from your agent flow:</p>
+          <ul>
+            <li>Define a Platform Event object (Setup → Platform Events → New)</li>
+            <li>In your agent flow, add a <strong>Create Records</strong> element targeting the Platform Event object</li>
+            <li>Populate the event fields with data from your flow variables</li>
+            <li>After saving, any configured Platform Event–Triggered Flows or Apex subscribers will receive the event asynchronously</li>
+          </ul>
+
+          <h3>Use Cases</h3>
+          <ul>
+            <li><strong>Async processing:</strong> Agent creates a return request record and publishes an event. A separate subscriber flow handles complex return logistics asynchronously — outside the agent's response window.</li>
+            <li><strong>Real-time notifications:</strong> Agent resolves a case and publishes an event that notifies the account manager via Slack via a subscriber flow.</li>
+            <li><strong>Integration triggers:</strong> Agent confirms an order and publishes an event that triggers an ERP integration in a subscriber.</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 Publishing a Platform Event from an agent flow is synchronous (the flow waits for the publish to succeed) but the <em>processing</em> of the event by subscribers is asynchronous. This is ideal for fire-and-forget operations that don't affect the agent's response.
+          </div>
+        </div>
+      </section>
+
+      <section id="a-performance">
+        <div class="content-block">
+          <h2>🚀 Flow Performance Optimization</h2>
+
+          <h3>Indexing Strategy for Get Records</h3>
+          <p>SOQL queries in Flow are subject to the same query optimizer rules as all Salesforce SOQL:</p>
+          <ul>
+            <li>Always filter on <strong>indexed fields</strong> (Id, Name, unique/indexed custom fields, External ID fields, standard indexed fields like Email on Contact)</li>
+            <li>Use LIMIT in Get Records — always limit the number of records fetched to what you actually need</li>
+            <li>Avoid filtering on formula fields, long text area fields, or rich text fields — these are not indexable</li>
+          </ul>
+
+          <h3>Reduce Unnecessary SOQL Calls</h3>
+          <ul>
+            <li>Fetch all needed fields in a single Get Records element rather than multiple sequential queries</li>
+            <li>Use relationship traversal (e.g., Account.Name on a Contact record) to fetch parent record data in the same query</li>
+            <li>Cache reference data in Platform Cache (via Apex) rather than querying it in every agent turn</li>
+          </ul>
+
+          <h3>Flow Interviews and Context</h3>
+          <p>Each agent action invocation creates a new Flow Interview — a complete execution context. There is no state shared between invocations. This means:</p>
+          <ul>
+            <li>You cannot use Flow to maintain state between agent turns (use conversation context variables in your agent configuration instead)</li>
+            <li>Each interview starts fresh — cached data in Platform Cache survives between interviews, making it valuable for frequently accessed reference data</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-apex-types">
+        <div class="content-block">
+          <h2>🔧 Apex-Defined Types in Flow</h2>
+          <p>When your flow needs to work with complex data structures that don't map to standard Salesforce objects, Apex-Defined Types allow you to define custom data structures in Apex and use them as Flow variable types.</p>
+
+          <h3>Defining an Apex Type for Flow</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>global class ShipmentStatus {
+    @AuraEnabled @InvocableVariable
+    global String carrier;
+
+    @AuraEnabled @InvocableVariable
+    global String trackingNumber;
+
+    @AuraEnabled @InvocableVariable
+    global String currentLocation;
+
+    @AuraEnabled @InvocableVariable
+    global Date estimatedDelivery;
+
+    @AuraEnabled @InvocableVariable
+    global Boolean isDelayed;
+}</code></pre>
+          <p>This type can now be used as a variable type in Flow Builder. It enables Flow actions to return structured objects with multiple properties — cleaner than multiple individual output variables for complex action results.</p>
+        </div>
+      </section>
+
+      <section id="a-testing">
+        <div class="content-block">
+          <h2>🧪 Apex Testing for Agent Flows</h2>
+          <p>Flow test cases in Flow Builder are useful but limited. For production-grade testing, use Apex test classes to call your flows programmatically — enabling integration into your CI/CD pipeline.</p>
+
+          <h3>Calling a Flow from an Apex Test</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code>@isTest
+public class GetOrderStatusFlowTest {
+
+    @TestSetup
+    static void setup() {
+        // Create test Order record
+        Order__c testOrder = new Order__c(
+            OrderNumber__c = 'ORD-999',
+            Status__c = 'In Transit',
+            CarrierName__c = 'FedEx'
+        );
+        insert testOrder;
+    }
+
+    @isTest
+    static void testOrderFound() {
+        Map&lt;String, Object&gt; inputs = new Map&lt;String, Object&gt;{
+            'inputOrderNumber' =&gt; 'ORD-999'
+        };
+
+        Flow.Interview flowInterview =
+            Flow.Interview.createInterview('Get_Order_Status_for_Agent', inputs);
+        flowInterview.start();
+
+        Boolean success = (Boolean) flowInterview.getVariableValue('outputSuccess');
+        String status = (String) flowInterview.getVariableValue('outputOrderStatus');
+
+        System.assertEquals(true, success, 'Expected success=true for existing order');
+        System.assertEquals('In Transit', status, 'Expected In Transit status');
+    }
+
+    @isTest
+    static void testOrderNotFound() {
+        Map&lt;String, Object&gt; inputs = new Map&lt;String, Object&gt;{
+            'inputOrderNumber' =&gt; 'ORD-NOTEXIST'
+        };
+
+        Flow.Interview flowInterview =
+            Flow.Interview.createInterview('Get_Order_Status_for_Agent', inputs);
+        flowInterview.start();
+
+        Boolean success = (Boolean) flowInterview.getVariableValue('outputSuccess');
+        System.assertEquals(false, success, 'Expected success=false for missing order');
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="a-resources">
+        <div class="content-block">
+          <h2>🔗 Advanced Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.flow.meta/flow/flow_considerations_bulk.htm" target="_blank" rel="noopener">Flow Bulkification Considerations</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.flow.meta/flow/flow_ref_elements_apex_type.htm" target="_blank" rel="noopener">Apex-Defined Data Types in Flow</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_flow.htm" target="_blank" rel="noopener">Testing Flows with Apex</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/flow-testing-debugging" target="_blank" rel="noopener">Trailhead: Flow Testing and Debugging</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /advanced -->
+
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Flow Builder</span>
+      <span><a href="index.html">← Salesforce Hub</a> · <a href="../index.html">Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+new Quiz({
+  containerId: 'quiz-container',
+  topic: 'Flow Builder for Agentforce',
+  questions: [
+    {
+      question: 'Which Flow type is the ONLY type compatible with Agentforce Flow Actions?',
+      options: [
+        'Screen Flow with Active User context',
+        'Record-Triggered Flow on Before Save',
+        'Autolaunched Flow (No Trigger)',
+        'Scheduled Flow with batch processing'
+      ],
+      correct: 2,
+      topic: 'Flow Types',
+      explanation: 'Only Autolaunched Flows (No Trigger) can be invoked as Agentforce actions. Screen Flows require user interaction, Record-Triggered Flows activate on data events, and Scheduled Flows run on a time schedule — none of these work in an agent context.'
+    },
+    {
+      question: 'Why should every agent-facing Flow include an "outputSuccess" boolean output variable?',
+      options: [
+        'It is required by Salesforce to activate the flow as an agent action',
+        'It enables the Atlas Reasoning Engine to understand whether the action succeeded and respond appropriately',
+        'It controls whether the flow can be called multiple times in the same agent session',
+        'It determines whether the Einstein Trust Layer applies PII masking to the output'
+      ],
+      correct: 1,
+      topic: 'Agent Flow Design',
+      explanation: 'Without an explicit success indicator, the agent must infer success from the presence or absence of output data — which is ambiguous when data is legitimately empty. An explicit boolean enables reliable, deterministic agent response logic.'
+    },
+    {
+      question: 'What is the Flow bulkification anti-pattern, and why is it problematic?',
+      options: [
+        'Using Get Records to retrieve multiple records at once — this uses too much memory',
+        'Performing DML operations inside a Loop — this consumes one DML per iteration instead of one DML for all records',
+        'Using subflows more than 5 levels deep — this causes stack overflow errors',
+        'Querying parent record fields via relationship traversal — this creates multiple SOQL calls'
+      ],
+      correct: 1,
+      topic: 'Bulk Processing',
+      explanation: 'Performing DML (Create/Update/Delete Records) inside a Loop creates one DML statement per loop iteration, rapidly consuming the 150 DML limit. The correct pattern is to collect all records during the loop, then perform a single bulk DML after the loop ends.'
+    },
+    {
+      question: 'What does the Fault connector on a Flow element do?',
+      options: [
+        'It connects elements that should only run when the flow encounters no data',
+        'It provides an alternative execution path when an element fails (throws an error)',
+        'It marks the end of an error-prone element for debugging purposes',
+        'It connects the flow to the Einstein Trust Layer for toxicity checking'
+      ],
+      correct: 1,
+      topic: 'Error Handling',
+      explanation: 'The Fault connector activates when an element fails at runtime. Connecting it to a fault path with proper output variables (outputSuccess=false, user-friendly outputMessage) prevents uncaught exceptions and gives the agent meaningful information to relay to the user.'
+    },
+    {
+      question: 'When would you use an Apex-Defined Type variable in a Flow instead of multiple individual output variables?',
+      options: [
+        'When the output data exceeds the 255-character limit for text variables',
+        'When you need to return a complex, structured object with multiple related properties from a single action',
+        'When the flow needs to pass data to the Einstein Trust Layer for custom masking',
+        'When the flow must run asynchronously in a separate Queueable context'
+      ],
+      correct: 1,
+      topic: 'Apex-Defined Types',
+      explanation: 'Apex-Defined Types allow you to return structured objects (e.g., a ShipmentStatus with carrier, tracking number, location, and delivery date as properties) rather than multiple separate output variables. This makes action outputs cleaner and easier for the LLM to interpret.'
+    },
+    {
+      question: 'In Apex testing for Flows, which method is used to execute a Flow interview and retrieve output variables?',
+      options: [
+        'Flow.Test.run() and Flow.Test.getOutput()',
+        'Flow.Interview.createInterview(), flowInterview.start(), and flowInterview.getVariableValue()',
+        'Test.invokeFlow() and Assert.flowOutput()',
+        'FlowRunner.execute() and FlowResult.getValue()'
+      ],
+      correct: 1,
+      topic: 'Apex Testing',
+      explanation: 'The standard pattern is: Flow.Interview.createInterview(flowAPIName, inputsMap) to create the interview, .start() to execute it, and .getVariableValue(varName) to retrieve output values for assertions.'
+    }
+  ]
+});
+</script>
+</body>
+</html>

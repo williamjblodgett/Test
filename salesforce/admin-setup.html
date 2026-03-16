@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Setup &amp; DevOps — Salesforce AI · AI Learning Hub</title>
+  <meta name="description" content="Salesforce Agentforce admin setup, permissions, sandbox strategy, DevOps Center deployment, CI/CD pipelines, governance, and certification paths — Beginner through Advanced.">
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="../index.html"><span class="navbar__brand-icon">🤖</span>AI Learning Hub</a>
+      <ul class="navbar__links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../salesforce/index.html" class="active">Salesforce</a></li>
+        <li><a href="../tableau/index.html">Tableau</a></li>
+        <li><a href="../copilot/index.html">Copilot Studio</a></li>
+        <li><a href="../ms365/index.html">MS365 AI</a></li>
+        <li><a href="../security/index.html">Security</a></li>
+      </ul>
+      <div class="navbar__actions"><button class="btn-theme" id="theme-toggle">🌙</button></div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="index.html">Salesforce</a><span>/</span>
+      <span>Admin Setup &amp; DevOps</span>
+    </nav>
+    <div class="page-hero__icon">⚙️</div>
+    <h1>Admin Setup &amp; DevOps</h1>
+    <p>Enable Agentforce, configure permissions, manage sandboxes, and deploy to production — plus full DevOps pipelines, governance frameworks, and certification paths.</p>
+  </div>
+</section>
+
+<div style="background:var(--color-bg-alt,#f8fafc);border-bottom:1px solid var(--color-border);padding:0.75rem 0;position:sticky;top:57px;z-index:90;">
+  <div class="container">
+    <div class="level-switcher">
+      <span class="level-switcher-label">Skill Level:</span>
+      <div class="level-tabs">
+        <button class="level-tab" data-level="beginner">Beginner</button>
+        <button class="level-tab" data-level="intermediate">Intermediate</button>
+        <button class="level-tab" data-level="advanced">Advanced</button>
+      </div>
+      <span class="level-desc" id="level-desc"></span>
+    </div>
+  </div>
+</div>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">On This Page</div>
+    <ul class="sidebar-nav">
+      <li data-level="beginner"><a href="#b-prereqs">Prerequisites &amp; Licensing</a></li>
+      <li data-level="beginner"><a href="#b-enable">Enabling Agentforce</a></li>
+      <li data-level="beginner"><a href="#b-permissions">Permissions &amp; Profiles</a></li>
+      <li data-level="beginner"><a href="#b-sandbox">Sandbox Strategy</a></li>
+      <li data-level="beginner"><a href="#b-resources">Resources</a></li>
+
+      <li data-level="intermediate"><a href="#i-deployment">Deployment Process</a></li>
+      <li data-level="intermediate"><a href="#i-changesets">Change Sets</a></li>
+      <li data-level="intermediate"><a href="#i-devops-center">DevOps Center</a></li>
+      <li data-level="intermediate"><a href="#i-monitoring">Monitoring Setup</a></li>
+      <li data-level="intermediate"><a href="#i-named-creds">Named Credentials</a></li>
+      <li data-level="intermediate"><a href="#i-resources">Resources</a></li>
+
+      <li data-level="advanced"><a href="#a-governance">Enterprise Governance</a></li>
+      <li data-level="advanced"><a href="#a-cicd">Full CI/CD Pipeline</a></li>
+      <li data-level="advanced"><a href="#a-scaling">Scaling Considerations</a></li>
+      <li data-level="advanced"><a href="#a-certs">Certification Paths</a></li>
+      <li data-level="advanced"><a href="#a-resources">Resources</a></li>
+
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- BEGINNER -->
+    <div class="level-content" data-level="beginner">
+
+      <section id="b-prereqs">
+        <div class="content-block">
+          <h2>📋 Prerequisites &amp; Licensing</h2>
+
+          <h3>Salesforce Edition Requirements</h3>
+          <p>Agentforce is available on the following editions (as of early 2026):</p>
+          <ul>
+            <li><strong>Enterprise Edition:</strong> Base platform; Agentforce available as an add-on license.</li>
+            <li><strong>Unlimited Edition:</strong> Includes Agentforce capabilities — check your contract for conversation limits.</li>
+            <li><strong>Einstein 1 Service/Sales Edition:</strong> Includes Agentforce with higher conversation limits and additional AI features.</li>
+            <li><strong>Developer Edition:</strong> Free; includes Agentforce for testing and development (limited conversation volume).</li>
+          </ul>
+
+          <div class="alert alert-warning">
+            ⚠️ Agentforce is licensed per conversation or per resolution — not per seat. Understand your license model before enabling it broadly. High-volume use cases can accumulate significant license costs.
+          </div>
+
+          <h3>Required Features to Enable</h3>
+          <ul>
+            <li>Einstein generative AI features</li>
+            <li>Agentforce (formerly Einstein Bots)</li>
+            <li>Data Cloud — required if you plan to use RAG grounding or unified profiles in agents</li>
+            <li>Messaging for In-App and Web — required for web/mobile deployment channels</li>
+          </ul>
+
+          <h3>Who Needs Access?</h3>
+          <ul>
+            <li><strong>Admins:</strong> Configure agents, topics, channels, permissions, and deployment settings.</li>
+            <li><strong>Developers:</strong> Build Apex actions and Flow actions; deploy via source control or Change Sets.</li>
+            <li><strong>Business Analysts:</strong> Design topic instructions and test agent behavior in the Testing Center.</li>
+            <li><strong>Service Operations:</strong> Monitor agent performance via the Activity Tracker.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="b-enable">
+        <div class="content-block">
+          <h2>🔌 Enabling Agentforce in Your Org</h2>
+
+          <h3>Step-by-Step Activation</h3>
+          <ol>
+            <li>Navigate to <strong>Setup → Einstein → Einstein Generative AI</strong> and toggle <strong>Einstein Generative AI</strong> to <strong>On</strong>. Accept the terms of service.</li>
+            <li>Navigate to <strong>Setup → Einstein → Agentforce → Settings</strong> and enable <strong>Agentforce</strong>. This activates the agent runtime in your org.</li>
+            <li>Optionally enable <strong>Einstein Trust Layer</strong> settings customization (it's on by default — you only need to visit settings if you want to change PII masking sensitivity or toxicity filters).</li>
+            <li>If using Data Cloud for grounding, navigate to <strong>Setup → Data Cloud → Data Cloud Settings</strong> and confirm Data Cloud is provisioned and connected to your org.</li>
+          </ol>
+
+          <h3>Verification</h3>
+          <p>After enabling, navigate to <strong>Setup → Agentforce → Agents</strong>. If you see the Agents list page (even if empty), Agentforce is enabled. If you see a "Feature Not Enabled" message, return to the Einstein settings and confirm activation.</p>
+
+          <div class="alert alert-info">
+            💡 Enabling Agentforce does not immediately activate any agents or expose any AI features to users — you still need to create and deploy agents before any user-facing changes occur.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-permissions">
+        <div class="content-block">
+          <h2>🔒 Permissions &amp; Profiles</h2>
+
+          <h3>Admin/Builder Permissions</h3>
+          <p>Users who build and configure agents need these permissions (assignable via Permission Set):</p>
+          <ul>
+            <li><strong>Manage Bots</strong> — Create, edit, and delete agent configurations.</li>
+            <li><strong>Create and Customize Bots</strong> — Configure topics, instructions, and actions.</li>
+            <li><strong>View Setup and Configuration</strong> — Access Setup pages.</li>
+            <li><strong>Customize Application</strong> — Needed to create and modify Flow actions and custom objects used by agents.</li>
+            <li><strong>Author Apex</strong> — Required for developers writing Apex actions.</li>
+          </ul>
+
+          <h3>Integration User Permissions</h3>
+          <p>Agentforce agents execute actions in the context of a dedicated <strong>Integration User</strong>. This user needs:</p>
+          <ul>
+            <li>Read access to all objects/fields the agent needs to query</li>
+            <li>Create/Edit access to objects the agent will write to (e.g., Case, Task)</li>
+            <li>Named Credential access for any external API actions</li>
+            <li>No System Administrator profile — follow the principle of least privilege</li>
+          </ul>
+
+          <h3>Creating the Integration User</h3>
+          <ol>
+            <li>Create a dedicated profile: "Agentforce Integration Profile" — clone Minimum Access User and add only required object permissions.</li>
+            <li>Create a new user with type: <strong>Integration User</strong> (doesn't consume a regular user license).</li>
+            <li>Assign the Integration Profile to this user.</li>
+            <li>In your agent's Configuration → Integration User, select this dedicated user.</li>
+          </ol>
+
+          <h3>End-User Permissions</h3>
+          <p>End users who chat with agents typically don't need special Salesforce permissions — they interact through the messaging widget or Experience Cloud, not directly through Salesforce. However, if the agent needs to access user-specific data, the authenticated user's profile must allow read access to their own records.</p>
+        </div>
+      </section>
+
+      <section id="b-sandbox">
+        <div class="content-block">
+          <h2>🏖️ Sandbox Strategy</h2>
+          <p>Never build directly in production. A well-structured sandbox strategy is essential for reliable Agentforce development.</p>
+
+          <h3>Recommended Sandbox Tiers</h3>
+          <ul>
+            <li><strong>Developer Sandbox:</strong> Individual developers build and unit test here. Multiple sandboxes for multiple team members. Data is minimal/synthetic — no real customer data.</li>
+            <li><strong>Developer Pro Sandbox:</strong> Slightly larger — for developers working on features that need more data volume to test correctly (bulk flows, performance testing).</li>
+            <li><strong>Full Sandbox:</strong> Production-like data volume. Used for end-to-end agent testing, performance validation, and user acceptance testing (UAT). Refresh before major release cycles.</li>
+            <li><strong>Production:</strong> The live environment. Always deploy from a sandbox, never build directly here.</li>
+          </ul>
+
+          <h3>What to Test in Each Tier</h3>
+          <ul>
+            <li><strong>Developer Sandbox:</strong> Unit test individual actions (Flow, Apex). Test individual topic routing. Verify input/output variable mappings.</li>
+            <li><strong>Full Sandbox / UAT:</strong> End-to-end agent conversations. Performance testing (response latency under realistic data volume). Business stakeholder acceptance testing. Security review.</li>
+            <li><strong>Production (with monitoring):</strong> Phased rollout (10% → 50% → 100% traffic). Monitor escalation rate and CSAT closely in the first 72 hours after deployment.</li>
+          </ul>
+
+          <div class="alert alert-info">
+            💡 Agentforce agent configurations are <strong>metadata</strong> — they can be version controlled and deployed exactly like Apex classes and Flow metadata. This makes CI/CD pipelines practical.
+          </div>
+        </div>
+      </section>
+
+      <section id="b-resources">
+        <div class="content-block">
+          <h2>🔗 Beginner Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/starting-with-salesforce-dx" target="_blank" rel="noopener">Trailhead: Starting with Salesforce DX</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=ai.agentforce_setup.htm" target="_blank" rel="noopener">Agentforce Setup Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.admin_intro.htm" target="_blank" rel="noopener">Salesforce Admin Guide</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /beginner -->
+
+    <!-- INTERMEDIATE -->
+    <div class="level-content" data-level="intermediate">
+
+      <section id="i-deployment">
+        <div class="content-block">
+          <h2>🚀 The Deployment Process</h2>
+          <p>Deploying Agentforce configuration from sandbox to production follows the same metadata deployment patterns as all Salesforce configuration.</p>
+
+          <h3>What Gets Deployed</h3>
+          <p>Agentforce deployments typically include the following metadata types:</p>
+          <ul>
+            <li><strong>BotDefinition:</strong> The agent configuration (name, description, integration user, channels)</li>
+            <li><strong>BotVersion:</strong> Versioned agent configurations</li>
+            <li><strong>BotBlock / BotDialog / GenAiPlugin:</strong> Topic and action metadata</li>
+            <li><strong>Flow:</strong> All autolaunched flows used as agent actions</li>
+            <li><strong>ApexClass:</strong> Apex action classes</li>
+            <li><strong>PromptTemplate:</strong> Prompt Builder templates</li>
+            <li><strong>NamedCredential:</strong> External API credentials (credentials themselves are environment-specific — only the schema is deployed, credentials are entered per-org)</li>
+          </ul>
+
+          <h3>Deployment Sequence</h3>
+          <p>Order matters. Deploy in this sequence to avoid dependency errors:</p>
+          <ol>
+            <li>Custom objects and fields (if any new schema changes)</li>
+            <li>Apex classes (action implementations)</li>
+            <li>Flows (action logic)</li>
+            <li>Prompt Templates</li>
+            <li>Agent configuration (BotDefinition, topics, actions)</li>
+            <li>Named Credential schema (not credentials)</li>
+            <li>Permission Set updates</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="i-changesets">
+        <div class="content-block">
+          <h2>📦 Change Sets</h2>
+          <p>Change Sets are Salesforce's built-in, point-and-click deployment mechanism. Good for smaller teams, less frequent deployments, or organizations that prefer a UI-driven workflow.</p>
+
+          <h3>Creating an Outbound Change Set</h3>
+          <ol>
+            <li>In your <strong>sandbox</strong>, navigate to <strong>Setup → Deployment → Outbound Change Sets → New</strong>.</li>
+            <li>Give the Change Set a descriptive name: "Agentforce-OrderManagement-v2.1"</li>
+            <li>Add components:
+              <ul>
+                <li>Add your Agent configuration components (Bot Definition)</li>
+                <li>Add all dependent Flows</li>
+                <li>Add all dependent Apex classes</li>
+                <li>Add Prompt Templates</li>
+                <li>Use <strong>Add Dependencies</strong> to automatically discover referenced components</li>
+              </ul>
+            </li>
+            <li>Upload the Change Set. It appears in the target org's Inbound Change Sets.</li>
+          </ol>
+
+          <h3>Deploying an Inbound Change Set to Production</h3>
+          <ol>
+            <li>In <strong>production</strong>, navigate to <strong>Setup → Deployment → Inbound Change Sets</strong>.</li>
+            <li>Find your Change Set and click <strong>Validate</strong> first — this runs the deployment checks without actually committing. Review any errors.</li>
+            <li>Fix errors in the sandbox, re-upload, and re-validate until clean.</li>
+            <li>Schedule the deployment for a low-traffic window.</li>
+            <li>Click <strong>Deploy</strong>. Monitor the deployment status page.</li>
+          </ol>
+
+          <h3>Change Set Limitations</h3>
+          <ul>
+            <li>No version control — no git history, no diff comparison</li>
+            <li>Cannot roll back easily — a failed deployment may leave the org in a partial state</li>
+            <li>Manual dependency management — easy to miss a component</li>
+            <li>No automated testing integration</li>
+          </ul>
+          <p>For larger teams or frequent releases, consider DevOps Center (below) or a Salesforce CLI-based CI/CD pipeline.</p>
+        </div>
+      </section>
+
+      <section id="i-devops-center">
+        <div class="content-block">
+          <h2>🔧 DevOps Center</h2>
+          <p>Salesforce DevOps Center is a source-driven deployment tool built into Salesforce that bridges the gap between Change Sets and full CLI/CI-CD pipelines. It integrates directly with GitHub.</p>
+
+          <h3>Key Concepts</h3>
+          <ul>
+            <li><strong>Project:</strong> A DevOps Center project represents your application. It maps to a GitHub repository.</li>
+            <li><strong>Pipeline:</strong> The ordered sequence of environments (Developer Sandbox → Full Sandbox → Production) that changes flow through.</li>
+            <li><strong>Work Item:</strong> A deployable unit of work — equivalent to a ticket/feature branch in traditional dev. Each Work Item tracks which metadata components are associated with it.</li>
+            <li><strong>Bundled Change:</strong> A group of Work Items deployed together as a release.</li>
+          </ul>
+
+          <h3>DevOps Center Workflow</h3>
+          <ol>
+            <li>Developer creates a Work Item in DevOps Center linked to their GitHub feature branch.</li>
+            <li>Developer makes changes in their Developer Sandbox (flows, Apex, agent config).</li>
+            <li>Changes are tracked as metadata commits to the feature branch.</li>
+            <li>Developer creates a pull request; peer review in GitHub.</li>
+            <li>After merge, DevOps Center promotes the change through the pipeline (Dev Sandbox → UAT Sandbox → Production).</li>
+            <li>Each stage requires a manual promotion trigger (or can be automated via GitHub Actions).</li>
+          </ol>
+
+          <h3>DevOps Center vs. Change Sets</h3>
+          <div style="overflow-x:auto;">
+            <table class="compare-table">
+              <thead><tr><th>Factor</th><th>Change Sets</th><th>DevOps Center</th></tr></thead>
+              <tbody>
+                <tr><td>Version control</td><td>No</td><td>Yes — GitHub integration</td></tr>
+                <tr><td>Rollback</td><td>Manual, complex</td><td>Git revert + re-deploy</td></tr>
+                <tr><td>Peer review</td><td>No</td><td>GitHub pull request workflow</td></tr>
+                <tr><td>Audit trail</td><td>Limited</td><td>Full git commit history</td></tr>
+                <tr><td>Setup complexity</td><td>Low</td><td>Medium</td></tr>
+                <tr><td>Recommended for</td><td>Small teams, simple configs</td><td>Medium/large teams, regular releases</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="i-monitoring">
+        <div class="content-block">
+          <h2>📊 Monitoring Setup</h2>
+
+          <h3>Einstein Activity Tracker</h3>
+          <p>Navigate to <strong>Setup → Agentforce → Activity Tracker</strong> to access the built-in monitoring dashboard. Configure it to track:</p>
+          <ul>
+            <li>Conversations per day (volume trending)</li>
+            <li>Escalation rate per agent and per topic</li>
+            <li>Average turn count per conversation</li>
+            <li>Top failing topics (by escalation)</li>
+            <li>Action error rate per action type</li>
+          </ul>
+
+          <h3>Setting Up Alert Rules</h3>
+          <p>Configure email alerts for critical thresholds via <strong>Setup → Workflow Rules</strong> or <strong>Flow → Scheduled Flow</strong>:</p>
+          <ul>
+            <li>Alert when escalation rate exceeds 30% in a rolling 24-hour window</li>
+            <li>Alert when action error rate exceeds 5%</li>
+            <li>Alert when daily conversation volume drops by more than 50% (indicates a channel outage)</li>
+          </ul>
+
+          <h3>Custom Monitoring Dashboard</h3>
+          <p>For richer analytics, build a CRM Analytics (Tableau CRM) dashboard on top of the BotSession and related objects that Agentforce writes to. Useful metrics to surface:</p>
+          <ul>
+            <li>Containment rate by time of day / day of week</li>
+            <li>Escalation rate by customer tier (do high-value customers escalate more?)</li>
+            <li>Average resolution time (turns to resolution)</li>
+            <li>Topic distribution — which topics are most used?</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="i-named-creds">
+        <div class="content-block">
+          <h2>🔑 Named Credentials Configuration</h2>
+          <p>Named Credentials securely store authentication details for external APIs. They prevent API keys and passwords from being hardcoded in Apex or Flow and enable org-specific credentials to be managed without code changes.</p>
+
+          <h3>Creating a Named Credential</h3>
+          <ol>
+            <li>Navigate to <strong>Setup → Security → Named Credentials → New</strong>.</li>
+            <li>Choose the credential type: <strong>Named Credential</strong> (for external endpoints) or <strong>External Credential</strong> (for OAuth flows).</li>
+            <li>Enter the Label and Name (used in code: <code>callout:MyAPI/endpoint</code>).</li>
+            <li>Enter the URL — the base URL of the external service.</li>
+            <li>Configure authentication: API key (custom header), Basic Auth (username/password), OAuth 2.0, JWT Bearer, or no authentication.</li>
+            <li>Enable <strong>Allow Merge Fields in HTTP Body</strong> if your Apex actions need to pass Salesforce data in request payloads.</li>
+          </ol>
+
+          <h3>Environment-Specific Credentials</h3>
+          <p>Named Credentials are org-specific — the credential <em>definition</em> is deployed via Change Set or DevOps Center, but the actual credentials (API keys, passwords) are entered manually in each org. This ensures production credentials are never stored in source control or passed through sandboxes.</p>
+        </div>
+      </section>
+
+      <section id="i-resources">
+        <div class="content-block">
+          <h2>🔗 Intermediate Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/modules/devops-center-basics" target="_blank" rel="noopener">Trailhead: DevOps Center Basics</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm" target="_blank" rel="noopener">Salesforce DX Developer Guide</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://help.salesforce.com/s/articleView?id=sf.named_credentials.htm" target="_blank" rel="noopener">Named Credentials Documentation</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/administrator" target="_blank" rel="noopener">Salesforce Certified Administrator</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /intermediate -->
+
+    <!-- ADVANCED -->
+    <div class="level-content" data-level="advanced">
+
+      <section id="a-governance">
+        <div class="content-block">
+          <h2>🏛️ Enterprise Governance Framework</h2>
+
+          <h3>AI Governance Structure</h3>
+          <p>For organizations with multiple Agentforce deployments, establish formal governance:</p>
+          <ul>
+            <li><strong>AI Center of Excellence (CoE):</strong> Central team responsible for Agentforce platform standards, shared component libraries, and cross-org best practices. Owns the master Action library and approved Topic templates.</li>
+            <li><strong>Line of Business AI Owners:</strong> Business units that own their specific agent configurations. Accountable for agent performance, escalation rates, and continuous improvement.</li>
+            <li><strong>Risk &amp; Compliance Review:</strong> Mandatory review gate for any agent that processes regulated data (healthcare, financial, legal).</li>
+          </ul>
+
+          <h3>Change Approval Process</h3>
+          <p>Define the approval required for different change types:</p>
+          <div style="overflow-x:auto;">
+            <table class="compare-table">
+              <thead><tr><th>Change Type</th><th>Review Required</th><th>Approval Process</th></tr></thead>
+              <tbody>
+                <tr><td>New Topic instruction wording (minor)</td><td>Business owner</td><td>Async Slack approval</td></tr>
+                <tr><td>New Topic (scope expansion)</td><td>Business owner + Security</td><td>Formal change ticket</td></tr>
+                <tr><td>New external API integration</td><td>Security + Architecture</td><td>Architecture review board</td></tr>
+                <tr><td>New agent accessing regulated data</td><td>Risk + Compliance + Legal</td><td>Full compliance review</td></tr>
+                <tr><td>LLM provider change</td><td>Risk + Legal + AI CoE</td><td>Board-level approval</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Documentation Requirements</h3>
+          <p>Maintain living documentation for each deployed agent:</p>
+          <ul>
+            <li>Agent purpose and business objectives</li>
+            <li>Data categories accessed (list every Salesforce object and field)</li>
+            <li>External systems integrated (with data flow diagram)</li>
+            <li>Compliance risk assessment</li>
+            <li>Test results from UAT (with test case coverage)</li>
+            <li>Monitoring thresholds and alert configuration</li>
+            <li>Runbook for common incidents (high escalation rate, action failures)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-cicd">
+        <div class="content-block">
+          <h2>⚙️ Full CI/CD Pipeline</h2>
+          <p>For mature engineering teams, a fully automated CI/CD pipeline enables rapid, reliable deployments with comprehensive testing at every stage.</p>
+
+          <h3>Recommended Stack</h3>
+          <ul>
+            <li><strong>Source Control:</strong> GitHub (or GitLab/Bitbucket)</li>
+            <li><strong>CI/CD Platform:</strong> GitHub Actions, Copado, Gearset, or Flosum</li>
+            <li><strong>Testing:</strong> Salesforce CLI (<code>sf apex run test</code>), Flow Testing API, custom agent conversation tests</li>
+            <li><strong>Package Management:</strong> Salesforce DX Unlocked Packages (for modular deployment)</li>
+          </ul>
+
+          <h3>Pipeline Stages</h3>
+          <ol>
+            <li><strong>PR Validation (on pull request):</strong>
+              <ul>
+                <li>Deploy to a fresh scratch org</li>
+                <li>Run all Apex test classes (<code>sf apex run test --target-org scratch --test-level RunLocalTests</code>)</li>
+                <li>Run Flow test cases via the Flow Testing API</li>
+                <li>Validate agent metadata deploys without errors</li>
+                <li>Block merge if any test fails or code coverage &lt; 75%</li>
+              </ul>
+            </li>
+            <li><strong>Merge to develop → Full Sandbox deploy</strong>
+              <ul>
+                <li>Deploy to Full Sandbox automatically</li>
+                <li>Run regression suite of agent conversation tests (scripted via Agent API)</li>
+                <li>Post results to Slack/Teams channel</li>
+              </ul>
+            </li>
+            <li><strong>Release branch → Production deploy</strong>
+              <ul>
+                <li>Manual gate: requires release manager approval in GitHub</li>
+                <li>Deploy during scheduled maintenance window</li>
+                <li>Run smoke tests via Agent API immediately post-deploy</li>
+                <li>Monitor escalation rate for 30 minutes post-deploy; automated rollback trigger if rate exceeds threshold</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>Salesforce CLI Key Commands</h3>
+          <pre style="background:var(--color-bg-alt,#f1f5f9);border:1px solid var(--color-border);border-radius:6px;padding:1rem;font-size:0.82rem;overflow-x:auto;"><code># Deploy metadata to org
+sf project deploy start --target-org production --manifest package.xml
+
+# Validate without deploying (pre-deployment check)
+sf project deploy start --dry-run --target-org production --manifest package.xml
+
+# Run Apex tests
+sf apex run test --target-org production --test-level RunLocalTests --result-format tap
+
+# Create a scratch org for CI
+sf org create scratch --definition-file config/project-scratch-def.json --set-default
+
+# Retrieve metadata from an org (source tracking)
+sf project retrieve start --target-org my-sandbox</code></pre>
+        </div>
+      </section>
+
+      <section id="a-scaling">
+        <div class="content-block">
+          <h2>📈 Scaling Considerations</h2>
+
+          <h3>Conversation Volume Scaling</h3>
+          <ul>
+            <li>Agentforce scales automatically — Salesforce manages the underlying infrastructure. However, your <strong>connected systems</strong> (external APIs, backend services) may not. Load test your external API integrations at expected peak agent conversation volume before launch.</li>
+            <li>Monitor the Agentforce rate limit consumption dashboard — high-volume orgs may need to request limit increases from Salesforce.</li>
+            <li>For planned peak events (product launches, seasonal campaigns), notify your Salesforce account team in advance for capacity planning.</li>
+          </ul>
+
+          <h3>Multi-Org Architecture</h3>
+          <p>Very large enterprises may deploy Agentforce across multiple Salesforce orgs (e.g., separate orgs for different regions, subsidiaries, or business units). Key considerations:</p>
+          <ul>
+            <li>Each org has independent license allocation — plan license budgets per org.</li>
+            <li>Shared action libraries can be packaged as Unlocked Packages and deployed across orgs.</li>
+            <li>Consider a Hub org with Salesforce Connect for cross-org data access, rather than duplicating data.</li>
+            <li>Centralize Einstein Trust Layer audit logs from all orgs in a single compliance data store (Data Cloud or external SIEM).</li>
+          </ul>
+
+          <h3>Data Cloud at Scale</h3>
+          <ul>
+            <li>For orgs with 50M+ unified profiles, schedule identity resolution runs during off-peak hours — resource-intensive at high volume.</li>
+            <li>Use Data Cloud's <strong>data tier</strong> settings to categorize hot (frequently accessed) vs. cold (archival) data — this optimizes both cost and query performance.</li>
+            <li>Monitor Data Cloud job queues in the Jobs dashboard — long queue times indicate resource contention and may require capacity adjustments.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="a-certs">
+        <div class="content-block">
+          <h2>🏆 Salesforce AI Certification Paths</h2>
+
+          <h3>Certification Recommendations by Role</h3>
+
+          <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:1rem;">
+            <div class="card" style="padding:1.25rem; border-top:3px solid #10b981;">
+              <strong style="font-size:0.95rem;">AI Associate</strong>
+              <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">For: Anyone starting with Salesforce AI. Covers: AI concepts, Einstein features, Agentforce overview, ethical AI. No technical prerequisites.</p>
+              <p style="font-size:0.78rem; margin-top:0.5rem;"><strong>Study path:</strong> Trailhead AI Associate Trailmix (8–10 hours)</p>
+            </div>
+            <div class="card" style="padding:1.25rem; border-top:3px solid var(--color-primary);">
+              <strong style="font-size:0.95rem;">AI Specialist</strong>
+              <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">For: Developers and admins implementing Agentforce. Covers: Agent configuration, Prompt Builder, Einstein features, Trust Layer. Recommends AI Associate first.</p>
+              <p style="font-size:0.78rem; margin-top:0.5rem;"><strong>Study path:</strong> AI Specialist Trailmix (20–30 hours)</p>
+            </div>
+            <div class="card" style="padding:1.25rem; border-top:3px solid #8b5cf6;">
+              <strong style="font-size:0.95rem;">Data Cloud Consultant</strong>
+              <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">For: Architects and consultants deploying Data Cloud. Covers: Data ingestion, identity resolution, segmentation, RAG architecture, governance.</p>
+              <p style="font-size:0.78rem; margin-top:0.5rem;"><strong>Study path:</strong> Data Cloud Consultant Trailmix</p>
+            </div>
+            <div class="card" style="padding:1.25rem; border-top:3px solid #f59e0b;">
+              <strong style="font-size:0.95rem;">Platform Developer I &amp; II</strong>
+              <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.4rem;">For: Developers writing Apex actions and Flows. Covers: Core Apex, SOQL, LWC, deployment. Foundational for Agentforce development.</p>
+              <p style="font-size:0.78rem; margin-top:0.5rem;"><strong>Study path:</strong> Platform Dev Trailmixes</p>
+            </div>
+          </div>
+
+          <h3>Recommended Study Sequence</h3>
+          <ol>
+            <li>AI Associate (foundation for everyone)</li>
+            <li>Salesforce Administrator (if not already certified)</li>
+            <li>AI Specialist (for Agentforce practitioners)</li>
+            <li>Platform Developer I (for those writing Apex actions)</li>
+            <li>Data Cloud Consultant (for those implementing RAG and CDP)</li>
+          </ol>
+
+          <h3>Maintaining Certifications</h3>
+          <p>Salesforce releases maintenance modules twice a year (Spring and Summer releases). Certified individuals must complete maintenance exams annually to keep their certifications active. AI-related certifications tend to have substantial maintenance content given the pace of platform evolution. Subscribe to the <strong>Trailblazer Community</strong> release notes to stay ahead of changes.</p>
+        </div>
+      </section>
+
+      <section id="a-resources">
+        <div class="content-block">
+          <h2>🔗 Advanced Resources</h2>
+          <ul class="resource-list">
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/aiassociate" target="_blank" rel="noopener">Salesforce AI Associate Certification</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/aispecialist" target="_blank" rel="noopener">Salesforce AI Specialist Certification</a></li>
+            <li><span class="res-type res-cert">Cert</span><a href="https://trailhead.salesforce.com/credentials/salesforcedatacloudconsultant" target="_blank" rel="noopener">Salesforce Data Cloud Consultant Certification</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm" target="_blank" rel="noopener">Salesforce DX Developer Guide</a></li>
+            <li><span class="res-type res-course">Trail</span><a href="https://trailhead.salesforce.com/content/learn/trails/automate-cicd-with-devops-center" target="_blank" rel="noopener">Trailhead: Automate CI/CD with DevOps Center</a></li>
+            <li><span class="res-type res-doc">Docs</span><a href="https://developer.salesforce.com/tools/salesforcecli" target="_blank" rel="noopener">Salesforce CLI Reference</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /advanced -->
+
+    <section id="quiz">
+      <div class="quiz-section" id="quiz-container"></div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <span>🤖 <strong style="color:#94a3b8">AI Learning Hub</strong> — Admin Setup &amp; DevOps</span>
+      <span><a href="index.html">← Salesforce Hub</a> · <a href="../index.html">Home</a> · <a href="https://github.com/williamjblodgett/Test" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/main.js"></script>
+<script src="../scripts/quiz.js"></script>
+<script>
+new Quiz({
+  containerId: 'quiz-container',
+  topic: 'Admin Setup & DevOps',
+  questions: [
+    {
+      question: 'Why should Agentforce agents use a dedicated Integration User rather than an admin account?',
+      options: [
+        'Admin accounts cannot invoke Flow actions in Agentforce contexts',
+        'To apply the principle of least privilege — the Integration User has only the permissions the agent actually needs, reducing the blast radius of a misconfiguration or security incident',
+        'Salesforce requires a dedicated integration user type for Agentforce licensing',
+        'Admin users are blocked from the Einstein Trust Layer by default'
+      ],
+      correct: 1,
+      topic: 'Permissions',
+      explanation: 'Using a dedicated Integration User with minimal permissions follows the principle of least privilege. If the agent\'s actions are ever misused or a security issue occurs, the damage is limited to exactly what that Integration User is permitted to access.'
+    },
+    {
+      question: 'In a sandbox deployment strategy, what is the primary purpose of the Full Sandbox before production deployment?',
+      options: [
+        'It is where developers write and compile Apex code before deploying to production',
+        'It provides production-like data volume for end-to-end testing and UAT, ensuring the agent performs correctly at realistic scale',
+        'It is where Change Sets are assembled before being uploaded to production',
+        'It hosts the LLM for all agent interactions before production is enabled'
+      ],
+      correct: 1,
+      topic: 'Sandbox Strategy',
+      explanation: 'Developer Sandboxes have minimal/synthetic data. Full Sandboxes contain production-like data volume, enabling realistic performance testing and UAT — the last validation checkpoint before production deployment.'
+    },
+    {
+      question: 'What is the key advantage of DevOps Center over Change Sets for Agentforce deployments?',
+      options: [
+        'DevOps Center deploys faster because it bypasses Apex compilation',
+        'DevOps Center integrates with GitHub, providing version control, peer review, and git history for all configuration changes',
+        'DevOps Center automatically generates test cases for agent topics',
+        'DevOps Center does not require a sandbox — changes can be tested directly in production'
+      ],
+      correct: 1,
+      topic: 'DevOps Center',
+      explanation: 'Change Sets have no version control — there\'s no git history, no diff comparison, and rollback is manual and complex. DevOps Center integrates with GitHub, enabling proper version control, pull request reviews, and a complete change history.'
+    },
+    {
+      question: 'When deploying Named Credentials via Change Set or DevOps Center to a new org, what must be done manually after deployment?',
+      options: [
+        'The Named Credential must be approved by the Einstein Trust Layer before it becomes active',
+        'The actual authentication credentials (API keys, passwords) must be entered manually in the target org — only the schema is deployed, not the secret values',
+        'A Flow must be created to bind the Named Credential to the agent actions that use it',
+        'The Named Credential URL must be updated to the production endpoint in the target org\'s Setup'
+      ],
+      correct: 1,
+      topic: 'Named Credentials',
+      explanation: 'Named Credential definitions (schema, endpoint URL, authentication type) deploy via metadata, but the actual secrets (API keys, OAuth tokens, passwords) are never stored in metadata for security reasons. They must be entered manually in each target org after deployment.'
+    },
+    {
+      question: 'In a CI/CD pipeline for Salesforce, what is the purpose of "sf project deploy start --dry-run"?',
+      options: [
+        'It deploys to a scratch org and runs automated tests simultaneously',
+        'It validates the deployment package without actually committing any changes to the target org',
+        'It deploys only to the sandbox tier and skips production promotion',
+        'It creates a draft version of the deployment for review before scheduling'
+      ],
+      correct: 1,
+      topic: 'CI/CD Pipeline',
+      explanation: '"--dry-run" (validate without deploying) checks that all metadata in the deployment package is syntactically correct and all dependencies are present — without making any changes to the target org. This is the safe pre-deployment check that catches errors before they affect a live environment.'
+    },
+    {
+      question: 'Which Salesforce certification is the recommended first step for someone who is new to Salesforce AI and wants to understand Agentforce concepts before building?',
+      options: [
+        'Platform Developer I — covers core Apex and Flow development',
+        'Salesforce Administrator — provides platform fundamentals',
+        'AI Associate — covers AI concepts, Einstein features, and ethical AI with no technical prerequisites',
+        'Data Cloud Consultant — covers the data layer that powers Agentforce'
+      ],
+      correct: 2,
+      topic: 'Certifications',
+      explanation: 'The AI Associate certification is designed as the entry-level credential for everyone working with Salesforce AI — admins, developers, business stakeholders. It has no technical prerequisites and provides the conceptual foundation for more advanced certifications like AI Specialist.'
+    }
+  ]
+});
+</script>
+</body>
+</html>
