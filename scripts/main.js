@@ -83,9 +83,9 @@ window.addEventListener('DOMContentLoaded', () => {
   observeActiveSections();
 });
 
-// ── Level Tab Switcher (topic pages) ─────────────────────────
+// ── Level Selector Switcher (topic pages) ────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  const tabs   = document.querySelectorAll('.level-switcher .level-tab');
+  const tabs   = document.querySelectorAll('.level-selector-card[data-level]');
   const panels = document.querySelectorAll('.level-content[data-level]');
   if (!tabs.length) return;
 
@@ -117,22 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const hash = location.hash.replace('#', '');
   const startLevel = ['beginner', 'intermediate', 'advanced'].includes(hash) ? hash : 'intermediate';
   activate(startLevel);
-});
-
-// ── Home Page: Course Card Level Tabs ─────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.course-card').forEach(card => {
-    const tabs = card.querySelectorAll('.course-level-tab');
-    const cta  = card.querySelector('.course-cta');
-    if (!tabs.length || !cta) return;
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        if (cta.dataset.base) cta.href = cta.dataset.base + '#' + tab.dataset.level;
-      });
-    });
-  });
 });
 
 // ── Card Search Filter (home page) ───────────────────────────
